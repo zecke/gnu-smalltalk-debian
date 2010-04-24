@@ -1094,6 +1094,11 @@ PackageInfo subclass: StarPackage [
 	loadedPackage := package.
 	^loadedPackage
     ]
+
+    describe [
+	<category: 'accessing'>
+	^self name, ' from ', self fileName
+    ]
 ]
 
 ]
@@ -1602,6 +1607,11 @@ XML.'>
 			    [self error: 'error in packages file: unmatched start tags' 
 					, stack asArray printString]]
     ]
+
+    describe [
+	<category: 'accessing'>
+	^self name
+    ]
 ]
 
 
@@ -1865,7 +1875,8 @@ into a Smalltalk image, correctly handling dependencies.'>
 		OutputVerbosity > 0 
 		    ifTrue: 
 			[Transcript
-			    nextPutAll: 'Loading package ' , each;
+			    nextPutAll: 'Loading package ' ,
+			    (self packageAt: each) describe;
 			    nl].
 		(self packageAt: each) primFileIn]
     ]

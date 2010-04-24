@@ -1,3 +1,9 @@
+2010-04-24  Holger Hans Peter Freyther <zecke@selfish.org>
+
+	* kernel/PkgLoader.st: Print the file name of the package that will
+	be loaded. Add Package>>describe and StarPackage>>describe to
+	describe the origin.
+
 2010-04-15  Paolo Bonzini <bonzini@gnu.org>
 
 	* kernel/Regex.st: Fix printing a MatchingRegexResults.
