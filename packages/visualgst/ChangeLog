@@ -1,3 +1,10 @@
+2010-04-26  Holger Hans Peter Freyther  <zecke@selfish.org>
+
+	* Debugger/GtkDebugger.st, GtkAssistant.st, GtkClassBrowser.st,
+	GtkWebBrowser.st, Implementors/GtkImplementor.st, SUnit/GtkSUnit.st,
+	Senders/GtkSender.st, VisualGST.st: Move the MIT License text
+	into VisualGST.st and call VisualGST license to get the text. 
+
 2010-04-19  Paolo Bonzini  <bonzini@gnu.org>
 
 	* GtkTranscriptWidget: Convert what is #show:-ed to a string.
