@@ -97,10 +97,10 @@ Smalltalk.Object subclass: GtkMainWindow [
     aboutGst [
 	<category: 'events'>
 
-	(GTK.GtkAboutDialog new)
-	    setProgramName: 'GNU Smalltalk';
-	    setVersion: (Smalltalk version =~ 'version (.*)' at: 1);
-	    setLicense: 'GNU Smalltalk is free software; you can redistribute it and/or modify it
+	GTK.Gtk showAboutDialog: nil varargs: {
+	    'program-name' . 'GNU Smalltalk' .
+	    'version' . (Smalltalk version =~ 'version (.*)' at: 1) .
+	    'license' . 'GNU Smalltalk is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the Free
 Software Foundation; either version 2, or (at your option) any later version.
 
@@ -114,9 +114,8 @@ GNU Smalltalk; see the file COPYING.  If not, write to the Free Software
 Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.  
 
 Please consult the GNU Smalltalk source code for additional permissions
-that are specific to this version of GNU Smalltalk.';
-	    setWebsite: 'http://smalltalk.gnu.org/';
-	    showModalDestroy
+that are specific to this version of GNU Smalltalk.' .
+	    'website' . 'http://smalltalk.gnu.org/' . nil }
     ]
 
     close [

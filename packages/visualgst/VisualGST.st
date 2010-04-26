@@ -109,14 +109,13 @@ THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.'
     aboutLauncher [
 	<category: 'help events'>
 
-	(GTK.GtkAboutDialog new)
-	    setVersion: self class version;
-	    setLicense: self class license;
-	    setWebsite: self class website;
-	    setComments: 'This is a GTK+ wrapper for GNU Smalltalk.';
+	GTK.Gtk showAboutDialog: nil varargs: {
+	    'version' . self class version.
+	    'license' . self class license.
+	    'website' . self class website.
+	    'comments' . 'This is a GTK+ wrapper for GNU Smalltalk.'.
+	    'program-name' . 'VisualGST' . nil }
 	    "setAuthors: {'Gwenael Casaccio'. 'Nicolas Petton'. nil};"
-	    setProgramName: 'VisualGST';
-	    showModalDestroy
     ]
 
     browser [

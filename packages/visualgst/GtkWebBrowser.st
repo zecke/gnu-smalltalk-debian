@@ -17,14 +17,13 @@ GtkMainWindow subclass: GtkWebBrowser [
     aboutBrowser [
 	<category: 'help events'>
 
-	(GTK.GtkAboutDialog new)
-	    setVersion: VisualGST version;
-	    setLicense: VisualGST license;
-	    setWebsite: 'http://le site du gnu';
-	    setComments: 'This is a GTK+ wrapper for GNU Smalltalk.';
+	GTK.Gtk showAboutDialog: nil varargs: {
+	    'version' . VisualGST version.
+	    'license' . VisualGST license.
+	    'website' . 'http://le site du gnu'.
+	    'comments' . 'This is a GTK+ wrapper for GNU Smalltalk.'.
+	    'rogram-name' . 'GNU Smalltalk Launcher' . nil }
 	    "setAuthors: {'Gwenael Casaccio'. 'Nicolas Petton'};"
-	    setProgramName: 'GNU Smalltalk Launcher';
-	    showModalDestroy
     ]
 
     initialize [

@@ -10,14 +10,13 @@ GtkMainWindow subclass: GtkClassBrowser [
     aboutBrowser [
 	<category: 'events'>
 
-	(GTK.GtkAboutDialog new)
-	    setVersion: VisualGST version;
-	    setLicense: VisualGST license;
-	    setWebsite: VisualGST website;
-	    setComments: 'This is a system browser for GNU Smalltalk.';
+	GTK.Gtk showAboutDialog: nil varargs: {
+	    'version' . VisualGST version.
+	    'license' . VisualGST license.
+	    'website' . VisualGST website.
+	    'comments' . 'This is a system browser for GNU Smalltalk.'.
+	    'program-name' . 'GNU Smalltalk Browser' . nil }
 	    "setAuthors: {'Gwenael Casaccio'. 'Nicolas Petton'};"
-	    setProgramName: 'GNU Smalltalk Browser';
-	    showModalDestroy
     ]
 
     browser [
