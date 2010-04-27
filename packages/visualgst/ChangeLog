@@ -1,6 +1,11 @@
 2010-04-27  Holger Hans Peter Freyther  <zecke@selfish.org>
 
-	*  Debugger/GtkDebugger.st, GtkAssistant.st, GtkClassBrowser.st,
+	* GtkAssistant.st: Rename selector from #aboutBrowser to
+	#aboutAssistant.
+
+2010-04-27  Holger Hans Peter Freyther  <zecke@selfish.org>
+
+	* Debugger/GtkDebugger.st, GtkAssistant.st, GtkClassBrowser.st,
 	GtkMainWindow.st, GtkWebBrowser.st, Implementors/GtkImplementor.st,
 	SUnit/GtkSUnit.st, Senders/GtkSender.st, VisualGST.st: Move to
 	GTK.Gtk>>showAboutDialog for showing the about dialog. This has the

@@ -7,7 +7,7 @@ GtkMainWindow subclass: GtkAssistant [
 	^ self openSized: 450@375
     ]
 
-    aboutBrowser [
+    aboutAssistant [
 	<category: 'help events'>
 
 	GTK.Gtk showAboutDialog: nil varargs: {
