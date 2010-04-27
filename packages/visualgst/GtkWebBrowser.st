@@ -116,7 +116,7 @@ GtkMainWindow subclass: GtkWebBrowser [
 	    appendToolItem: (GTK.GtkToolButton newFromStock: 'gtk-copy');
 	    appendToolItem: (GTK.GtkToolButton newFromStock: 'gtk-paste');
 	    appendSeparator;
-	    appendToolItem: (GTK.GtkToolButton newFromStock: 'gtk-execute' label: 'Do It')
+	    appendToolItem: (GTK.GtkToolButton newFromStock: 'gtk-execute' label: 'Do It');
 	    appendToolItem: (GTK.GtkToolButton newFromStock: 'gtk-convert' label: 'Inspect It')
     ]
 

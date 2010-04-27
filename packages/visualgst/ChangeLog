@@ -1,5 +1,9 @@
 2010-04-27  Holger Hans Peter Freyther  <zecke@selfish.org>
 
+	* GtkWebBrowser.st: Fix #createToolbar.
+
+2010-04-27  Holger Hans Peter Freyther  <zecke@selfish.org>
+
 	* GtkAssistant.st: Rename selector from #aboutBrowser to
 	#aboutAssistant.
 
