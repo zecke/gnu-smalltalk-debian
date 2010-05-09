@@ -32,7 +32,7 @@
 
 Object subclass: Pango [
     
-    <category: 'Gtk'>
+    <category: 'GTK'>
     <comment: nil>
 ]
 
@@ -40,7 +40,7 @@ Object subclass: Pango [
 
 Object subclass: Gdk [
     
-    <category: 'Gtk'>
+    <category: 'GTK'>
     <comment: nil>
 ]
 
@@ -48,7 +48,7 @@ Object subclass: Gdk [
 
 Object subclass: Gtk [
     
-    <category: 'Gtk'>
+    <category: 'GTK'>
     <comment: nil>
 ]
 
@@ -56,7 +56,7 @@ Object subclass: Gtk [
 
 Object subclass: Atk [
     
-    <category: 'Gtk'>
+    <category: 'GTK'>
     <comment: nil>
 ]
 
@@ -64,7 +64,7 @@ Object subclass: Atk [
 
 Object subclass: GLib [
     
-    <category: 'Gtk'>
+    <category: 'GTK'>
     <comment: nil>
 
     GLib class [
@@ -94,7 +94,7 @@ Object subclass: GLib [
 
 Object subclass: GQuark [
     
-    <category: 'Gtk'>
+    <category: 'GTK'>
     <comment: nil>
 ]
 
@@ -103,7 +103,7 @@ Object subclass: GQuark [
 CObject subclass: GList [
     
     <shape: #word>
-    <category: 'Gtk'>
+    <category: 'GTK'>
     <comment: nil>
 ]
 
@@ -112,7 +112,7 @@ CObject subclass: GList [
 CObject subclass: GSList [
     
     <shape: #word>
-    <category: 'Gtk'>
+    <category: 'GTK'>
     <comment: nil>
 ]
 
@@ -121,7 +121,7 @@ CObject subclass: GSList [
 CObject subclass: GdkEvent [
     
     <shape: #word>
-    <category: 'Gtk'>
+    <category: 'GTK'>
     <comment: nil>
 ]
 

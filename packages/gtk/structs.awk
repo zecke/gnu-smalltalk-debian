@@ -168,7 +168,7 @@ function emit_struct (parent, name, save, i)
   print "\tinstanceVariableNames: ''"
   print "\tclassVariableNames: ''"
   print "\tpoolDictionaries: ''"
-  print "\tcategory: 'Gtk'!\n"
+  print "\tcategory: 'GTK'!\n"
 
   save = $0
   $0 = synonyms[name]
