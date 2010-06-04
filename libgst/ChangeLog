@@ -1,3 +1,22 @@
+2010-05-28  Paolo Bonzini <bonzini@gnu.org>
+
+	* libgst/sysdep/posix/time.c: Prefer using nanosleep to usleep.
+	usleep is totally broken under Solaris 8 and 9. Reported by Rick
+	Flower.
+
+2010-05-21  Paolo Bonzini <bonzini@gnu.org>
+
+	* libgst/files.c: Load DynVariable.st.
+
+2010-05-18  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/comp.c: Flush aggressively around _gst_execute_statements.
+	* libgst/gst-parse.c: Likewise.
+
+2010-04-21  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/sockets.c: Fix previous commit.
+
 2010-04-19  Paolo Bonzini  <bonzini@gnu.org>
 
 	* libgst/sockets.c: Make connect return int.

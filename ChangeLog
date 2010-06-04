@@ -12,6 +12,42 @@
 	be loaded. Add Package>>describe and StarPackage>>describe to
 	describe the origin.
 
+2010-05-31  Paolo Bonzini <bonzini@gnu.org>
+
+	* scripts/Package.st: Remove debugging output.  Change "git fetch"
+	to "git pull".
+
+2010-05-27  Gwenael Casaccio  <mrgwen@gmail.com>
+
+	* kernel/LookupKey.st: Remove value instance variable.
+
+2010-05-25  Paolo Bonzini <bonzini@gnu.org>
+
+	* kernel/Object.st: Fix error message for storing UnicodeCharacters
+	into Strings.
+
+2010-05-21  Paolo Bonzini <bonzini@gnu.org>
+
+	* kernel/FileDescr.st: Fix #atEnd for pipes.
+
+2010-05-21  Paolo Bonzini <bonzini@gnu.org>
+
+	* kernel/DynVariable.st: Reimplement DynamicVariable here.
+	* kernel/ProcEnv.st: Add methods used by DynamicVariable.
+	* kernel/SysExcept.st: Remove old implementation from here.
+
+2010-05-19  Paolo Bonzini <bonzini@gnu.org>
+
+	* scripts/Remote.st: Gracefully handle #atEnd on the remote socket.
+
+2010-05-03  Holger Hans Peter Freyther <zecke@selfish.org>
+
+	* gst-tool.c: Add -v|-V|--verbose to all tools.
+	* scripts/Package.st: Handle the verbose option.
+	* scripts/GenDoc.st: Likewise.
+	* scripts/Profile.st: Likewise.
+	* scripts/Remote.st: Likewise.
+
 2010-04-15  Paolo Bonzini <bonzini@gnu.org>
 
 	* kernel/Regex.st: Fix printing a MatchingRegexResults.

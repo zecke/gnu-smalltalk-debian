@@ -80,7 +80,7 @@ GtkMainWindow subclass: GtkAssistant [
             {'<Control><Shift>S'. '<GtkLauncher>/File/SaveAs'}.
             {'<Control>Q'. '<GtkAssistant>/File/Close'}}.
 
-        ^ self createNewMenuEntry: {GTK.GtkMenuItem menuItem: 'New worskpace' connectTo: self selector: #newWorkspace.
+        ^ self createNewMenuEntry: {GTK.GtkMenuItem menuItem: 'New workspace' connectTo: self selector: #newWorkspace.
             GTK.GtkMenuItem new.
             GTK.GtkMenuItem menuItem: 'Open' accelPath: '<GtkLauncher>/File/Open' connectTo: self selector: #open.
             GTK.GtkMenuItem menuItem: 'Save' accelPath: '<GtkLauncher>/File/Save' connectTo: self selector: #save.
