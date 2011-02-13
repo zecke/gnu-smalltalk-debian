@@ -264,10 +264,10 @@ operation:
 	  { curr_op = define_operation ($2); c_code_on_brace = true; }
 	ids stack_balance 
           { curr_fil = filnew (NULL, 0);
-	    filprintf (curr_fil, "#line %d \"vm.def\"\n      ", yylineno + 1);
+	    filprintf (curr_fil, "/*line %d \"vm.def\"\n      */", yylineno + 1);
 	  }
 	'{' c_code '}'
-	  { filprintf (curr_fil, "\n#line __oline__ \"vm.inl\"");
+	  { filprintf (curr_fil, "/*line __oline__ \"vm.inl\" */");
 	    if (curr_op)
 	      {
 	        curr_op->args = $4;
@@ -746,6 +746,8 @@ main ()
     exit (1);
 
   printf ("  goto jump_around;\n");
+  printf ("dispatch_next:\n");
+  printf ("NEXT_BC_NO_ARG(dispatch_vec);\n");
   code = fildelete (out_fil);
   fputs (code, stdout);
   printf ("jump_around:\n  ;\n");
