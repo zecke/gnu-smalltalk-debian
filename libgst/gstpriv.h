@@ -139,7 +139,8 @@
    GCC 2.96 also introduced branch prediction hints for basic block
    reordering.  We use a shorter syntax than the wordy one that GCC
    wants.  */
-#if GNUC_PREREQ (2, 96)
+#if 0
+//#if GNUC_PREREQ (2, 96)
 #define UNCOMMON(x) (__builtin_expect ((x) != 0, 0))
 #define COMMON(x)   (__builtin_expect ((x) != 0, 1))
 #else
