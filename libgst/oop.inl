@@ -119,8 +119,8 @@ static inline OOP alloc_oop (PTR obj, intptr_t flags);
 
 /* Answer whether ADDR is part of the OOP table.  */
 #define IS_OOP_ADDR(addr)					\
-  ((OOP)(addr) >= _gst_mem.ot_base 	 			\
-    && (OOP)(addr) <= _gst_mem.last_allocated_oop		\
+  ((OOP)(addr) <= _gst_mem.last_allocated_oop  			\
+    && (OOP)(addr) >= _gst_mem.ot_base				\
     && (((intptr_t)addr & (sizeof (struct oop_s) - 1)) == 0))
 
 /* Answer whether ADDR is part of newspace.  */
