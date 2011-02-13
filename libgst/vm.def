@@ -54,7 +54,7 @@
    - operations are C code together with the stack effect that it should have;
      so far, this is used only to avoid specifying pushes and pops, but it
      might be used to combine the accesses to the stack and do some great
-     optimization of the superoperators.  `break' inside an operation has the
+     optimization of the superoperators.  'break' inside an operation has the
      nice effect of getting out of it.
 
      They can have parameters which are specified between the name and the
@@ -200,6 +200,9 @@
 #define NEXT_BC_NO_ARG(v)	goto *(v)[*ip]
 #define GET_ARG			(ip[1])
 #endif
+
+
+/* NEXT goto *(arg = GET_ARG, dispatch_vec[*ip]) */
 
 #define DISPATCH(v)		goto *(arg = GET_ARG, (v)[*ip])
 
@@ -639,14 +642,6 @@ operation JAVA_AS_LONG_SPECIAL ( rec -- val ) {
   FETCH;
 }
 
-operation SEND sel n ( -- ) {
-  PREPARE_STACK ();
-  EXPORT_REGS ();
-  SEND_MESSAGE (METHOD_LITERAL (sel), n);
-  IMPORT_REGS ();
-  FETCH;
-}
-
 operation SEND_SUPER sel n ( -- ) {
   OOP classOOP;
   PREPARE_STACK ();
@@ -758,17 +753,6 @@ operation STORE_RECEIVER_VARIABLE n ( tos -- tos ) {
   STORE_RECEIVER_VARIABLE (n, tos);
 }
 
-operation JUMP_BACK n ( -- ) {
-  PREPARE_STACK ();
-  ip -= n;
-  FETCH;
-}
-
-operation JUMP n ( -- ) {
-  PREPARE_STACK ();
-  ip += n;
-  FETCH;
-}
 
 operation POP_JUMP_FALSE n ( tos -- ) {
   if UNCOMMON (tos == _gst_false_oop)
@@ -848,11 +832,31 @@ operation RETURN_METHOD_STACK_TOP ( val -- val ) {
   FETCH;
 }
 
+operation SEND sel n ( -- ) {
+  PREPARE_STACK ();
+  EXPORT_REGS ();
+  SEND_MESSAGE (METHOD_LITERAL (sel), n);
+  IMPORT_REGS ();
+  FETCH;
+}
+
 operation RETURN_CONTEXT_STACK_TOP ( val -- val ) {
   EXPORT_REGS ();
   unwind_context ();
   IMPORT_REGS ();
   SET_STACKTOP (val);
+  FETCH;
+}
+
+operation JUMP_BACK n ( -- ) {
+  PREPARE_STACK ();
+  ip -= n;
+  FETCH;
+}
+
+operation JUMP n ( -- ) {
+  PREPARE_STACK ();
+  ip += n;
   FETCH;
 }
 
