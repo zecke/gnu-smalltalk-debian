@@ -1034,8 +1034,8 @@ unwind_context (void)
       /* Descend in the chain...  */
       newContextOOP = oldContext->parentContext;
 
-      if COMMON (free_lifo_context > lifo_contexts)
-        dealloc_stack_context ((gst_context_part) oldContext);
+      if (__builtin_expect(free_lifo_context > lifo_contexts, 0))
+        dealloc_stack_context ((gst_context_part) newContext);
 
       /* This context cannot be deallocated in a LIFO way.  We must
          keep it around so that the blocks it created can reference
@@ -1049,8 +1049,8 @@ unwind_context (void)
 
       newContext = (gst_method_context) OOP_TO_OBJ (newContextOOP);
     }
-  while UNCOMMON (CONTEXT_FLAGS (newContext) 
-		  == (MCF_IS_METHOD_CONTEXT | MCF_IS_DISABLED_CONTEXT));
+  while (__builtin_expect (CONTEXT_FLAGS (newContext)
+		  == (MCF_IS_METHOD_CONTEXT | MCF_IS_DISABLED_CONTEXT), 1));
 
   /* Clear the bit so that we return here just once.
      This makes this absurd snippet work:
