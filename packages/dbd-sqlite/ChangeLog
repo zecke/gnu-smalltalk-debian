@@ -1,3 +1,7 @@
+2011-04-28  Holger Hans Peter Freyther  <zecke@selfish.org>
+
+	* sqlite3.c: Convert ByteArray to BLOB, BLOB to ByteArray.
+
 2011-04-09  Paolo Bonzini  <bonzini@gnu.org>
 
 	* Statement.st: Move #resetAndClear inside an #ensure: block.

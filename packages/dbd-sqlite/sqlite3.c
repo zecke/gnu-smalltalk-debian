@@ -188,7 +188,8 @@ gst_sqlite3_exec (OOP self)
 	      tmpOOP = vmProxy->stringToOOP (sqlite3_column_text (stmt, i));
 	      break;
 	    case SQLITE_BLOB:
-	      tmpOOP = vmProxy->stringToOOP (sqlite3_column_text (stmt, i));
+	      tmpOOP = vmProxy->byteArrayToOOP (sqlite3_column_text (stmt, i),
+						sqlite3_column_bytes(stmt, i));
 	      break;
 	    case SQLITE_NULL:
 	      tmpOOP = vmProxy->nilOOP;
@@ -241,11 +242,12 @@ gst_sqlite3_bind (OOP self, OOP key, OOP value)
 				   (sqlite_int64) vmProxy->OOPToInt (value));
 #endif
         
-    if (vmProxy->objectIsKindOf (value, vmProxy->stringClass)
-	|| vmProxy->objectIsKindOf (value, vmProxy->byteArrayClass))
+    if (vmProxy->objectIsKindOf (value, vmProxy->byteArrayClass))
+        return sqlite3_bind_blob (stmt, index, vmProxy->OOPIndexedBase (value),
+				  vmProxy->basicSize (value), SQLITE_TRANSIENT);
+    if (vmProxy->objectIsKindOf (value, vmProxy->stringClass))
         return sqlite3_bind_text (stmt, index, vmProxy->OOPIndexedBase (value),
 				  vmProxy->basicSize (value), SQLITE_TRANSIENT);
-        
     if (vmProxy->objectIsKindOf (value, vmProxy->floatDClass))
         return sqlite3_bind_double (stmt, index, vmProxy->OOPToFloat (value));
         
