@@ -1,9 +1,13 @@
 List of user-visible changes in GNU Smalltalk
 
-NEWS FROM 3.2.5 to 3.2.90
+NEWS FROM 3.2.5 to 3.2.91
 
 o   Add PackageLoader>>#loadPackageFromFile: to load a package by using
     a package.xml. This can make the development more effective.
+
+o   Change the semantic of >>#rowCount for the SQLite backend. One can
+    either use the >>#next/#atEnd selectors to stream over the result or use
+    the #>>rows/#rowCount selectors.
 
 -----------------------------------------------------------------------------
 
