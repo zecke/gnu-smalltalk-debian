@@ -1,0 +1,14 @@
+<package>
+  <name>OSProcess</name>
+  <namespace>OSProcess</namespace>
+  <module>gst-osprocess</module>
+
+  <test>
+    <sunit>OSProcess.ProcessTest</sunit>
+    <filein>OSProcessTests.st</filein>
+  </test>
+
+  <filein>OSProcess.st</filein>
+
+  <file>ChangeLog</file>
+</package>
