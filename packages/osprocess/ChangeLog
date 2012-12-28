@@ -1,0 +1,6 @@
+2012-12-27  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* Makefile.am: Add.
+	* package.xml: Likewise.
+	* OSProcess.st: Likewise.
+	* gst_osprocess.c: Likewise.
