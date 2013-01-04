@@ -67,7 +67,7 @@
 
 #define	OBJECT_SIZE(M)		(MEM2BLOCK(M)->size)
 
-#define MMAP_AREA_SIZE		(sizeof (long) << 26)	/* 256/512 Mb */
+#define MMAP_AREA_SIZE		(sizeof (long) << 20)	/* 256/512 Mb. not true */
 #define MMAP_THRESHOLD		(sizeof (long) << 15)	/* 128/256 kb */
 
 /* Depending on the architecture, heap_block->vSmall.data could be
