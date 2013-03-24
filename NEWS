@@ -1,5 +1,12 @@
 List of user-visible changes in GNU Smalltalk
 
+NEWS FROM 3.2.5 to 3.2.90
+
+o   Add PackageLoader>>#loadPackageFromFile: to load a package by using
+    a package.xml. This can make the development more effective.
+
+-----------------------------------------------------------------------------
+
 NEWS FROM 3.2.4 to 3.2.5
 
 o   Add Delay>>#value:onTimeoutDo: as an easy way to timeout an operation.

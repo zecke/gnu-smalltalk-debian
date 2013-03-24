@@ -1,3 +1,9 @@
+2013-03-24  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* libgst/files.c: Add DirPackage.st to the bootstrap.
+	* kernel/DirPackage.st: Add new file with the DirPackage and DirPackagesContainer.
+	* kernel/PkgLoader.st: Refactor and create ExternalPackage baseclass.
+
 2013-03-04  Holger Hans Peter Freyther  <holger@freyther.de>
 
 	* kernel/PkgLoader.st: Remove unused variable.
