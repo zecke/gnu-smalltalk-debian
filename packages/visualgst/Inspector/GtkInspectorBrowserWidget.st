@@ -1,4 +1,4 @@
-GtkConcreteWidget subclass: GtkInspectorBrowserWidget [
+GTKTools.GtkConcreteWidget subclass: GtkInspectorBrowserWidget [
     | checkCode namespaceWidget classHierarchyWidget classHierarchyUpdate iCategoryWidget iMethodWidget cCategoryWidget cMethodWidget codeWidget state |
 
     GtkInspectorBrowserWidget class >> title [

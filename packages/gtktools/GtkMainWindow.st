@@ -1,4 +1,4 @@
-Smalltalk.Object subclass: GtkMainWindow [
+Object subclass: GtkMainWindow [
     | window container menuBar toolBar centralWidget statusBar accelGroup |
 
     GtkMainWindow class >> open	[
@@ -13,7 +13,7 @@ Smalltalk.Object subclass: GtkMainWindow [
 
     GtkMainWindow class >> openSized: aPoint [
 	<category: 'user interface'>
-	
+
 	^ (self new)
 	    initialize;
 	    resize: aPoint;
@@ -61,7 +61,7 @@ Smalltalk.Object subclass: GtkMainWindow [
     statusBar [
 	<category: 'accessing'>
 
-	^ statusBar ifNil: [ statusBar := GTK.GtkStatusbar new ] 
+	^ statusBar ifNil: [ statusBar := GTK.GtkStatusbar new ]
     ]
 
     statusBar: aGtkStatusBar [
@@ -111,7 +111,7 @@ details.
 
 You should have received a copy of the GNU General Public License along with
 GNU Smalltalk; see the file COPYING.  If not, write to the Free Software
-Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.  
+Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 Please consult the GNU Smalltalk source code for additional permissions
 that are specific to this version of GNU Smalltalk.';
@@ -127,7 +127,7 @@ that are specific to this version of GNU Smalltalk.';
 
     initialize [
 	<category: 'intialization'>
-	
+
 	window := GTK.GtkWindow	new: GTK.Gtk gtkWindowToplevel.
 	window addAccelGroup: self accelGroup.
         self
@@ -242,10 +242,10 @@ that are specific to this version of GNU Smalltalk.';
 
     showAll [
 	{menuBar->false. toolBar->false. centralWidget->true. statusBar->false} do: [ :each |
-	    each key ifNotNil: [ self container 
+	    each key ifNotNil: [ self container
 		packStart: each key expand: each value fill: true padding: 0 ] ].
 
-	window 
+	window
 	    add: self container;
 	    showAll
     ]

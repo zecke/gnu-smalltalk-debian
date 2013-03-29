@@ -27,7 +27,7 @@
 |
  ======================================================================"
 
-GtkMainWindow subclass: Tetris [
+GTKTools.GtkMainWindow subclass: Tetris [
     | canvasWidget canvas process pause delay grid movingBlocks level score level lines |
     
     <category: 'Graphics-Tetris'>

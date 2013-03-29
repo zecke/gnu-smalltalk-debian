@@ -62,6 +62,7 @@ packages/gtk/order
 packages/gtk/sizeof
 packages/gtk/sizeof.c
 packages/gtk/structs
+packages/gtktools/stamp-classes
 packages/i18n/ref-add.sed
 packages/i18n/ref-del.sed
 packages/net/gnutls-wrapper

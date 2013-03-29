@@ -1,4 +1,4 @@
-GtkConcreteWidget subclass: GtkCategorizedNamespaceWidget [
+GTKTools.GtkConcreteWidget subclass: GtkCategorizedNamespaceWidget [
     | namespaceTree model |
 
     initialize [

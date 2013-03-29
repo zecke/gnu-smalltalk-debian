@@ -1,4 +1,4 @@
-GtkConcreteWidget subclass: GtkTextPluginWidget [
+GTKTools.GtkConcreteWidget subclass: GtkTextPluginWidget [
     | textWidget closeButton |
 
     GtkTextPluginWidget class >> on: aTextWidget [

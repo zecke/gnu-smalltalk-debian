@@ -1,4 +1,4 @@
-GtkConcreteWidget subclass: GtkImageResultsWidget [
+GTKTools.GtkConcreteWidget subclass: GtkImageResultsWidget [
     | result resultTree model |
 
     initialize [

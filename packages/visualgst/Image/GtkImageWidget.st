@@ -1,4 +1,4 @@
-GtkConcreteWidget subclass: GtkImageWidget [
+GTKTools.GtkConcreteWidget subclass: GtkImageWidget [
 
     | imageTree image model searchEntry |
 

@@ -1,4 +1,4 @@
-GtkConcreteWidget subclass: GtkContextWidget [
+GTKTools.GtkConcreteWidget subclass: GtkContextWidget [
     | column contextTree model context contextList |
 
     GtkContextWidget class >> on: aContext [

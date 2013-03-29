@@ -63,4 +63,3 @@ Object subclass: GtkEntryDialog [
 	aGtkDialog getVBox add: hbox
     ]
 ]
-
