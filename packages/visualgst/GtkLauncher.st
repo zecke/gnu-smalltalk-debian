@@ -369,7 +369,7 @@ GtkVisualGSTTool subclass: GtkLauncher [
     buildImplementorPaned [
        <category: 'user interface'>
 
-	leftSidebar := GtkHSidebarWidget new
+	leftSidebar := GTKTools.GtkHSidebarWidget new
 			    initialize;
 			    addAll: {self buildImplementorView -> 'Implementor'. self buildSenderView -> 'Sender'. self buildHistoryView -> 'History'};
 			    yourself.
@@ -389,7 +389,7 @@ GtkVisualGSTTool subclass: GtkLauncher [
     buildRightSidebarPaned [
        <category: 'user interface'>
 
-        rightSidebar := GtkHSidebarWidget new
+        rightSidebar := GTKTools.GtkHSidebarWidget new
                             initialize;
                             addAll: {self buildPackageBuilderView -> 'Package Builder'};
                             yourself.
@@ -460,7 +460,7 @@ GtkVisualGSTTool subclass: GtkLauncher [
     buildTopSidebar [
         <category: 'user interface'>
 
-        topSidebar := GtkHSidebarWidget new
+        topSidebar := GTKTools.GtkHSidebarWidget new
                             initialize;
                             addAll: {self buildImplementorResultList mainWidget -> ''. self buildSenderResultList mainWidget -> ''};
 			    hideTabs;

@@ -1,6 +1,6 @@
 "======================================================================
 |
-| GtkVSidebarWidget class definition
+| GtkHSideBarWidget class definition
 |
 ======================================================================"
 
@@ -33,10 +33,9 @@
 |
 ======================================================================"
 
-GtkSidebarWidget subclass: GtkVSidebarWidget [
+GtkSidebarWidget subclass: GtkHSidebarWidget [
 
     panedOrientation [
-	^ GTK.GtkVPaned
+	^ GTK.GtkHPaned
     ]
 ]
-

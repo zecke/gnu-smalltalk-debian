@@ -1,5 +1,13 @@
 2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
 
+	* GtkLauncher.st: Use GTKTools namespace.
+	* package.xml: Remove moved files.
+	* GtkHSidebarWidget.st: Renamed to packages/gtktools/GtkHSidebarWidget.st.
+	* GtkSidebarWidget.st: Renamed to packages/gtktools/GtkSidebarWidget.st.
+	* GtkVSidebarWidget.st: Renamed to packages/gtktools/GtkVSidebarWidget.st.
+
+2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
+
 	* Debugger/GtkContextWidget.st: Use GTKTools namespace.
 	* GtkHistoryWidget.st: Use GTKTools namespace.
 	* GtkSimpleListWidget.st: Use GTKTools namespace.

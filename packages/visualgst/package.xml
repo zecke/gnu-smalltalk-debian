@@ -162,9 +162,6 @@
   <filein>GtkScrollTreeWidget.st</filein>
   <filein>GtkSimpleListWidget.st</filein>
   <filein>GtkEntryWidget.st</filein>
-  <filein>GtkSidebarWidget.st</filein>
-  <filein>GtkHSidebarWidget.st</filein>
-  <filein>GtkVSidebarWidget.st</filein>
   <filein>Model/GtkColumnType.st</filein>
   <filein>Model/GtkColumnTextType.st</filein>
   <filein>Model/GtkColumnPixbufType.st</filein>
@@ -386,9 +383,6 @@
   <file>GtkScrollTreeWidget.st</file>
   <file>GtkSimpleListWidget.st</file>
   <file>GtkEntryWidget.st</file>
-  <file>GtkSidebarWidget.st</file>
-  <file>GtkHSidebarWidget.st</file>
-  <file>GtkVSidebarWidget.st</file>
   <file>Model/GtkColumnType.st</file>
   <file>Model/GtkColumnTextType.st</file>
   <file>Model/GtkColumnPixbufType.st</file>
