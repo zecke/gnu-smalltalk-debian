@@ -18,4 +18,3 @@ GtkColumnType subclass: GtkColumnTextType [
         ^ GTK.GtkCellRendererText
     ]
 ]
-

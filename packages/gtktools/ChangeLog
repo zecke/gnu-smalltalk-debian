@@ -1,5 +1,18 @@
 2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
 
+	* Extensions.st: Added.
+	* GtkScrollTreeWidget.st: Renamed from packages/visualgst/GtkScrollTreeWidget.st.
+	* GtkSimpleListWidget.st: Renamed from packages/visualgst/GtkSimpleListWidget.st.
+	* Model/GtkColumnOOPType.st: Renamed from packages/visualgst/Model/GtkColumnOOPType.st.
+	* Model/GtkColumnPixbufType.st: Renamed from packages/visualgst/Model/GtkColumnPixbufType.st.
+	* Model/GtkColumnTextType.st: Renamed from packages/visualgst/Model/GtkColumnTextType.st.
+	* Model/GtkColumnType.st: Renamed from packages/visualgst/Model/GtkColumnType.st.
+	* Tests/GtkScrollTreeWidgetTest.st: Renamed from packages/visualgst/Tests/GtkScrollTreeWidgetTest.st.
+	* Tests/GtkSimpleListWidgetTest.st: Renamed from packages/visualgst/Tests/GtkSimpleListWidgetTest.st.
+	* package.xml: Add new files.
+
+2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
+
 	* GtkHSidebarWidget.st: Renamed from packages/visualgst/GtkHSidebarWidget.st.
 	* GtkSidebarWidget.st: Renamed from packages/visualgst/GtkSidebarWidget.st.
 	* GtkVSidebarWidget.st: Renamed from packages/visualgst/GtkVSidebarWidget.st.

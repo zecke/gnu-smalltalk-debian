@@ -3,6 +3,7 @@
   <namespace>GTKTools</namespace>
   <prereq>GTK</prereq>
 
+  <filein>Extensions.st</filein>
   <filein>GtkMainWindow.st</filein>
   <filein>GtkAbstractConcreteWidget.st</filein>
   <filein>GtkConcreteWidget.st</filein>
@@ -11,11 +12,22 @@
   <filein>GtkSidebarWidget.st</filein>
   <filein>GtkHSidebarWidget.st</filein>
   <filein>GtkVSidebarWidget.st</filein>
+  <filein>GtkScrollTreeWidget.st</filein>
+  <filein>GtkSimpleListWidget.st</filein>
+
+  <filein>Model/GtkColumnType.st</filein>
+  <filein>Model/GtkColumnTextType.st</filein>
+  <filein>Model/GtkColumnPixbufType.st</filein>
+  <filein>Model/GtkColumnOOPType.st</filein>
 
   <test>
     <sunit>
       GTKTools.GtkConcreteWidgetTest
+      GTKTools.GtkScrollTreeWidgetTest
+      GTKTools.GtkSimpleListWidgetTest
     </sunit>
     <filein>Tests/GtkConcreteWidgetTest.st</filein>
+    <filein>Tests/GtkScrollTreeWidgetTest.st</filein>
+    <filein>Tests/GtkSimpleListWidgetTest.st</filein>
   </test>
 </package>

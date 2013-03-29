@@ -18,4 +18,3 @@ GtkColumnType subclass: GtkColumnPixbufType [
         ^ GTK.GtkCellRendererPixbuf
     ]
 ]
-

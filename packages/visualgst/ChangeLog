@@ -1,5 +1,18 @@
 2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
 
+	* Extensions.st: Move the model extensiosn to GTKtools.
+	* package.xml: Remove moved files.
+	* GtkScrollTreeWidget.st: Renamed to packages/gtktools/GtkScrollTreeWidget.st.
+	* GtkSimpleListWidget.st: Renamed to packages/gtktools/GtkSimpleListWidget.st.
+	* Model/GtkColumnOOPType.st: Renamed to packages/gtktools/Model/GtkColumnOOPType.st.
+	* Model/GtkColumnPixbufType.st: Renamed to packages/gtktools/Model/GtkColumnPixbufType.st.
+	* Model/GtkColumnTextType.st: Renamed to packages/gtktools/Model/GtkColumnTextType.st.
+	* Model/GtkColumnType.st: Renamed to packages/gtktools/Model/GtkColumnType.st.
+	* Tests/GtkScrollTreeWidgetTest.st: Renamed to packages/gtktools/Tests/GtkScrollTreeWidgetTest.st.
+	* Tests/GtkSimpleListWidgetTest.st: Renamed to packages/gtktools/Tests/GtkSimpleListWidgetTest.st.
+
+2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
+
 	* GtkLauncher.st: Use GTKTools namespace.
 	* package.xml: Remove moved files.
 	* GtkHSidebarWidget.st: Renamed to packages/gtktools/GtkHSidebarWidget.st.

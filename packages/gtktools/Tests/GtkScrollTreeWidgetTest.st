@@ -16,4 +16,3 @@ TestCase subclass: GtkScrollTreeWidgetTest [
         widget := GtkScrollTreeWidget createListWithModel: {{GtkColumnTextType title: 'aString'}}.
     ]
 ]
-

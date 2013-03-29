@@ -18,4 +18,3 @@ GtkColumnType subclass: GtkColumnOOPType [
         ^ self error: 'OOP type has no cell renderer'
     ]
 ]
-
