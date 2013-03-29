@@ -47,7 +47,7 @@ GTKTools.GtkConcreteWidget subclass: GtkImageResultsWidget [
 
         resultTree := GTK.GtkTreeView createListWithModel: {{GtkColumnTextType title: 'Methods and Classes'}}.
         resultTree getSelection setMode: GTK.Gtk gtkSelectionBrowse.
-        (model := GtkListModel on: resultTree getModel)
+        (model := GTKTools.GtkListModel on: resultTree getModel)
                                         contentsBlock: [ :each | {each asString} ].
         ^ GTK.GtkScrolledWindow withChild: resultTree
     ]

@@ -88,7 +88,7 @@ GTKTools.GtkConcreteWidget subclass: GtkInspectorWidget [
 
         inspectorTree := GtkScrollTreeWidget createListWithModel: {{GtkColumnTextType title: 'Variables'}}.
         inspectorTree connectToWhenPopupMenu: (InspectorMenus on: self).
-        (model := GtkListModel on: inspectorTree treeView getModel)
+        (model := GTKTools.GtkListModel on: inspectorTree treeView getModel)
                                         contentsBlock: [ :each | {each displayString} ].
         ^ inspectorTree mainWidget
     ]

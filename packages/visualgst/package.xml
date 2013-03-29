@@ -169,7 +169,6 @@
   <filein>Model/GtkColumnTextType.st</filein>
   <filein>Model/GtkColumnPixbufType.st</filein>
   <filein>Model/GtkColumnOOPType.st</filein>
-  <filein>GtkListModel.st</filein>
   <filein>GtkTreeModel.st</filein>
   <filein>Text/GtkTextWidget.st</filein>
   <filein>GtkPackageBuilderWidget.st</filein>
@@ -394,7 +393,6 @@
   <file>Model/GtkColumnTextType.st</file>
   <file>Model/GtkColumnPixbufType.st</file>
   <file>Model/GtkColumnOOPType.st</file>
-  <file>GtkListModel.st</file>
   <file>GtkTreeModel.st</file>
   <file>Text/GtkTextWidget.st</file>
   <file>GtkPackageBuilderWidget.st</file>

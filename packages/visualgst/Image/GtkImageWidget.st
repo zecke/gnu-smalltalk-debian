@@ -70,7 +70,7 @@ GTKTools.GtkConcreteWidget subclass: GtkImageWidget [
 
         imageTree := (GTK.GtkTreeView createListWithModel: {{GtkColumnTextType title: 'Methods and Classes'}}).
         imageTree setSearchEntry: searchEntry.
-        [ (model := GtkListModel on: imageTree getModel)
+        [ (model := GTKTools.GtkListModel on: imageTree getModel)
 					item: (image := GtkImage new);
                                         contentsBlock: [ :each | {each displayString} ];
 					refresh ] fork.
