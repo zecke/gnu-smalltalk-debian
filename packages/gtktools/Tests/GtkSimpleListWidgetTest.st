@@ -8,4 +8,3 @@ TestCase subclass: GtkSimpleListWidgetTest [
 	self assert: widget treeView isNil not
     ]
 ]
-

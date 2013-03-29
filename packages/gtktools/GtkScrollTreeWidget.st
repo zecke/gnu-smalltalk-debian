@@ -1,4 +1,4 @@
-GTKTools.GtkConcreteWidget subclass: GtkScrollTreeWidget [
+GtkConcreteWidget subclass: GtkScrollTreeWidget [
 
     GtkScrollTreeWidget class >> createListWithModel: anObject [
 	<category: 'instance creation'>
@@ -45,4 +45,3 @@ GTKTools.GtkConcreteWidget subclass: GtkScrollTreeWidget [
 	^ treeView
     ]
 ]
-
