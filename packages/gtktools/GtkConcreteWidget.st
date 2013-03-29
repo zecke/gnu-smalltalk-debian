@@ -29,7 +29,7 @@ GtkAbstractConcreteWidget subclass: GtkConcreteWidget [
 
         parentWindow := aGtkWindow
     ]
-    
+
     parentWindow [
 	<category: 'accessing'>
 

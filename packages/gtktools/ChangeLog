@@ -1,0 +1,8 @@
+2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* GtkAbstractConcreteWidget.st: Renamed from packages/visualgst/GtkAbstractConcreteWidget.st.
+	* GtkConcreteWidget.st: Renamed from packages/visualgst/GtkConcreteWidget.st.
+	* GtkEntryDialog.st: Renamed from packages/visualgst/GtkEntryDialog.st.
+	* GtkMainWindow.st: Renamed from packages/visualgst/GtkMainWindow.st.
+	* Tests/GtkConcreteWidgetTest.st: Renamed from packages/visualgst/Tests/GtkConcreteWidgetTest.st.
+	* package.xml: Added.

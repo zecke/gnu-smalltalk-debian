@@ -1,4 +1,4 @@
-GtkConcreteWidget subclass: GtkNotebookWidget [
+GTKTools.GtkConcreteWidget subclass: GtkNotebookWidget [
     | currentWidget selectMessage notebook pages labels |
 
     initialize [

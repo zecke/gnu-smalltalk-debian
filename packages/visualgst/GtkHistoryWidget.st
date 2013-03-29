@@ -1,4 +1,4 @@
-GtkConcreteWidget subclass: GtkHistoryWidget [
+GTKTools.GtkConcreteWidget subclass: GtkHistoryWidget [
     | browser model widget |
 
     GtkHistoryWidget class >> new [

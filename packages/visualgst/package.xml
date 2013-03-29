@@ -3,6 +3,7 @@
   <namespace>VisualGST</namespace>
   <prereq>Parser</prereq>
   <prereq>GTK</prereq>
+  <prereq>GTKTools</prereq>
   <prereq>Cairo</prereq>
   <prereq>SUnit</prereq>
   <prereq>DebugTools</prereq>
@@ -26,7 +27,6 @@
     <filein>Tests/PragmaTest.st</filein>
     <filein>Tests/GtkCategorizedNamespaceWidgetTest.st</filein>
     <filein>Tests/GtkCategorizedClassWidgetTest.st</filein>
-    <filein>Tests/GtkConcreteWidgetTest.st</filein>
     <file>Tests/AddNamespaceUndoCommandTest.st</file>
     <file>Tests/GtkMethodWidgetTest.st</file>
     <file>Tests/CompiledMethodTest.st</file>
@@ -44,7 +44,6 @@
     <file>Tests/PragmaTest.st</file>
     <file>Tests/GtkCategorizedNamespaceWidgetTest.st</file>
     <file>Tests/GtkCategorizedClassWidgetTest.st</file>
-    <file>Tests/GtkConcreteWidgetTest.st</file>
     <sunit>
       VisualGST.AddNamespaceUndoCommandTest
       VisualGST.GtkMethodWidgetTest
@@ -65,7 +64,6 @@
       VisualGST.GtkCategorizedNamespaceWidgetTest
       VisualGST.GtkCategorizedClassWidgetTest
       VisualGST.#Test
-      VisualGST.GtkConcreteWidgetTest
     </sunit>
   </test>
   <filein>Extensions.st</filein>
@@ -159,8 +157,6 @@
   <filein>Category/ClassCategory.st</filein>
   <filein>Category/AbstractNamespace.st</filein>
   <filein>Category/Class.st</filein>
-  <filein>GtkAbstractConcreteWidget.st</filein>
-  <filein>GtkConcreteWidget.st</filein>
   <filein>GtkScrollTreeWidget.st</filein>
   <filein>GtkSimpleListWidget.st</filein>
   <filein>GtkEntryWidget.st</filein>
@@ -175,7 +171,6 @@
   <filein>GtkTreeModel.st</filein>
   <filein>Text/GtkTextWidget.st</filein>
   <filein>GtkPackageBuilderWidget.st</filein>
-  <filein>GtkMainWindow.st</filein>
   <filein>GtkVisualGSTTool.st</filein>
   <filein>GtkBrowsingTool.st</filein>
   <filein>GtkLauncher.st</filein>
@@ -204,7 +199,6 @@
   <filein>GtkHistoryWidget.st</filein>
   <filein>Inspector/GtkInspector.st</filein>
   <filein>StBrowser/GtkClassBrowserWidget.st</filein>
-  <filein>GtkEntryDialog.st</filein>
   <filein>HistoryStack.st</filein>
   <filein>Undo/UndoStack.st</filein>
   <filein>Undo/UndoCommand.st</filein>
@@ -385,8 +379,6 @@
   <file>Category/ClassCategory.st</file>
   <file>Category/AbstractNamespace.st</file>
   <file>Category/Class.st</file>
-  <file>GtkAbstractConcreteWidget.st</file>
-  <file>GtkConcreteWidget.st</file>
   <file>GtkScrollTreeWidget.st</file>
   <file>GtkSimpleListWidget.st</file>
   <file>GtkEntryWidget.st</file>
@@ -401,7 +393,6 @@
   <file>GtkTreeModel.st</file>
   <file>Text/GtkTextWidget.st</file>
   <file>GtkPackageBuilderWidget.st</file>
-  <file>GtkMainWindow.st</file>
   <file>GtkVisualGSTTool.st</file>
   <file>GtkBrowsingTool.st</file>
   <file>GtkLauncher.st</file>
@@ -430,7 +421,6 @@
   <file>GtkHistoryWidget.st</file>
   <file>Inspector/GtkInspector.st</file>
   <file>StBrowser/GtkClassBrowserWidget.st</file>
-  <file>GtkEntryDialog.st</file>
   <file>HistoryStack.st</file>
   <file>Undo/UndoStack.st</file>
   <file>Undo/UndoCommand.st</file>

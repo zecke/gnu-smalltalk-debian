@@ -13,7 +13,7 @@ TestCase subclass: GtkConcreteWidgetTest [
     ]
 
     getVisible [
-	
+
 	^ false
     ]
 
@@ -40,4 +40,3 @@ TestCase subclass: GtkConcreteWidgetTest [
 	self should: [ widget close. true].
     ]
 ]
-

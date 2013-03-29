@@ -1,4 +1,4 @@
-GtkConcreteWidget subclass: GtkSUnitResult [
+GTKTools.GtkConcreteWidget subclass: GtkSUnitResult [
     | model resultTree results |
     initialize [
 	<category: 'initialization'>
