@@ -10,7 +10,7 @@ GtkScrollTreeWidget subclass: GtkSimpleListWidget [
         <category: 'user interface'>
 
         self treeView getSelection setMode: GTK.Gtk gtkSelectionBrowse.
-        (GtkListModel on: self treeView getModel)
+        (GTKTools.GtkListModel on: self treeView getModel)
                                         contentsBlock: [ :each | {each displayString} ]
     ]
 ]

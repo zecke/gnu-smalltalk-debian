@@ -1,5 +1,19 @@
 2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
 
+	* Debugger/GtkContextWidget.st: Use GTKTools namespace.
+	* GtkHistoryWidget.st: Use GTKTools namespace.
+	* GtkSimpleListWidget.st: Use GTKTools namespace.
+	* GtkVariableTrackerWidget.st: Use GTKTools namespace.
+	* Image/GtkImageWidget.st: Use GTKTools namespace.
+	* Implementors/GtkImageResultsWidget.st: Use GTKTools namespace.
+	* Inspector/GtkInspectorWidget.st: Use GTKTools namespace.
+	* StBrowser/GtkCategoryWidget.st: Use GTKTools namespace.
+	* StBrowser/GtkMethodWidget.st: Use GTKTools namespace.
+	* package.xml: Remove moved files.
+	* GtkListModel.st: Renamed to packages/gtktools/GtkListModel.st.
+
+2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
+
 	* Commands/CategoryMenus/AddCategoryCommand.st: Use GTKTools namespace.
 	* Commands/CategoryMenus/RenameCategoryCommand.st: Use GTKTools namespace.
 	* Commands/ClassMenus/AddClassCommand.st: Use GTKTools namespace.

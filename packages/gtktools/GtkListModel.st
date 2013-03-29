@@ -95,4 +95,3 @@ Object subclass: GtkListModel [
 	^ self findIter: anObject ifAbsent: [ self error: 'Item not found' ]
     ]
 ]
-

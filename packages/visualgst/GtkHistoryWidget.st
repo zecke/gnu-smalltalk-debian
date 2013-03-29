@@ -29,7 +29,7 @@ GTKTools.GtkConcreteWidget subclass: GtkHistoryWidget [
                             yourself.
         widget getSelection setMode: GTK.Gtk gtkSelectionBrowse.
         widget getSelection connectSignal: 'changed' to: self selector: #onSelectionChanged.
-        (model := GtkListModel on: widget getModel)
+        (model := GTKTools.GtkListModel on: widget getModel)
                                         contentsBlock: [ :each | {each name displayString} ].
         ^ GTK.GtkScrolledWindow withChild: widget
     ]

@@ -1,5 +1,10 @@
 2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
 
+	* GtkListModel.st: Renamed from packages/visualgst/GtkListModel.st.
+	* package.xml: Add GtkListModel.
+
+2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
+
 	* GtkAbstractConcreteWidget.st: Renamed from packages/visualgst/GtkAbstractConcreteWidget.st.
 	* GtkConcreteWidget.st: Renamed from packages/visualgst/GtkConcreteWidget.st.
 	* GtkEntryDialog.st: Renamed from packages/visualgst/GtkEntryDialog.st.
