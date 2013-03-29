@@ -1,6 +1,6 @@
 "======================================================================
 |
-| GtkScrollTreeWidgetTest class definition
+| GtkColumnOOPType class definition
 |
 ======================================================================"
 
@@ -33,22 +33,23 @@
 |
 ======================================================================"
 
-TestCase subclass: GtkScrollTreeWidgetTest [
+GtkColumnType subclass: GtkColumnOOPType [
 
-    testAccessing [
-	<category: 'testing'>
+    GtkColumnOOPType class >> kind [
+	<category: 'accessing'>
 
-	| widget |
-	widget := GtkScrollTreeWidget basicNew.
-	widget treeView: 123.
-	self assert: widget treeView = 123
+	^ GLib.GType oopType
     ]
 
-    testPopupConnection [
-	<category: 'testing'>
+    GtkColumnOOPType class >> kindName [
+        <category: 'accessing'>
 
-        | widget |
-        widget := GtkScrollTreeWidget createListWithModel: {{GtkColumnTextType title: 'aString'}}.
+        ^ self error: 'OOP type should not be displayed'
+    ]
+
+    GtkColumnOOPType class >> cellRenderer [
+        <category: 'accessing'>
+
+        ^ self error: 'OOP type has no cell renderer'
     ]
 ]
-

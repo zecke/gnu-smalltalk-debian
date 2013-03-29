@@ -1,6 +1,6 @@
 "======================================================================
 |
-| GtkColumnPixbufType class definition
+| GtkSimpleListWidget class definition
 |
 ======================================================================"
 
@@ -33,24 +33,19 @@
 |
 ======================================================================"
 
-GtkColumnType subclass: GtkColumnPixbufType [
+GtkScrollTreeWidget subclass: GtkSimpleListWidget [
 
-    GtkColumnPixbufType class >> kind [
-	<category: 'accessing'>
+    GtkSimpleListWidget class >> named: aString [
+	<category: 'instance creation'>
 
-	^ GTK.GdkPixbuf getType
+	^ self createListWithModel: {{GtkColumnTextType title: aString}}
     ]
 
-    GtkColumnPixbufType class >> kindName [
-        <category: 'accessing'>
+    buildTreeView [
+        <category: 'user interface'>
 
-        ^ 'pixbuf'
-    ]
-
-    GtkColumnPixbufType class >> cellRenderer [
-        <category: 'accessing'>
-
-        ^ GTK.GtkCellRendererPixbuf
+        self treeView getSelection setMode: GTK.Gtk gtkSelectionBrowse.
+        (GtkListModel on: self treeView getModel)
+                                        contentsBlock: [ :each | {each displayString} ]
     ]
 ]
-

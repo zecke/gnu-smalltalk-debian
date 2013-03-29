@@ -1,6 +1,6 @@
 "======================================================================
 |
-| GtkSimpleListWidget class definition
+| GtkScrollTreeWidget class definition
 |
 ======================================================================"
 
@@ -33,20 +33,50 @@
 |
 ======================================================================"
 
-GtkScrollTreeWidget subclass: GtkSimpleListWidget [
+GtkConcreteWidget subclass: GtkScrollTreeWidget [
 
-    GtkSimpleListWidget class >> named: aString [
+    GtkScrollTreeWidget class >> createListWithModel: anObject [
 	<category: 'instance creation'>
 
-	^ self createListWithModel: {{GtkColumnTextType title: aString}}
+	^ self basicNew
+		treeView: (GTK.GtkTreeView createListWithModel: anObject);
+		initialize;
+		yourself
+    ]
+
+    GtkScrollTreeWidget class >> createTreeWithModel: anObject [
+        <category: 'instance creation'>
+
+        ^ self basicNew
+                treeView: (GTK.GtkTreeView createTreeWithModel: anObject);
+                initialize;
+                yourself
+    ]
+
+    | treeView |
+
+    initialize [
+	<category:'initialize'>
+
+	popupMenu := [ :value | ].
+	self buildTreeView.
+	self mainWidget: (GTK.GtkScrolledWindow withChild: self treeView)
     ]
 
     buildTreeView [
-        <category: 'user interface'>
+	<category: 'user interface'>
 
-        self treeView getSelection setMode: GTK.Gtk gtkSelectionBrowse.
-        (GTKTools.GtkListModel on: self treeView getModel)
-                                        contentsBlock: [ :each | {each displayString} ]
+    ]
+
+    treeView: aGtkTreeView [
+	<category: 'accessing'>
+
+	treeView := aGtkTreeView.
+    ]
+
+    treeView [
+	<category: 'accessing'>
+
+	^ treeView
     ]
 ]
-

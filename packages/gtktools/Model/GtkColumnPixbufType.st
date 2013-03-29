@@ -1,6 +1,6 @@
 "======================================================================
 |
-| GtkColumnOOPType class definition
+| GtkColumnPixbufType class definition
 |
 ======================================================================"
 
@@ -33,24 +33,23 @@
 |
 ======================================================================"
 
-GtkColumnType subclass: GtkColumnOOPType [
+GtkColumnType subclass: GtkColumnPixbufType [
 
-    GtkColumnOOPType class >> kind [
+    GtkColumnPixbufType class >> kind [
 	<category: 'accessing'>
 
-	^ GLib.GType oopType
+	^ GTK.GdkPixbuf getType
     ]
 
-    GtkColumnOOPType class >> kindName [
+    GtkColumnPixbufType class >> kindName [
         <category: 'accessing'>
 
-        ^ self error: 'OOP type should not be displayed'
+        ^ 'pixbuf'
     ]
 
-    GtkColumnOOPType class >> cellRenderer [
+    GtkColumnPixbufType class >> cellRenderer [
         <category: 'accessing'>
 
-        ^ self error: 'OOP type has no cell renderer'
+        ^ GTK.GtkCellRendererPixbuf
     ]
 ]
-

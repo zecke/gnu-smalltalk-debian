@@ -1,6 +1,6 @@
 "======================================================================
 |
-| GtkSimpleListWidgetTest class definition
+| GtkColumnTextType class definition
 |
 ======================================================================"
 
@@ -33,14 +33,23 @@
 |
 ======================================================================"
 
-TestCase subclass: GtkSimpleListWidgetTest [
+GtkColumnType subclass: GtkColumnTextType [
 
-    testInstanceCreation [
-	<category: 'testing'>
+    GtkColumnTextType class >> kind [
+	<category: 'accessing'>
 
-	| widget |
-	widget := GtkSimpleListWidget named: 'foo'.
-	self assert: widget treeView isNil not
+	^ GTK.GValue gTypeString
+    ]
+
+    GtkColumnTextType class >> kindName [
+        <category: 'accessing'>
+
+        ^ 'text'
+    ]
+
+    GtkColumnTextType class >> cellRenderer [
+        <category: 'accessing'>
+
+        ^ GTK.GtkCellRendererText
     ]
 ]
-

@@ -1,6 +1,6 @@
 "======================================================================
 |
-| GtkColumnTextType class definition
+| GtkScrollTreeWidgetTest class definition
 |
 ======================================================================"
 
@@ -33,24 +33,21 @@
 |
 ======================================================================"
 
-GtkColumnType subclass: GtkColumnTextType [
+TestCase subclass: GtkScrollTreeWidgetTest [
 
-    GtkColumnTextType class >> kind [
-	<category: 'accessing'>
+    testAccessing [
+	<category: 'testing'>
 
-	^ GTK.GValue gTypeString
+	| widget |
+	widget := GtkScrollTreeWidget basicNew.
+	widget treeView: 123.
+	self assert: widget treeView = 123
     ]
 
-    GtkColumnTextType class >> kindName [
-        <category: 'accessing'>
+    testPopupConnection [
+	<category: 'testing'>
 
-        ^ 'text'
-    ]
-
-    GtkColumnTextType class >> cellRenderer [
-        <category: 'accessing'>
-
-        ^ GTK.GtkCellRendererText
+        | widget |
+        widget := GtkScrollTreeWidget createListWithModel: {{GtkColumnTextType title: 'aString'}}.
     ]
 ]
-
