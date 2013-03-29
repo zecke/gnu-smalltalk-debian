@@ -4,4 +4,3 @@ GtkSidebarWidget subclass: GtkHSidebarWidget [
 	^ GTK.GtkHPaned
     ]
 ]
-

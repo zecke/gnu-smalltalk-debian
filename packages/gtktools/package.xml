@@ -8,6 +8,9 @@
   <filein>GtkConcreteWidget.st</filein>
   <filein>GtkEntryDialog.st</filein>
   <filein>GtkListModel.st</filein>
+  <filein>GtkSidebarWidget.st</filein>
+  <filein>GtkHSidebarWidget.st</filein>
+  <filein>GtkVSidebarWidget.st</filein>
 
   <test>
     <sunit>

@@ -1,5 +1,12 @@
 2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
 
+	* GtkHSidebarWidget.st: Renamed from packages/visualgst/GtkHSidebarWidget.st.
+	* GtkSidebarWidget.st: Renamed from packages/visualgst/GtkSidebarWidget.st.
+	* GtkVSidebarWidget.st: Renamed from packages/visualgst/GtkVSidebarWidget.st.
+	* package.xml: Add the new files.
+
+2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
+
 	* GtkListModel.st: Renamed from packages/visualgst/GtkListModel.st.
 	* package.xml: Add GtkListModel.
 
