@@ -33,7 +33,7 @@
 |
 ======================================================================"
 
-GtkConcreteWidget subclass: GtkTextWidget [
+GTKTools.GtkConcreteWidget subclass: GtkTextWidget [
     | findWidget replaceWidget textWidget userAction undoStack lastCommand cut textSaved lastSavedCommand |
 
     GtkTextWidget class >> newWithBuffer: aGtkTextBuffer [

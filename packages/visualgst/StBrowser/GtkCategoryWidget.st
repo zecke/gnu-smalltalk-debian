@@ -33,7 +33,7 @@
 |
 ======================================================================"
 
-GtkConcreteWidget subclass: GtkCategoryWidget [
+GTKTools.GtkConcreteWidget subclass: GtkCategoryWidget [
     | categoryTree categories model class |
 
     GtkCategoryWidget >> on: aClass [

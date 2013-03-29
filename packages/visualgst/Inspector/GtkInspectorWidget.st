@@ -33,7 +33,7 @@
 |
 ======================================================================"
 
-GtkConcreteWidget subclass: GtkInspectorWidget [
+GTKTools.GtkConcreteWidget subclass: GtkInspectorWidget [
     | inspector model object inspectorTree workspaceWidget objectView stack |
 
     GtkInspectorWidget >> openOn: anObject [

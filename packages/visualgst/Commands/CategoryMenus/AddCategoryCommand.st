@@ -44,7 +44,7 @@ ClassCommand subclass: AddCategoryCommand [
 	<category: 'command'>
 
 	| dlg |
-        dlg := GtkEntryDialog title: 'Add a category' text: 'Name of the category'.
+        dlg := GTKTools.GtkEntryDialog title: 'Add a category' text: 'Name of the category'.
         dlg hasPressedOk: [ 
             self addCategory: dlg result onWidget: target viewedCategoryWidget ]
 

@@ -33,7 +33,7 @@
 |
 ======================================================================"
 
-GtkConcreteWidget subclass: GtkMethodWidget [
+GTKTools.GtkConcreteWidget subclass: GtkMethodWidget [
     | browser model methodTree class category |
 
     GtkMethodWidget >> on: aClass withCategory: aCategory [

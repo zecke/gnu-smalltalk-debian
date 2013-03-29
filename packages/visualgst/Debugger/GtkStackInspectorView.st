@@ -33,7 +33,7 @@
 |
 ======================================================================"
 
-GtkConcreteWidget subclass: GtkStackInspectorView [
+GTKTools.GtkConcreteWidget subclass: GtkStackInspectorView [
     | object args temps |
 
     GtkStackInspectorView class >> openOn: aContext [

@@ -1,3 +1,42 @@
+2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* Commands/CategoryMenus/AddCategoryCommand.st: Use GTKTools namespace.
+	* Commands/CategoryMenus/RenameCategoryCommand.st: Use GTKTools namespace.
+	* Commands/ClassMenus/AddClassCommand.st: Use GTKTools namespace.
+	* Commands/ClassMenus/RenameClassCommand.st: Use GTKTools namespace.
+	* Commands/NamespaceMenus/AddNamespaceCommand.st: Use GTKTools namespace.
+	* Commands/NamespaceMenus/RenameNamespaceCommand.st: Use GTKTools namespace.
+	* Debugger/GtkContextWidget.st: Use GTKTools namespace.
+	* Debugger/GtkStackInspectorView.st: Use GTKTools namespace.
+	* GtkEntryWidget.st: Use GTKTools namespace.
+	* GtkHistoryWidget.st: Use GTKTools namespace.
+	* GtkNotebookWidget.st: Use GTKTools namespace.
+	* GtkPackageBuilderWidget.st: Use GTKTools namespace.
+	* GtkScrollTreeWidget.st: Use GTKTools namespace.
+	* GtkSidebarWidget.st: Use GTKTools namespace.
+	* GtkVariableTrackerWidget.st: Use GTKTools namespace.
+	* GtkVisualGSTTool.st: Use GTKTools namespace.
+	* Image/GtkImageWidget.st: Use GTKTools namespace.
+	* Implementors/GtkImageResultsWidget.st: Use GTKTools namespace.
+	* Inspector/GtkInspectorBrowserWidget.st: Use GTKTools namespace.
+	* Inspector/GtkInspectorWidget.st: Use GTKTools namespace.
+	* SUnit/GtkSUnitResultWidget.st: Use GTKTools namespace.
+	* StBrowser/GtkCategorizedClassWidget.st: Use GTKTools namespace.
+	* StBrowser/GtkCategorizedNamespaceWidget.st: Use GTKTools namespace.
+	* StBrowser/GtkCategoryWidget.st: Use GTKTools namespace.
+	* StBrowser/GtkClassBrowserWidget.st: Use GTKTools namespace.
+	* StBrowser/GtkClassHierarchyWidget.st: Use GTKTools namespace.
+	* StBrowser/GtkMethodWidget.st: Use GTKTools namespace.
+	* Tetris/Tetris.st: Use GTKTools namespace.
+	* Text/GtkTextPluginWidget.st: Use GTKTools namespace.
+	* Text/GtkTextWidget.st: Use GTKTools namespace.
+	* package.xml: Use GTKTools namespace.
+	* GtkAbstractConcreteWidget.st: Renamed to packages/gtktools/GtkAbstractConcreteWidget.st.
+	* GtkConcreteWidget.st: Renamed to packages/gtktools/GtkConcreteWidget.st.
+	* GtkEntryDialog.st: Renamed to packages/gtktools/GtkEntryDialog.st.
+	* GtkMainWindow.st: Renamed to packages/gtktools/GtkMainWindow.st.
+	* Tests/GtkConcreteWidgetTest.st: Renamed to packages/gtktools/Tests/GtkConcreteWidgetTest.st.
+
 2013-08-20  Gwenael Casaccio  <gwenael.casaccio@gmail.com>
 
 	* Extensions.st: Move some extensions to Debugger/Extensions.

@@ -33,7 +33,7 @@
 |
 ======================================================================"
 
-GtkConcreteWidget subclass: GtkEntryWidget [
+GTKTools.GtkConcreteWidget subclass: GtkEntryWidget [
 
     GtkEntryWidget class >> labeled: aString [
 	<category: 'instance creation'>

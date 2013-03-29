@@ -33,7 +33,7 @@
 |
 ======================================================================"
 
-GtkConcreteWidget subclass: GtkVariableTrackerWidget [
+GTKTools.GtkConcreteWidget subclass: GtkVariableTrackerWidget [
     | model object widget |
 
     GtkVariableTrackerWidget class >> on: anObject [

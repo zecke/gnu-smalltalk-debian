@@ -33,7 +33,7 @@
 |
 ======================================================================"
 
-GtkConcreteWidget subclass: GtkClassBrowserWidget [
+GTKTools.GtkConcreteWidget subclass: GtkClassBrowserWidget [
     GtkClassBrowserWidget class [ | Undo | ]
 
     | launcher checkCode namespaceWidget classWidget classHierarchyWidget classHierarchyUpdate iCategoryWidget iMethodWidget cCategoryWidget cMethodWidget classAndInstanceSide codeWidget historyStack state |

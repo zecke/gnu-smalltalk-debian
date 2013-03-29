@@ -41,7 +41,7 @@ Smalltalk.String extend [
     ]
 ]
 
-GtkConcreteWidget subclass: GtkCategorizedClassWidget [
+GTKTools.GtkConcreteWidget subclass: GtkCategorizedClassWidget [
     | classesTree column model namespace category |
 
     GtkCategorizedClassWidget >> on: aNamespace [

@@ -33,7 +33,7 @@
 |
 ======================================================================"
 
-GtkConcreteWidget subclass: GtkPackageBuilderWidget [
+GTKTools.GtkConcreteWidget subclass: GtkPackageBuilderWidget [
 
     | classList ressourceList packName namespace provide provideList test classCategory prereq prereqList entries |
 

@@ -44,7 +44,7 @@ NamespaceCommand subclass: AddNamespaceCommand [
 	<category: 'command'>
 
 	| dlg |
-        dlg := GtkEntryDialog title: 'Add a namespace' text: 'Name of the new namespace'.
+        dlg := GTKTools.GtkEntryDialog title: 'Add a namespace' text: 'Name of the new namespace'.
         dlg hasPressedOk: [ 
             (SysAddNamespaceCommand add: dlg result asSymbol to: target state namespace) executeIfValid ]
     ]

@@ -44,7 +44,7 @@ CategoryCommand subclass: RenameCategoryCommand [
 	<category: 'command'>
 
 	| dlg |
-        dlg := GtkEntryDialog title: 'Rename a category' text: 'Name of the category'.
+        dlg := GTKTools.GtkEntryDialog title: 'Rename a category' text: 'Name of the category'.
         dlg hasPressedOk: [
             (SysRenameCategoryCommand rename: target state category in: target state classOrMeta as: dlg result onModel: target viewedCategoryModel) executeIfValid ]
     ]

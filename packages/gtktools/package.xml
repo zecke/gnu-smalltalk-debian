@@ -1,0 +1,17 @@
+<package>
+  <name>GTKTools</name>
+  <namespace>GTKTools</namespace>
+  <prereq>GTK</prereq>
+
+  <filein>GtkMainWindow.st</filein>
+  <filein>GtkAbstractConcreteWidget.st</filein>
+  <filein>GtkConcreteWidget.st</filein>
+  <filein>GtkEntryDialog.st</filein>
+
+  <test>
+    <sunit>
+      GTKTools.GtkConcreteWidgetTest
+    </sunit>
+    <filein>Tests/GtkConcreteWidgetTest.st</filein>
+  </test>
+</package>

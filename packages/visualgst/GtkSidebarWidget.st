@@ -33,7 +33,7 @@
 |
 ======================================================================"
 
-GtkConcreteWidget subclass: GtkSidebarWidget [
+GTKTools.GtkConcreteWidget subclass: GtkSidebarWidget [
     | activeWidget widgets widgetEvents paned |
 
     initialize [
@@ -45,7 +45,7 @@ GtkConcreteWidget subclass: GtkSidebarWidget [
 				yourself.
 	self mainWidget: paned.
 	widgetEvents := Dictionary new.
-	activeWidget := GtkAbstractConcreteWidget new.
+	activeWidget := GTKTools.GtkAbstractConcreteWidget new.
 	widgets := OrderedCollection new
     ]
 
