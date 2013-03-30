@@ -36,4 +36,8 @@ Object subclass: SourceEntity [
     emitTo: aStream filteredBy: aBlock [
         self subclassResponsibility
     ]
+
+    isSourceClass [
+        ^ false
+    ]
 ]

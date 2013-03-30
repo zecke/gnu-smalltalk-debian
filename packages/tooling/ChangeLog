@@ -1,5 +1,15 @@
 2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
 
+	* Lint/Monticello.st: Added Monticello class for linting.
+	* Parser/SourceClass.st: Reimplement >>#isSourceClass, >>#methodsToEmit,
+		>>#classMethodsToEmit, #>>isComplete.
+	* Parser/SourceEntity.st: Added >>#isSourceClass.
+	* Parser/Loader.st: Add >>#stuffToEmit selector.
+	* TODO: Add work item.
+	* package.xml: Add the Lint/Monticello.st.
+
+2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
+
 	* Makefile.frag: Added.
 	* Parser/SourceClass.st: Added from scripts/Convert.st.
 	* Parser/SourceComments.st: Added from scripts/Convert.st.

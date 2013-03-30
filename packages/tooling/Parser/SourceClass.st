@@ -82,4 +82,24 @@ SourceEntity subclass: SourceClass [
             completeFileOut: isComplete;
             fileOutSelectors: methodsToEmit classSelectors: classMethodsToEmit.
     ]
+
+    isSourceClass [
+        <category: 'accessing'>
+        ^ true
+    ]
+
+    methodsToEmit [
+        <category: 'accessing'>
+        ^ methodsToEmit
+    ]
+
+    classMethodsToEmit [
+        <category: 'accessing'>
+        ^ classMethodsToEmit
+    ]
+
+    isComplete [
+        <category: 'accessing'>
+        ^ isComplete
+    ]
 ]
