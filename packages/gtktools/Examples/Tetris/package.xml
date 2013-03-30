@@ -1,0 +1,23 @@
+<package>
+    <name>GTKTools-Example-Tetris</name>
+    <namespace>Tetris</namespace>
+    <prereq>GTKTools</prereq>
+
+    <filein>HighScores.st</filein>
+    <filein>Score.st</filein>
+    <filein>TetrisPieceWidget.st</filein>
+    <filein>BlockWidget.st</filein>
+    <filein>TetrisField.st</filein>
+    <filein>TetrisPiece.st</filein>
+    <filein>TetrisPieceI.st</filein>
+    <filein>TetrisPieceJ.st</filein>
+    <filein>TetrisPieceL.st</filein>
+    <filein>TetrisPieceO.st</filein>
+    <filein>TetrisPieceS.st</filein>
+    <filein>TetrisPieceT.st</filein>
+    <filein>TetrisPieceZ.st</filein>
+    <filein>Tetris.st</filein>
+
+    <start>Tetris.Tetris open.
+    GTK.Gtk main</start>
+</package>

@@ -27,7 +27,7 @@
 |
  ======================================================================"
 
-Object subclass: TetrisPieceWidget [
+Object subclass: TetrisFieldWidget [
 
     | position size color |
 
@@ -42,7 +42,7 @@ Object subclass: TetrisPieceWidget [
 
 	size := anInteger
     ]
-    
+
     color: aColor [
 	<category: 'accessing'>
 

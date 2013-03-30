@@ -217,7 +217,6 @@
   <filein>Undo/Text/InsertTextCommand.st</filein>
   <filein>Undo/Text/DeleteTextCommand.st</filein>
   <filein>Undo/Text/ReplaceTextCommand.st</filein>
-  <filein>Clock/GtkClock.st</filein>
   <filein>Inspector/GtkInspectorSourceWidget.st</filein>
   <filein>Inspector/GtkInspectorBrowserWidget.st</filein>
   <filein>Inspector/GtkInspectorWidget.st</filein>
@@ -239,20 +238,6 @@
   <filein>Notification/Kernel/MethodDictionary.st</filein>
   <filein>Debugger/GtkStackInspectorView.st</filein>
   <filein>Debugger/GtkStackInspector.st</filein>
-  <filein>Tetris/HighScores.st</filein>
-  <filein>Tetris/Score.st</filein>
-  <filein>Tetris/TetrisPieceWidget.st</filein>
-  <filein>Tetris/BlockWidget.st</filein>
-  <filein>Tetris/TetrisField.st</filein>
-  <filein>Tetris/TetrisPiece.st</filein>
-  <filein>Tetris/TetrisPieceI.st</filein>
-  <filein>Tetris/TetrisPieceJ.st</filein>
-  <filein>Tetris/TetrisPieceL.st</filein>
-  <filein>Tetris/TetrisPieceO.st</filein>
-  <filein>Tetris/TetrisPieceS.st</filein>
-  <filein>Tetris/TetrisPieceT.st</filein>
-  <filein>Tetris/TetrisPieceZ.st</filein>
-  <filein>Tetris/Tetris.st</filein>
   <filein>SUnit/TestBacktraceLog.st</filein>
   <filein>SUnit/GtkSUnitResultWidget.st</filein>
   <filein>GtkClassSUnitWidget.st</filein>
@@ -430,7 +415,6 @@
   <file>Undo/Text/InsertTextCommand.st</file>
   <file>Undo/Text/DeleteTextCommand.st</file>
   <file>Undo/Text/ReplaceTextCommand.st</file>
-  <file>Clock/GtkClock.st</file>
   <file>Inspector/GtkInspectorSourceWidget.st</file>
   <file>Inspector/GtkInspectorBrowserWidget.st</file>
   <file>Inspector/GtkInspectorWidget.st</file>
@@ -452,20 +436,6 @@
   <file>Notification/Kernel/MethodDictionary.st</file>
   <file>Debugger/GtkStackInspectorView.st</file>
   <file>Debugger/GtkStackInspector.st</file>
-  <file>Tetris/HighScores.st</file>
-  <file>Tetris/Score.st</file>
-  <file>Tetris/TetrisPieceWidget.st</file>
-  <file>Tetris/BlockWidget.st</file>
-  <file>Tetris/TetrisField.st</file>
-  <file>Tetris/TetrisPiece.st</file>
-  <file>Tetris/TetrisPieceI.st</file>
-  <file>Tetris/TetrisPieceJ.st</file>
-  <file>Tetris/TetrisPieceL.st</file>
-  <file>Tetris/TetrisPieceO.st</file>
-  <file>Tetris/TetrisPieceS.st</file>
-  <file>Tetris/TetrisPieceT.st</file>
-  <file>Tetris/TetrisPieceZ.st</file>
-  <file>Tetris/Tetris.st</file>
   <file>SUnit/TestBacktraceLog.st</file>
   <file>SUnit/GtkSUnitResultWidget.st</file>
   <file>GtkClassSUnitWidget.st</file>
