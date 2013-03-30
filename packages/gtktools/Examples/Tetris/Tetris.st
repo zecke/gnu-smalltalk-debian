@@ -15,21 +15,21 @@
 | GNU Smalltalk is free software; you can redistribute it and/or modify it
 | under the terms of the GNU General Public License as published by the Free
 | Software Foundation; either version 2, or (at your option) any later version.
-| 
+|
 | GNU Smalltalk is distributed in the hope that it will be useful, but WITHOUT
 | ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 | FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
 | details.
-| 
+|
 | You should have received a copy of the GNU General Public License along with
 | GNU Smalltalk; see the file LICENSE.  If not, write to the Free Software
-| Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.  
+| Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 |
  ======================================================================"
 
 GTKTools.GtkMainWindow subclass: Tetris [
     | canvasWidget canvas process pause delay grid movingBlocks level score level lines |
-    
+
     <category: 'Graphics-Tetris'>
     <comment: nil>
 
@@ -95,7 +95,7 @@ GTKTools.GtkMainWindow subclass: Tetris [
 
     buildCentralWidget [
 	<category: 'user interface'>
-	
+
 	^ canvasWidget := GTK.GtkDrawingArea new
 	    setSizeRequest: 400 height: 700;
 	    connectSignal: 'expose_event' to: self selector: #'expose:event:';
@@ -108,7 +108,7 @@ GTKTools.GtkMainWindow subclass: Tetris [
         | res |
         res := aGtkAllocation castTo: (CIntType arrayType: 4).
 
-        canvas saveWhile: [ 
+        canvas saveWhile: [
 	    canvas
                 rectangle: ((0@0) extent: ((res at: 2) @ (res at: 3)));
                 operator: #clear;
@@ -202,32 +202,32 @@ GTKTools.GtkMainWindow subclass: Tetris [
 
     cycle [
 	<category: 'game'>
-	
+
 	| result filledLines |
 	grid := TetrisField new.
 	[ movingBlocks := true.
 	  result := grid currentPiece: TetrisPiece random.
-	  result ifTrue: [ self 
+	  result ifTrue: [ self
 			    refresh;
 			    delay ].
-	  result ] whileTrue: [ 
+	  result ] whileTrue: [
 		[ result := self slidePiece.
 		  self refresh.
 		  result ] whileTrue: [ self delay ].
-		  filledLines := self 
+		  filledLines := self
 				    resetMovingBlocks;
 				    cementPiece;
 				    removeLines.
 		  self updateScore: filledLines.
 		  Processor yield ].
 
-	^ self gameOver 
+	^ self gameOver
     ]
 
     initializeGame [
 	<category: 'game'>
 
-	self 
+	self
 	    level: 1;
 	    lines: 0;
 	    score: 0.
@@ -388,4 +388,3 @@ GTKTools.GtkMainWindow subclass: Tetris [
 	^ grid dropPiece
     ]
 ]
-

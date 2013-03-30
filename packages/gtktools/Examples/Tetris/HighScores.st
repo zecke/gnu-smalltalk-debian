@@ -1,6 +1,6 @@
 "======================================================================
 |
-| Score class definition
+| HighScores class definition
 |
 ======================================================================"
 
@@ -33,28 +33,39 @@
 |
 ======================================================================"
 
-Object subclass: Score [
+Object subclass: HighScores [
 
-    Score class >> score: anInteger [
+    | highScores maxScores |
+
+    HighScores class >> newSized: anInteger [
 	<category: 'instance creation'>
 
 	^ self new
-	    score: anInteger;
+	    maxScores: anInteger;
 	    yourself
     ]
 
-    | score |
-
-    score: anInteger [
+    highScores [
 	<category: 'accessing'>
 
-	score := anInteger
+	^ highScores ifNil: [ highScores := OrderedCollection new ]
     ]
 
-    score [
-	<category: 'acccessing'>
+    maxScores: anInteger [
+	<category: 'accessing'>
 
-	^ score
+	maxScores := anInteger
+    ]
+
+    addScore: aScore [
+	<category: 'updating'>
+
+	| pos |
+	pos := 0.
+	self highScores doWithIndex: [ :each :index |
+	    each < index ifTrue: [ pos := index ] ].
+	pos = 0 ifTrue: [ ^ self ].
+	self highScores add: aScore after: pos.
+	self highScores size > self maxScores ifTrue: [ self highScores removeLast ]
     ]
 ]
-
