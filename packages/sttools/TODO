@@ -2,3 +2,14 @@
   of the calls to emitTo:.
 
 * Remove "Emit" from variable names.
+
+* The following is shown as a a single class
+  Object subclass: Foo [
+        signal []
+  ]
+
+  Foo extend [
+        signalTwo []
+  ]
+
+  It should be two SourceClass

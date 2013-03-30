@@ -8,4 +8,6 @@
     <filein>Parser/SourceComments.st</filein>
     <filein>Parser/SourceEval.st</filein>
     <filein>Parser/Loader.st</filein>
+
+    <filein>Lint/Monticello.st</filein>
 </package>
