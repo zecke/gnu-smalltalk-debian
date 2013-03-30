@@ -22,4 +22,3 @@ Object subclass: Score [
 	^ score
     ]
 ]
-

@@ -34,4 +34,3 @@ Object subclass: HighScores [
 	self highScores size > self maxScores ifTrue: [ self highScores removeLast ]
     ]
 ]
-

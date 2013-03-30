@@ -12,7 +12,7 @@ Smalltalk.Object subclass: GtkClock [
 
     GtkClock class >> openSized: aPoint [
 	<category: 'user interface'>
-	
+
 	^ (self new)
 	    initialize;
 	    resize: aPoint;
@@ -122,7 +122,7 @@ Smalltalk.Object subclass: GtkClock [
 	    x := 128.
 	    y := 128.
 
-	    self 
+	    self
 		clearArea: aGtkWidget getAllocation;
 		time;
 		drawClock: cr ].
@@ -134,7 +134,7 @@ Smalltalk.Object subclass: GtkClock [
 	<category: 'intialization'>
 
 	window := (GTK.GtkWindow new: GTK.Gtk gtkWindowToplevel).
-	window 
+	window
 	    setColormap: window getScreen getRgbaColormap;
 	    connectSignal: 'expose_event' to: self selector: #'expose:event:';
 	    connectSignal: 'delete-event' to: self selector: #'delete:event:';

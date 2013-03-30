@@ -8,7 +8,7 @@
 "======================================================================
 |
 | Copyright 1999 Free Software Foundation, Inc.
-| Written by Gwenael Casaccio.
+| Written by Paolo Bonzini, Gwenael Casaccio.
 |
 | This file is part of GNU Smalltalk.
 |
@@ -27,31 +27,35 @@
 |
  ======================================================================"
 
-Object subclass: TetrisFieldWidget [
+TetrisPiece subclass: TetrisPieceI [
 
-    | position size color |
+    <category: 'Graphics-Tetris'>
+    <comment: nil>
 
-    position: aPoint [
-	<category: 'accessing'>
+    TetrisPieceI class >> piece [
+	<category: 'pieces'>
 
-	position := aPoint
+	^#( #( #(1 0 0 0)
+	       #(1 0 0 0)
+	       #(1 0 0 0)
+	       #(1 0 0 0))
+	    #( #(0 0 0 0)
+	       #(0 0 0 0)
+	       #(0 0 0 0)
+	       #(1 1 1 1))
+	    #( #(1 0 0 0)
+	       #(1 0 0 0)
+	       #(1 0 0 0)
+	       #(1 0 0 0))
+	    #( #(0 0 0 0)
+	       #(0 0 0 0)
+	       #(0 0 0 0)
+	       #(1 1 1 1)))
     ]
 
-    size: anInteger [
-	<category: 'accessing'>
+    TetrisPieceI class >> color [
+	<category: 'pieces'>
 
-	size := anInteger
-    ]
-    
-    color: aColor [
-	<category: 'accessing'>
-
-	color := aColor
-    ]
-
-    drawOn: aCanvas [
-	<category: 'drawing'>
-
-	self subclassResponsibility
+	^ Cairo.Color red
     ]
 ]

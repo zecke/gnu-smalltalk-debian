@@ -15,22 +15,22 @@
 | GNU Smalltalk is free software; you can redistribute it and/or modify it
 | under the terms of the GNU General Public License as published by the Free
 | Software Foundation; either version 2, or (at your option) any later version.
-| 
+|
 | GNU Smalltalk is distributed in the hope that it will be useful, but WITHOUT
 | ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 | FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
 | details.
-| 
+|
 | You should have received a copy of the GNU General Public License along with
 | GNU Smalltalk; see the file LICENSE.  If not, write to the Free Software
-| Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.  
+| Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 |
  ======================================================================"
 
 
 Object subclass: TetrisField [
     | rows currentPiece |
-    
+
     <category: 'Graphics-Tetris'>
     <comment: nil>
 
@@ -54,7 +54,7 @@ Object subclass: TetrisField [
 
     initialize [
 	<category: 'initializing'>
-	
+
 	rows := (1 to: 22) collect: [:each | ByteArray new: 10].
 	rows do: [:each | self initializeLine: each].
 	(rows at: 22) atAll: (1 to: 10) put: 1
@@ -80,9 +80,9 @@ Object subclass: TetrisField [
 	removed := 0.
 	firstLine := self currentPiece y.
 	lastLine := 21 min: firstLine + 3.
-	lastLine - firstLine + 1 timesRepeat: 
-		[(self checkLine: lastLine) 
-		    ifTrue: 
+	lastLine - firstLine + 1 timesRepeat:
+		[(self checkLine: lastLine)
+		    ifTrue:
 			[removed := removed + 1.
 			self removeLine: lastLine]
 		    ifFalse: [lastLine := lastLine - 1]].
@@ -177,4 +177,3 @@ Object subclass: TetrisField [
 	self currentPiece drawOn: aCanvas
     ]
 ]
-
