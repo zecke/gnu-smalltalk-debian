@@ -232,4 +232,9 @@ STInST.STClassLoader subclass: Loader [
                 ifTrue: [ stuffToEmit last addMethod: aMethod ]
                 ifFalse: [ stuffToEmit add: ((EmittedClass forExtension: currentClass) addMethod: aMethod) ]
     ]
+
+    stuffToEmit [
+        <category: 'accessing'>
+        ^ stuffToEmit
+    ]
 ]

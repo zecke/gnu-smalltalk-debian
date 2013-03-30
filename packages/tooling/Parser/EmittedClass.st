@@ -82,4 +82,24 @@ EmittedEntity subclass: EmittedClass [
             completeFileOut: isComplete;
             fileOutSelectors: methodsToEmit classSelectors: classMethodsToEmit.
     ]
+
+    isEmittedClass [
+        <category: 'accessing'>
+        ^ true
+    ]
+
+    methodsToEmit [
+        <category: 'accessing'>
+        ^ methodsToEmit
+    ]
+
+    classMethodsToEmit [
+        <category: 'accessing'>
+        ^ classMethodsToEmit
+    ]
+
+    isComplete [
+        <category: 'accessing'>
+        ^ isComplete
+    ]
 ]
