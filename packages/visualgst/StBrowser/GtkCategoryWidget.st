@@ -1,4 +1,4 @@
-GtkConcreteWidget subclass: GtkCategoryWidget [
+GTKTools.GtkConcreteWidget subclass: GtkCategoryWidget [
     | categoryTree categories model class |
 
     GtkCategoryWidget >> on: aClass [
@@ -74,7 +74,7 @@ GtkConcreteWidget subclass: GtkCategoryWidget [
 	categoryTree := GtkScrollTreeWidget createListWithModel: {{GtkColumnTextType title: 'Method categories'}}.
 	categoryTree treeView getSelection setMode: GTK.Gtk gtkSelectionBrowse.
 	categoryTree connectToWhenPopupMenu: (CategoryMenus on: self).
-        (model := GtkListModel on: categoryTree treeView getModel)
+        (model := GTKTools.GtkListModel on: categoryTree treeView getModel)
                                         contentsBlock: [ :each | {each displayString} ].
 	^ categoryTree mainWidget
     ]

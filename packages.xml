@@ -107,6 +107,7 @@
   <file>Bag.st</file>
   <file>Date.st</file>
   <file>Message.st</file>
+  <file>MessageLookup.st</file>
   <file>SharedQueue.st</file>
   <file>Behavior.st</file>
   <file>Delay.st</file>
@@ -145,13 +146,13 @@
   <file>Object.st</file>
   <file>Time.st</file>
   <file>FileStream.st</file>
-  <file>Security.st</file>
   <file>OrderColl.st</file>
   <file>CCallable.st</file>
   <file>CCallback.st</file>
   <file>CFuncs.st</file>
   <file>Float.st</file>
   <file>PkgLoader.st</file>
+  <file>DirPackage.st</file>
   <file>Transcript.st</file>
   <file>CObject.st</file>
   <file>Fraction.st</file>

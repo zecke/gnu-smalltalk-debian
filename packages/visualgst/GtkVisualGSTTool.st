@@ -1,4 +1,4 @@
-GtkMainWindow subclass: GtkVisualGSTTool [
+GTKTools.GtkMainWindow subclass: GtkVisualGSTTool [
     <comment: 'I am the base for various tools of VisualGST.'>
 
     GtkVisualGSTTool class >> version [

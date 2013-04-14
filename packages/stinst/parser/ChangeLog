@@ -1,3 +1,91 @@
+2013-03-31  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* STLoaderObjs.st: Change ProxyNamespace>>#printOn to avoid
+	recursion into self.
+
+2013-02-23  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* RBParser.st: Fix RBParser>>#parsedNegatedNumber.
+	* RBToken.st: Add RBNumberLiteralToken>>#makeNegative.
+	* RewriteTests.st: Add testcase for RBParser>>#parseNegatedNumber.
+
+2013-02-17  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* RBParser.st: Fix RBScanner>>#scanNumber.
+	* RewriteTests.st: Add testcase for RBScanner>>#scanNumber.
+	* package.xml: Add the new test to the testsuite.
+
+2013-02-10  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* OldSyntaxExporter.st: Reformat the method node in
+	OldSyntaxExporter>>#oldSyntaxSourceCodeFor:.
+	* RewriteTests.st: Add the TestRewrite class.
+	* package.xml: Add the TestRewrite test to the testsuite.
+
+2013-02-08  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* RBFormatter.st: Use the RBToken>>#storeOn: for writing.
+	* RBParser.st: Create a RBNumberLiteralToken for number literals.
+	* RBToken.st: Create the RBNumberLiteralToken class.
+	* RewriteTests.st: Add test for the number literal parsing
+	* package.xml: Add the new test to the testsuite.
+
+2013-01-23  Gwenael Casaccio  <gwenael.casaccio@gmail.com>
+
+	* STSymTable.st: Remove security checks.
+
+2013-01-29  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* STLoaderObjs.st: Put class variables into the classVars array.
+
+2013-01-29  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* Exporter.st: Add FileOutExporter class>>#fileOutComment:to:.
+	* SqueakExporter.st: Re-implement the
+	SqueakSyntaxExporter class>>#fileOutComment:to: using chunks.
+
+2012-10-06  Holger Freyther  <holger@freyther.de>
+
+	* SqueakExporter.st: Use 'as yet unclassified' as category string
+	if it is nil.
+
+2012-10-02  Holger Freyther  <holger@freyther.de>
+
+	* GSTParser.st: Change GSTFileInParser>>#parseClassTag to parse
+	more complicated pragmas.
+
+2012-09-29  Holger Freyther  <holger@freyther.de>
+
+	* RBParser.st: Add RBScanner>>#digitValue:.
+	* SqueakParser.st: Reimplement SqueakFileInScanner>>#digitValue:,
+	SqueakFileInScanner>>#isDigit:base:. Parsing of 16rff is now
+	possible.
+
+2012-09-09  Holger Freyther  <holger@freyther.de>
+
+	* STLoaderObjs.st: Add LoadedBehavior>>#article.
+
+2011-11-10  Gwenael Casaccio  <mrgwen@gmail.com>
+            Paolo Bonzini  <bonzini@gnu.org>
+
+	* STSymTable.st: Use #scopeDictionary.
+
+2011-09-26  Paolo Bonzini  <bonzini@gnu.org>
+
+	* GSTParser.st: Do not shortcut evaluation of class tags to
+	#evaluateMessageOn:selector:arguments:.
+
+2011-09-24  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* STCompiler.st: Do not attempt inlining of #to:do: if the
+	block argument is not a literal.
+
+2011-09-24  Paolo Bonzini  <bonzini@gnu.org>
+
+	* STCompiler.st: Do not attempt inlining of boolean methods if
+	the arguments are not literal blocks.  Reported by Holger
+	Freyther.
+
 2011-06-28  Gwenael Casaccio <mrgwen@gmail.com>
 
 	* ParseTreeSearcher.st: Remove #beConsistent.

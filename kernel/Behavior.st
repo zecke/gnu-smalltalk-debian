@@ -1292,16 +1292,6 @@ method dictionary, and iterating over the class hierarchy.'>
 	^'<no name>'
     ]
 
-    securityPolicy [
-	<category: 'support for lightweight classes'>
-	^self asClass securityPolicy
-    ]
-
-    securityPolicy: aSecurityPolicy [
-	<category: 'support for lightweight classes'>
-	self shouldNotImplement
-    ]
-
     printOn: aStream in: aNamespace [
 	"Answer the class name when the class is referenced from aNamespace
 	 - a dummy one, since Behavior does not support names."
@@ -1690,6 +1680,13 @@ method dictionary, and iterating over the class hierarchy.'>
 	<category: 'built ins'>
 	<primitive: VMpr_Behavior_primCompileIfError>
 	^self primitiveFailed
+    ]
+
+    scopeDictionary [
+        "Answer the dictionary that is used when the receiver is before
+         a period in Smalltalk source code."
+        <category: 'compilation'>
+        ^self classPool
     ]
 ]
 

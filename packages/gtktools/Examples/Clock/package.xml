@@ -1,0 +1,9 @@
+<package>
+    <name>GTKTools-Example-Clock</name>
+    <namespace>Clock</namespace>
+    <prereq>GTKTools</prereq>
+
+    <filein>GtkClock.st</filein>
+    <start>Clock.GtkClock open.
+    GTK.Gtk main</start>
+</package>

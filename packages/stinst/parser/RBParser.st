@@ -544,7 +544,7 @@ Object subclass: RBParser [
 	    ^self parserError: 'Number expected' ].
 	token value negative ifTrue: [
 	    ^self parserError: 'Positive number expected' ].
-	token value: token value negated.
+	token makeNegative.
 	self step.
 	^RBLiteralNode literalToken: token
     ]
@@ -976,6 +976,11 @@ Stream subclass: RBScanner [
 	    ifFalse: [aChar isDigit]
     ]
 
+    digitValue: aChar [
+	<category: 'private-scanning numbers'>
+        ^ aChar digitValue
+    ]
+
     scanDigits: ch base: base [
 	<category: 'private-scanning numbers'>
 	| c num |
@@ -987,7 +992,7 @@ Stream subclass: RBScanner [
 		c := currentCharacter].
 	c notNil and: [self isDigit: c base: base]] 
 		whileTrue: 
-		    [num := num * base + c digitValue.
+		    [num := num * base + (self digitValue: c).
 		    self step.
 		    c := currentCharacter].
 	^num
@@ -1016,7 +1021,7 @@ Stream subclass: RBScanner [
 		c := currentCharacter].
 	c notNil and: [self isDigit: c base: base]] 
 		whileTrue: 
-		    [result := result * base + c digitValue.
+		    [result := result * base + (self digitValue: c).
 		    self step.
 		    c := currentCharacter.
 		    scale := scale - 1].
@@ -1315,11 +1320,19 @@ Stream subclass: RBScanner [
     ]
 
     scanNumber [
+        | stop val string |
 	<category: 'private-scanning'>
-	^RBLiteralToken 
-	    value: self scanNumberValue
-	    start: tokenStart
-	    stop: self previousStepPosition
+        val := self scanNumberValue.
+        stop := self previousStepPosition.
+
+        "Get the parsed source"
+        string := stream copyFrom: tokenStart - 1 to: stop - 1.
+
+	^RBNumberLiteralToken
+            value: val
+            start: tokenStart
+            stop: stop
+            source: string
     ]
 
     scanQualifier [

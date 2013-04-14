@@ -240,7 +240,7 @@ _gst_is_simple_return (bc_vector bytecodes,
 
   bytes = bytecodes->base;
 
-  for (i = 1; i <= 3; i++)
+  for (i = 1; i <= 4; i++)
     {
       int should_have_been_return = (maybe != MTH_NORMAL);
       if (bytes == bytecodes->ptr)
@@ -414,11 +414,16 @@ search_block (const PTR a, const PTR b)
 int
 compute_jump_length (int ofs)
 {
-  if (ofs > -256 && ofs < 256)
+  /* The offset is counted from the end of the bytecode and the result of
+     compute_jump_length is subtracted when computing the jump offset (the
+     the jump offset increases in absolute value when jumping back).  This
+     means the actual range for backwards jumps is a little less than 2^8k
+     bytes, while for forwards jumps it is a little more than 2^8k bytes.  */
+  if (ofs > -254 && ofs < 258)
     return 2;
-  else if (ofs > -65536 && ofs < 65536)
+  else if (ofs > -65532 && ofs < 65540)
     return 4;
-  else if (ofs > -16777216 && ofs < 16777216)
+  else if (ofs > -16777210 && ofs < 16777222)
     return 6;
   else
     return 8;
@@ -1226,11 +1231,7 @@ typedef struct partially_constructed_array {
   CHECK_LITERAL (n); \
   if (IS_INT (literals[(n)]) || \
       !is_a_kind_of (OOP_CLASS (literals[(n)]), _gst_lookup_key_class)) \
-    return ("LookupKey expected"); \
-  else if (store \
-	   && untrusted \
-	   && !IS_OOP_UNTRUSTED (literals[(n)])) \
-    return ("Invalid global variable access");
+    return ("LookupKey expected");
 
 #define LIT_VARIABLE_CLASS(n) \
   /* Special case classes because of super and {...} */ \
@@ -1309,7 +1310,6 @@ _gst_verify_method (OOP methodOOP, int *num_outer_temps, int depth)
   int size, bc_len, num_temps, stack_depth,
     num_literals, num_rec_vars, num_ro_rec_vars;
 
-  mst_Boolean untrusted;
   const char *error;
   gst_uchar *bp;
   OOP *literals, methodClass, last_used_literal;
@@ -1326,7 +1326,6 @@ _gst_verify_method (OOP methodOOP, int *num_outer_temps, int depth)
   methodClass = GET_METHOD_CLASS (methodOOP);
   num_literals = NUM_METHOD_LITERALS (methodOOP);
   num_rec_vars = CLASS_FIXED_FIELDS (methodClass);
-  untrusted = IS_OOP_UNTRUSTED (methodOOP);
 
   if (is_a_kind_of (OOP_CLASS (methodOOP), _gst_compiled_method_class))
     {
@@ -1374,17 +1373,7 @@ _gst_verify_method (OOP methodOOP, int *num_outer_temps, int depth)
   else
     return "invalid class";
 
-  if (untrusted)
-    {
-       OOP class_oop;
-       for (class_oop = methodClass; IS_OOP_UNTRUSTED (class_oop);
-            class_oop = SUPERCLASS (class_oop))
-         ;
-
-       num_ro_rec_vars = CLASS_FIXED_FIELDS (class_oop);
-    }
-  else
-    num_ro_rec_vars = 0;
+  num_ro_rec_vars = 0;
 
 #ifdef DEBUG_VERIFIER
   printf ("Verifying %O (max. stack depth = %d):\n", methodOOP, stack_depth);

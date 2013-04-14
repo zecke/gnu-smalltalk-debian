@@ -35,6 +35,10 @@ OldSyntaxExporter subclass: SqueakSyntaxExporter [
     <comment: 'This class is responsible for filing out 
                a given class on a given stream in Squeak format'>
 
+    SqueakSyntaxExporter class >> fileOutComment: aString to: aStream [
+        (self on: nil to: aStream)
+            fileOutChunk: aString.
+    ]
     
     fileOutDeclaration: aBlock [
         (completeFileOut and: [ outClass environment ~= self defaultNamespace ])
@@ -68,5 +72,12 @@ OldSyntaxExporter subclass: SqueakSyntaxExporter [
 	    nl.
 
 	super fileOutClassDeclaration: aBlock
+    ]
+
+    fileOutCategory: aString methods: methods class: aClass [
+        | cat |
+        "Pharo does not like 'nil' as category name pick something else."
+        cat := aString ifNil: ['as yet unclassified'].
+        ^super fileOutCategory: cat methods: methods class: aClass.
     ]
 ]

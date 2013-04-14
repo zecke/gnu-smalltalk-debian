@@ -7,9 +7,11 @@ dnl Process this file with autoconf to produce a configure script.
 
 dnl 2.63 needed by testsuite, actually
 AC_PREREQ(2.63)
-AC_INIT([GNU Smalltalk], 3.2.90, help-smalltalk@gnu.org, smalltalk,
+AC_INIT([GNU Smalltalk], 3.2.91, help-smalltalk@gnu.org, smalltalk,
         [http://smalltalk.gnu.org/])
 MAINTAINER="bonzini@gnu.org"
+
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 dnl CURRENT:REVISION:AGE means this is the REVISION-th version of
 dnl the CURRENT-th interface; all the interface from CURRENT-AGE
@@ -19,7 +21,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([build-aux])
 AC_CONFIG_SRCDIR([main.c])
 AC_CONFIG_TESTDIR(tests)
-AM_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 GST_PROG_GAWK
 AM_INIT_AUTOMAKE
 AC_CANONICAL_HOST
@@ -322,7 +324,7 @@ AC_HEADER_ASSERT
 AC_CHECK_HEADERS_ONCE(stdint.h inttypes.h unistd.h poll.h sys/ioctl.h \
 	sys/resource.h sys/utsname.h stropts.h sys/param.h stddef.h limits.h \
 	sys/timeb.h termios.h sys/mman.h sys/file.h execinfo.h utime.h \
-	sys/select.h sys/wait.h fcntl.h, [], [], [AC_INCLUDES_DEFAULT])
+	sys/select.h sys/wait.h fcntl.h crt_externs.h, [], [], [AC_INCLUDES_DEFAULT])
 
 AC_CHECK_MEMBERS([struct stat.st_mtim.tv_nsec, struct stat.st_mtimensec,
 		  struct stat.st_mtimespec.tv_nsec])
@@ -358,8 +360,14 @@ AC_REPLACE_FUNCS(putenv strdup strerror strsignal mkstemp getpagesize \
 AC_CHECK_FUNCS_ONCE(gethostname memcpy memmove sighold uname usleep lstat \
 	grantpt popen getrusage gettimeofday fork strchr utimes utime readlink \
 	sigsetmask alarm select mprotect madvise waitpid accept4 \
-	setsid spawnl pread pwrite _NSGetExecutablePath \
+	setsid spawnl pread pwrite _NSGetExecutablePath _NSGetEnviron \
 	chown getgrnam getpwnam endgrent endpwent setgroupent setpassent)
+
+if test "$ac_cv_func__NSGetEnviron" = yes; then
+  AC_DEFINE([environ], [_NSGetEnviron()],
+    [Define to an appropriate function call if the system does not provide the
+     environ variable.])
+fi
 
 AC_SEARCH_LIBS([nanosleep], [rt])
 if test "$ac_cv_search_nanosleep" != no; then
@@ -373,14 +381,15 @@ if test "$ac_cv_search_clock_gettime" != no; then
     [Define if the system provides clock_gettime.])
 fi
 
+AC_SEARCH_LIBS([timer_create], [rt])
+if test "$ac_cv_search_timer_create" != no; then
+  AC_DEFINE(HAVE_TIMER_CREATE, 1, 
+    [Define if the system provides timer_create.])
+fi
 
 GST_FUNC_LRINT
 GST_FUNC_STRTOUL
 GST_FUNC_LOCALTIME
-
-{ echo; echo "${term_bold}Dynamic linking capabilities:${term_norm}"; } >& AS_MESSAGE_FD
-
-GST_LIB_LTDL
 
 dnl ------------------------- OTHER LIBRARIES -------------------
 
@@ -577,7 +586,11 @@ GST_PACKAGE_ENABLE([Sport], [sport])
 GST_PACKAGE_ENABLE([SUnit], [sunit])
 GST_PACKAGE_ENABLE([Swazoo], [swazoo-httpd])
 GST_PACKAGE_ENABLE([Sockets], [sockets], [], [gst_cv_sockets])
+GST_PACKAGE_ENABLE([Tooling], [tooling])
 GST_PACKAGE_ENABLE([VFSAddOns], [vfs], [], [], [Makefile])
+GST_PACKAGE_ENABLE([GTKTools], [gtktools])
+GST_PACKAGE_ENABLE([GTKTools-Example-Clock], [gtktools/Examples/Clock])
+GST_PACKAGE_ENABLE([GTKTools-Example-Tetris], [gtktools/Examples/Tetris])
 GST_PACKAGE_ENABLE([VisualGST], [visualgst])
 GST_PACKAGE_ENABLE([XML-XMLNodeBuilder], [xml/builder])
 GST_PACKAGE_ENABLE([XML-DOM], [xml/dom])
@@ -615,15 +628,6 @@ LIGHTNING_CONFIGURE_IF_NOT_FOUND([], enable_jit=no)
 if test "$enable_jit" != no; then
   AC_DEFINE(ENABLE_JIT_TRANSLATION, 1, 
     [Define to enable dynamic translation to machine code])
-fi
-
-AC_ARG_ENABLE(disassembler, 
-[  --enable-disassembler   include a disassembler in the gst executable], ,
-enable_disassembler=no)
-AM_CONDITIONAL(ENABLE_DISASSEMBLER, test "$enable_disassembler" != no)
-if test "$enable_disassembler" != no; then
-  AC_DEFINE(ENABLE_DISASSEMBLER, 1, 
-    [Define to include a disassembler in the gst executable])
 fi
 
 AC_ARG_ENABLE(dld,
@@ -715,11 +719,11 @@ if test "$enable_shared" != no; then
       # For Windows, the shared library will be installed in bindir anyway
       ;;
 
-    *-linux*)
-      # For Linux, we can use a relative rpath via -Wl,-rpath,...
+    *-gnu*)
+      # For glibc, we can use a relative rpath via -Wl,-rpath,...
       case "$acl_final_libdir" in
         "${acl_final_exec_prefix}"/*) ;;
-        /*) relocatable_reason='no, libdir outside exec-prefix' ;;
+        /*) relocatable_reason='no, libdir outside exec_prefix' ;;
         *) relocatable_reason='no, relative libdir' ;;
       esac
       ;;
@@ -738,7 +742,7 @@ if test "$relocatable_reason" = yes; then
   case "${acl_final_bindir}" in
     "${acl_final_exec_prefix}") ;;
     "${acl_final_exec_prefix}"/*) ;;
-    /*) relocatable_reason='no, bindir outside exec-prefix' ;;
+    /*) relocatable_reason='no, bindir outside exec_prefix' ;;
     *) relocatable_reason='no, relative bindir' ;;
   esac
   case "${acl_final_libexecdir}" in
@@ -825,7 +829,7 @@ case "$relocatable_reason" in
 		       [The relative path from the program to the prefix.
 		        Defined only for relocatable installs.])
     AC_DEFINE_UNQUOTED(EXEC_PREFIX, "$EXEC_PREFIX",
-		       [The relative path from the program to the exec-prefix.
+		       [The relative path from the program to the exec_prefix.
 			Defined only for relocatable installs.])
     ;;
 
@@ -879,6 +883,6 @@ AC_CONFIG_FILES(Makefile)
 
 dnl VM makefiles
 AC_CONFIG_FILES(doc/Makefile lib-src/Makefile libgst/Makefile)
-AC_CONFIG_FILES(opcode/Makefile lightning/Makefile tests/Makefile)
+AC_CONFIG_FILES(lightning/Makefile tests/Makefile)
 
 AC_OUTPUT

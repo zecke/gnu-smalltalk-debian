@@ -32,6 +32,8 @@ AC_CONFIG_HEADERS(config.h)
 AC_CONFIG_AUX_DIR(../build-aux)
 AC_CONFIG_MACRO_DIR(../build-aux)
 
+m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+
 AC_ARG_ENABLE(subdir,
 [  --enable-subdir     used in a package, texinfo+testsuite stripped], ,
 [enable_subdir=no])
@@ -110,7 +112,6 @@ AM_WITH_DMALLOC
 # check for various programs used during the build.
 # ----------------------------------------------------------------------
 AC_PROG_CC
-AM_PROG_CC_STDC
 AC_C_CONST
 AC_C_INLINE
 AC_EXEEXT

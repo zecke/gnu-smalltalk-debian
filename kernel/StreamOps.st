@@ -7,7 +7,7 @@
 
 "======================================================================
 |
-| Copyright 2001, 2002, 2007, 2008, 2009 Free Software Foundation, Inc.
+| Copyright 2001, 2002, 2007, 2008, 2009, 2013 Free Software Foundation, Inc.
 | Written by Paolo Bonzini.
 |
 | This file is part of GNU Smalltalk.
@@ -78,11 +78,14 @@ Stream subclass: ConcatenatedStream [
     stream [
 	<category: 'all'>
 	| s |
-	[(s := streams first) atEnd] whileTrue: 
-		[streams size = 1 ifTrue: [^nil].
-		lastStart := startPos.
-		startPos := startPos + curPos.
-		curPos := 0.
+        "This is somewhat performance-sensitive, so avoid testing for an
+         empty collection."
+	[(s := streams at: 1) atEnd] whileTrue: 
+		[curPos > 0 ifTrue: [
+                    lastStart := startPos.
+                    startPos := startPos + curPos.
+                    curPos := 0].
+                streams size = 1 ifTrue: [last := streams first. ^nil].
 		last := streams removeFirst].
 	^s
     ]
@@ -164,6 +167,11 @@ Stream subclass: ConcatenatedStream [
 	    ifTrue: [stream := last. lastStart]
 	    ifFalse: [startPos].
 	^stream copyFrom: (start - adjust max: 0) to: end - adjust
+    ]
+
+    species [
+        <category: 'all'>
+        ^ self stream species.
     ]
 
     addStream: stream [

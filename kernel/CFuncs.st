@@ -115,6 +115,12 @@ to perform the actual call-out to C routines.'>
 
 SystemDictionary extend [
 
+    system: aString withArguments: args [
+	<category: 'c call-outs'>
+	^self system: aString % (args collect: [ :string | string withShellEscapes ])
+	
+    ]
+
     system: aString [
 	<category: 'c call-outs'>
 	<cCall: 'system' returning: #int args: #(#string)>
@@ -124,6 +130,12 @@ SystemDictionary extend [
     getenv: aString [
 	<category: 'c call-outs'>
 	<cCall: 'getenv' returning: #string args: #(#string)>
+	
+    ]
+
+    environ [
+	<category: 'c call-outs'>
+	<cCall: 'environ' returning: #{CString} args: #()>
 	
     ]
 

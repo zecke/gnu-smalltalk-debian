@@ -284,6 +284,12 @@ static inline mst_Boolean cached_index_oop_put_primitive (OOP rec,
 							  OOP val,
 							  intptr_t spec);
 
+/* This functions accepts an OOP for a Semaphore object and puts the
+   PROCESSOOP to sleep, unless the semaphore has excess signals
+   on it.  */
+static void sync_wait_process (OOP semaphoreOOP,
+			       OOP processOOP);
+
 /* Empty the queue of asynchronous calls.  */
 static void empty_async_queue (void);
 
@@ -576,21 +582,6 @@ static void * const *dispatch_vec;
 #define PARENT_CONTEXT(contextOOP) \
   ( ((gst_method_context) OOP_TO_OBJ (contextOOP)) ->parentContext)
 
-/* Set whether the old context was a trusted one.  Untrusted contexts
-   are those whose receiver or sender is untrusted.  */
-#define UPDATE_CONTEXT_TRUSTFULNESS(contextOOP, parentContextOOP) \
-  MAKE_OOP_UNTRUSTED (contextOOP, \
-    IS_OOP_UNTRUSTED (_gst_self) | \
-    IS_OOP_UNTRUSTED (parentContextOOP));
-
-/* Set whether the current context is an untrusted one.  Untrusted contexts
-   are those whose receiver or sender is untrusted.  */
-#define IS_THIS_CONTEXT_UNTRUSTED() \
-  (UPDATE_CONTEXT_TRUSTFULNESS(_gst_this_context_oop, \
-			       PARENT_CONTEXT (_gst_this_context_oop)) \
-     & F_UNTRUSTED)
-
-
 /* Context management
  
    The contexts make up a linked list.  Their structure is:
@@ -763,8 +754,6 @@ empty_context_stack (void)
   context->spOffset = FROM_INT (sp - context->contextStack);
   context->ipOffset = FROM_INT (ip - method_base);
 
-  UPDATE_CONTEXT_TRUSTFULNESS (_gst_this_context_oop, context->parentContext);
-
   /* Even if the JIT is active, the current context might have no
      attached native_ip -- in fact it has one only if we are being
      called from activate_new_context -- so we have to `invent'
@@ -857,7 +846,6 @@ activate_new_context (int size,
     FROM_INT ((sp - thisContext->contextStack) - sendArgs);
   thisContext->ipOffset = FROM_INT (ip - method_base);
 
-  UPDATE_CONTEXT_TRUSTFULNESS (_gst_this_context_oop, thisContext->parentContext);
   _gst_this_context_oop = oop;
 
   return (newContext);
@@ -932,6 +920,8 @@ lookup_method (OOP sendSelector,
 {
   inc_ptr inc;
   OOP argsArrayOOP;
+  gst_message_lookup messageLookup;
+  OOP messageLookupOOP;
 
   if (_gst_find_method (method_class, sendSelector, methodData))
     return (true);
@@ -939,8 +929,16 @@ lookup_method (OOP sendSelector,
   inc = INC_SAVE_POINTER ();
   argsArrayOOP = create_args_array (sendArgs);
   INC_ADD_OOP (argsArrayOOP);
-  PUSH_OOP (_gst_message_new_args (sendSelector, argsArrayOOP));
+
+  messageLookup = (gst_message_lookup) new_instance (_gst_message_lookup_class,
+					             &messageLookupOOP);
+
+  messageLookup->selector = sendSelector;
+  messageLookup->args = argsArrayOOP;
+  messageLookup->startingClass = method_class;
+  PUSH_OOP (messageLookupOOP);
   INC_RESTORE_POINTER (inc);
+
   return (false);
 }
 
@@ -1381,51 +1379,6 @@ get_scheduled_process (void)
   return (processor->activeProcess);
 }
 
-void
-add_first_link (OOP semaphoreOOP,
-		OOP processOOP)
-{
-  gst_semaphore sem;
-  gst_process process, lastProcess;
-  OOP lastProcessOOP;
-
-  process = (gst_process) OOP_TO_OBJ (processOOP);
-  if (!IS_NIL (process->myList))
-    {
-      sem = (gst_semaphore) OOP_TO_OBJ (process->myList);
-      if (sem->firstLink == processOOP)
-	{
-	  sem->firstLink = process->nextLink;
-	  if (sem->lastLink == processOOP)
-	    {
-	      /* It was the only process in the list */
-	      sem->lastLink = _gst_nil_oop;
-	    }
-	}
-      else if (sem->lastLink == processOOP)
-	{
-	  /* Find the new last link */
-	  lastProcessOOP = sem->firstLink;
-	  lastProcess = (gst_process) OOP_TO_OBJ (lastProcessOOP);
-	  while (lastProcess->nextLink != processOOP)
-	    {
-	      lastProcessOOP = lastProcess->nextLink;
-	      lastProcess = (gst_process) OOP_TO_OBJ (lastProcessOOP);
-	    }
-	  sem->lastLink = lastProcessOOP;
-	  lastProcess->nextLink = _gst_nil_oop;
-	}
-    }
-
-  sem = (gst_semaphore) OOP_TO_OBJ (semaphoreOOP);
-  process->myList = semaphoreOOP;
-  process->nextLink = sem->firstLink;
-
-  sem->firstLink = processOOP;
-  if (IS_NIL (sem->lastLink))
-    sem->lastLink = processOOP;
-}
-
 static void
 remove_process_from_list (OOP processOOP)
 {
@@ -1450,7 +1403,7 @@ remove_process_from_list (OOP processOOP)
         }
       else
         {
-          /* Find the new last link */
+          /* Find the new prev node */
           lastProcessOOP = sem->firstLink;
           lastProcess = (gst_process) OOP_TO_OBJ (lastProcessOOP);
           while (lastProcess->nextLink != processOOP)
@@ -1468,6 +1421,25 @@ remove_process_from_list (OOP processOOP)
     }
 
   process->nextLink = _gst_nil_oop;
+}
+
+void
+add_first_link (OOP semaphoreOOP,
+		OOP processOOP)
+{
+  gst_semaphore sem;
+  gst_process process;
+
+  process = (gst_process) OOP_TO_OBJ (processOOP);
+  remove_process_from_list (processOOP);
+
+  sem = (gst_semaphore) OOP_TO_OBJ (semaphoreOOP);
+  process->myList = semaphoreOOP;
+  process->nextLink = sem->firstLink;
+
+  sem->firstLink = processOOP;
+  if (IS_NIL (sem->lastLink))
+    sem->lastLink = processOOP;
 }
 
 void
@@ -1497,32 +1469,7 @@ add_last_link (OOP semaphoreOOP,
   OOP lastProcessOOP;
 
   process = (gst_process) OOP_TO_OBJ (processOOP);
-  if (!IS_NIL (process->myList))
-    {
-      sem = (gst_semaphore) OOP_TO_OBJ (process->myList);
-      if (sem->firstLink == processOOP)
-	{
-	  sem->firstLink = process->nextLink;
-	  if (sem->lastLink == processOOP)
-	    {
-	      /* It was the only process in the list */
-	      sem->lastLink = _gst_nil_oop;
-	    }
-	}
-      else if (sem->lastLink == processOOP)
-	{
-	  /* Find the new last link */
-	  lastProcessOOP = sem->firstLink;
-	  lastProcess = (gst_process) OOP_TO_OBJ (lastProcessOOP);
-	  while (lastProcess->nextLink != processOOP)
-	    {
-	      lastProcessOOP = lastProcess->nextLink;
-	      lastProcess = (gst_process) OOP_TO_OBJ (lastProcessOOP);
-	    }
-	  sem->lastLink = lastProcessOOP;
-	  lastProcess->nextLink = _gst_nil_oop;
-	}
-    }
+  remove_process_from_list (processOOP);
 
   sem = (gst_semaphore) OOP_TO_OBJ (semaphoreOOP);
   process->myList = semaphoreOOP;
@@ -1727,11 +1674,20 @@ _gst_async_signal_and_unregister (OOP semaphoreOOP)
 }
 
 void
-_gst_sync_wait (OOP semaphoreOOP)
+sync_wait_process (OOP semaphoreOOP, OOP processOOP)
 {
   gst_semaphore sem;
+  mst_Boolean isActive;
 
   sem = (gst_semaphore) OOP_TO_OBJ (semaphoreOOP);
+  if (IS_NIL (processOOP))
+    {
+      processOOP = get_active_process ();
+      isActive = true;
+    }
+  else
+    isActive = (processOOP == get_active_process ());
+
   if (TO_INT (sem->signals) <= 0)
     {
       /* Have to suspend.  Prepare return value for #wait and move
@@ -1740,8 +1696,9 @@ _gst_sync_wait (OOP semaphoreOOP)
          Tweaking the stack top means that this function should only
 	 be called from a primitive.  */
       SET_STACKTOP (_gst_nil_oop);
-      add_last_link (semaphoreOOP, get_active_process ());
-      if (IS_NIL (ACTIVE_PROCESS_YIELD ()))
+      remove_process_from_list (processOOP);
+      add_last_link (semaphoreOOP, processOOP);
+      if (isActive && IS_NIL (ACTIVE_PROCESS_YIELD ()))
         {
 	  printf ("No runnable process");
 	  activate_process (_gst_prepare_execution_environment ());
@@ -1751,6 +1708,12 @@ _gst_sync_wait (OOP semaphoreOOP)
     sem->signals = DECR_INT (sem->signals);
 
   /* printf ("wait %O %O\n", semaphoreOOP, sem->firstLink); */
+}
+
+void
+_gst_sync_wait (OOP semaphoreOOP)
+{
+  sync_wait_process (semaphoreOOP, _gst_nil_oop);
 }
 
 OOP
@@ -2371,7 +2334,7 @@ set_preemption_timer (void)
 
   time_to_preempt = false;
   if (timeSlice > 0)
-    _gst_signal_after (timeSlice, preempt_smalltalk_process, SIGVTALRM);
+    _gst_sigvtalrm_every (timeSlice, preempt_smalltalk_process);
 #endif
 }
 

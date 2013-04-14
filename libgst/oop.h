@@ -76,7 +76,7 @@
    True, False, and UndefinedObject (nil) oops, which are
    built-ins.  */
 #define INITIAL_OOP_TABLE_SIZE	(1024 * 128 + BUILTIN_OBJECT_BASE)
-#define MAX_OOP_TABLE_SIZE	(sizeof(struct oop_s) << 20)
+#define MAX_OOP_TABLE_SIZE	(1 << 23)
 
 /* The number of free OOPs under which we trigger GCs.  0 is not
    enough because _gst_scavenge might still need some oops in
@@ -137,13 +137,6 @@ typedef struct gst_object_memory
 typedef unsigned long inc_ptr;
 
 /* Garbage collector data structures */
-
-typedef struct page_tree
-{
-  rb_node_t rb;
-  OOP *base;
-}
-page_tree;
 
 typedef struct weak_area_tree
 {
@@ -325,10 +318,6 @@ extern void _gst_finished_incremental_gc (void)
 extern void _gst_finish_incremental_gc (void) 
   ATTRIBUTE_HIDDEN;
 
-/* Compact the old objects.  Grow oldspace to NEWSIZE bytes.  */
-extern void _gst_compact (size_t newSize) 
-  ATTRIBUTE_HIDDEN;
-
 /* Move all the object in survivor space to old space.  */
 extern void _gst_tenure_all_survivors () 
   ATTRIBUTE_HIDDEN;
@@ -413,11 +402,6 @@ extern void _gst_inc_grow_registry (void)
    stored in P_OOP.  */
 extern gst_object _gst_alloc_obj (size_t size,
 				  OOP *p_oop) 
-  ATTRIBUTE_HIDDEN;
-
-/* The same, but for an oldspace object */
-extern gst_object _gst_alloc_old_obj (size_t size,
-				      OOP *p_oop) 
   ATTRIBUTE_HIDDEN;
 
 /* Allocate and return space for an object of SIZE words, without

@@ -1,4 +1,4 @@
-GtkConcreteWidget subclass: GtkStackInspectorView [
+GTKTools.GtkConcreteWidget subclass: GtkStackInspectorView [
     | object variables |
 
     GtkStackInspectorView class >> openOn: aContext [

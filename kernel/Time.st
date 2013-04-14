@@ -42,6 +42,7 @@ time value, and a block execution timing facility.'>
 
     SecondClockAdjustment := nil.
     ClockOnStartup := nil.
+    ClockOnImageSave := nil.
 
     Time class >> utcSecondClock [
 	"Answer the number of seconds since the midnight of 1/1/1901 (unlike
@@ -121,18 +122,25 @@ time value, and a block execution timing facility.'>
 	^self primitiveFailed
     ]
 
+    Time class >> nanosecondClock [
+	"Answer the number of nanoseconds since startup."
+
+	<category: 'clocks'>
+	^self primNanosecondClock - ClockOnStartup
+    ]
+
     Time class >> millisecondClock [
 	"Answer the number of milliseconds since startup."
 
 	<category: 'clocks'>
-	^self primMillisecondClock - ClockOnStartup
+	^self nanosecondClock // 1000000
     ]
 
-    Time class >> primMillisecondClock [
+    Time class >> primNanosecondClock [
 	"Returns the number of milliseconds since midnight."
 
 	<category: 'builtins'>
-	<primitive: VMpr_Time_millisecondClock>
+	<primitive: VMpr_Time_nanosecondClock>
 	^self primitiveFailed
     ]
 
@@ -143,6 +151,7 @@ time value, and a block execution timing facility.'>
 
 	<category: 'initialization'>
 	SecondClockAdjustment := 86400 * 36159.
+        ClockOnImageSave := 0.
 	ObjectMemory addDependent: self
     ]
 
@@ -150,8 +159,11 @@ time value, and a block execution timing facility.'>
 	"Private - Initialize the receiver's instance variables"
 
 	<category: 'initialization'>
-	aspect == #returnFromSnapshot 
-	    ifTrue: [ClockOnStartup := Time primMillisecondClock]
+        | time |
+	aspect == #returnFromSnapshot ifTrue: [
+            ClockOnStartup := Time primNanosecondClock - ClockOnImageSave].
+	aspect == #aboutToSnapshot ifTrue: [
+            ClockOnImageSave := Time nanosecondClock].
     ]
 
     Time class >> now [
@@ -240,33 +252,31 @@ time value, and a block execution timing facility.'>
 	 aStream"
 
 	<category: 'instance creation'>
-	| t1 t2 t3 ch ws |
-	t1 := t2 := t3 := 0.
-	ch := $:.
-	3 timesRepeat: 
-		[t1 := t2.
-		t2 := t3.
-		t3 := 0.
-		ch isSeparator 
-		    ifFalse: 
-			[ws := WriteStream on: (String new: 10).
-			ch := $:.
-			[aStream atEnd not and: [(ch := aStream next) isDigit not]] whileTrue.
-			ch isDigit 
-			    ifTrue: 
-				[
-				[ws nextPut: ch.
-				aStream atEnd not and: [(ch := aStream next) isDigit]] 
-					whileTrue].
-			t3 := ws contents asNumber]].
-	^self fromSeconds: t1 * 3600 + (t2 * 60) + t3
+        | hms i ch ws |
+        hms := {0. 0. 0}.
+        i := 1.
+        ch := $:.
+        [i <= 3 and: [aStream atEnd not and: [ch isSeparator not]]] whileTrue: [
+            ws := WriteStream on: (String new: 10).
+            [aStream atEnd not and: [(ch := aStream next) isDigit]]
+                whileTrue: [ws nextPut: ch].
+            hms at: i put: ws contents asNumber.
+            i := i + 1].
+        ^self fromSeconds: (hms at: 1) * 3600 + ((hms at: 2) * 60) + (hms at: 3)
+    ]
+
+    Time class >> nanosecondClockValue [
+	"Answer the number of milliseconds since startup"
+
+	<category: 'clocks'>
+	^self primNanosecondClock - ClockOnStartup
     ]
 
     Time class >> millisecondClockValue [
 	"Answer the number of milliseconds since startup"
 
 	<category: 'clocks'>
-	^self primMillisecondClock - ClockOnStartup
+	^self nanosecondClockValue // 1000000
     ]
 
     Time class >> millisecondsPerDay [
@@ -284,6 +294,11 @@ time value, and a block execution timing facility.'>
 	startTime := self millisecondClock.
 	timedBlock value.
 	^self millisecondClock - startTime
+    ]
+
+    asNanoseconds [
+	<category: 'accessing (non ANSI & for Durations)'>
+	^seconds * 1000000000
     ]
 
     asMilliseconds [

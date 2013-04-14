@@ -1,3 +1,355 @@
+2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* configure.ac: Introduce the GTKTools package
+
+2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* configure.ac: Introduce the Tooling package.
+
+2013-03-31  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* tests/stcompiler.ok: Update the test result.
+	* tests/stcompiler.st: Add a testcase for ProxyNamespace>>#printOn:.
+
+2013-03-24  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* libgst/files.c: Add DirPackage.st to the bootstrap.
+	* kernel/DirPackage.st: Add new file with the DirPackage and DirPackagesContainer.
+	* kernel/PkgLoader.st: Refactor and create ExternalPackage baseclass.
+
+2013-03-04  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* kernel/PkgLoader.st: Remove unused variable.
+
+2013-01-21  Gwenael Casaccio  <gwenael.casaccio@gmail.com>
+
+	 * main.c: Remove ENABLE_DISASSEMBLER support
+	 * opcode/dis-buf.c: Delete
+	 * opcode/disass.c: Delete
+	 * opcode/i386-dis.c: Delete
+	 * opcode/ppc-dis.c: Delete
+	 * opcode/ppc-opc.c: Delete
+	 * opcode/sparc-dis.c: Delete
+	 * opcode/sparc-opc.c: Delete
+
+2013-02-14  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* kernel/StreamOps.st: Override the >>#species selector.
+	* tests/streams.st: Add testcase.
+	* tests/streams.ok: Update the result.
+
+2013-01-23  Gwenael Casaccio  <gwenael.casaccio@gmail.com>
+
+	* kernel/Behavior.st: Remove security.
+	* kernel/BindingDict.st: Remove security.
+	* kernel/Class.st: Remove security.
+	* kernel/ContextPart.st: Remove security.
+	* kernel/Metaclass.st: Remove security.
+	* kernel/Object.st: Remove security.
+	* kernel/Security.st: Delete the file.
+	* kernel/SysExcept.st: Remove security exceptions.
+	* libgst/Makefile.am: Remove security files.
+	* libgst/comp.c: Remove security checks.
+	* libgst/dict.c: Update Class structure.
+	* libgst/dict.h: Update Class structure.
+	* libgst/files.c: Remove security file from bootstrap.
+	* libgst/gst-parse.c: Remove security checks.
+	* libgst/interp.c: Remove security checks.
+	* libgst/opt.c: Remove security checks.
+	* libgst/prims.def: Remove security primitives.
+	* libgst/security.c: Remove file.
+	* libgst/security.h: Remove file.
+	* libgst/sym.c: Remove security checks.
+	* packages.xml: Remove security file.
+	* tests/Makefile.am: Remove security tests.
+	* tests/testsuite.at: Remove security tests.
+	* tests/untrusted.ok: Remove security tests.
+	* tests/untrusted.st: Remove security tests.
+
+2013-01-27  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* configure.ac: Enable the silent rules.
+	* snprintfv/configure.ac: Enable the silent rules.
+
+2013-01-29  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* tests/stcompiler.st: Add parsing test.
+	* tests/stcompiler.ok: Update the test result.
+
+2013-01-17  Holger Freyther  <holger@freyther.de>
+
+	* kernel/Delay.st: Name the process created.
+
+2013-01-17  Holger Freyther  <holger@freyther.de>
+
+	* tests/dates.ok: Fix the testcase to read from the right
+	ReadStream.
+	* tests/dates.st: Update the test result.
+
+2013-01-23  Holger Freyther  <holger@freyther.de>
+
+	* .travis.yml: Update before_install to update the apt repository.
+
+2013-03-16  Holger Freyther  <holger@freyther.de>
+
+	* .travis.yml: Add description for the travis-ci service.
+
+2013-03-16  Holger Freyther  <holger@freyther.de>
+
+	* tests/Makefile.am: Add streams.st and streams.ok to data
+
+2012-10-09  Paolo Bonzini  <bonzini@gnu.org>
+            Holger Freyther  <holger@freyther.de>
+
+	* kernel/StreamOps.st: Fix previous changeset.
+	* tests/streams.st: New.
+	* tests/streams.ok: New.
+
+2012-10-08  Paolo Bonzini  <bonzini@gnu.org>
+
+	* kernel/StreamOps.st: Ensure "last" is up to date when a
+	stream has reached its end.  Reported by Holger Freyther.
+
+2012-10-02  Holger Freyther  <holger@freyther.de>
+
+	* tests/stcompiler.st: Add testcase for pragma parsing.
+	* tests/stcompiler.ok: Update the test result.
+
+2012-09-29  Holger Freyther  <holger@freyther.de>
+
+	* scripts/Convert.st: Collect all rewrite expressions and parse
+	them with the selected parser.
+
+2012-09-29  Holger Freyther  <holger@freyther.de>
+
+	* tests/stcompiler.st: Add testcase for parsing 16rff.
+	* tests/stcompiler.ok: Update the test result.
+
+2012-09-14  Thomas Girard  <thomas.g.girard@free.fr>
+
+	* tests/cobjects.st: Add CBoolean test case for issue#659.
+	* tests/cobjects.ok: Regenerate.
+	* kernel/CObject.st: Add missing CBoolean class>>#type.
+
+2012-09-09  Holger Freyther  <holger@freyther.de>
+
+	* tests/stcompiler.st: Add testcase for article.
+	* tests/stcompiler.ok: Update the test result.
+
+2012-09-09  Holger Freyther  <holger@freyther.de>
+
+	* kernel/Delay.st: Name the delay process.
+
+2012-09-09  Holger Freyther  <holger@freyther.de>
+
+	* kernel/CallinProcess.st: Copy the priority directly.
+
+2012-10-08  Roman  <komputikisto@gmail.com>
+
+	* kernel/Iterable.st: Fix #fold: for objects that do not implement
+	#isEmpty.
+
+2012-10-08  Roman  <komputikisto@gmail.com>
+
+	* kernel/Link.st: Fail fast on zero or negative indices.
+
+2012-02-22  Paolo Bonzini  <bonzini@gnu.org>
+
+	* kernel/CallinProcess.st: Fix creation of cloned process, reported
+	by Holger Freyther.
+
+2012-02-22  Gwenael Casaccio  <mrgwen@gmail.com>
+            Paolo Bonzini  <bonzini@gnu.org>
+
+	* kernel/PkgLoader.st: Add support for <dir> tag.
+
+2012-07-15  Paolo Bonzini  <bonzini@gnu.org>
+
+	* scripts/Package.st: Disable again backtraces.
+
+2012-06-04  Thomas Girard  <thomas.g.girard@free.fr>
+
+	* tests/cobjects.st: Adapt longLong test case, showing the issue#646.
+	* tests/cobjects.ok: Regenerate.
+
+2012-05-19  Ladislav Marek  <ladislav@marek.su>
+
+	* kernel/MessageLookup.st: Add missing dot.
+
+2012-05-19  Paolo Bonzini  <bonzini@gnu.org>
+
+	* kernel/Delay.st: Switch to nanosecond-precision.
+	* kernel/ProcSched.st: Rename #signal:atMillisecondClockValue:
+	to #signal:atNanosecondClockValue:.
+
+2012-05-19  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/sysdep.h: Rename _gst_init_sysdep_win32 to
+	_gst_init_sysdep_timer.
+	* libgst/sysdep/common/files.c: Likewise.
+	* libgst/sysdep/cygwin/timer.c: Likewise.
+	* libgst/sysdep/win32/timer.c: Likewise.
+	* libgst/sysdep/posix/timer.c: Support POSIX real-time timers.
+
+2012-05-19  Paolo Bonzini  <bonzini@gnu.org>
+
+	* kernel/Delay.st: Use #signal:atMillisecondClockValue:.
+	* kernel/ProcSched.st: Define #signal:atMillisecondClockValue:.
+
+2012-05-19  Paolo Bonzini  <bonzini@gnu.org>
+
+	* kernel/Random.st: Do not use #primMillisecondClock.
+	* kernel/Time.st: Base time on nanoseconds.
+
+2012-05-13  Stefano Lattarini  <stefano.lattarini@gmail.com> (tiny change)
+
+	build: don't use obsolescent AM_PROG_CC_STDC and AM_CONFIG_HEADER
+
+	The Automake-provided macros 'AM_PROG_CC_STDC' and 'AM_CONFIG_HEADER'
+	have been superseded respectively by the Autoconf-provided ones
+	'AC_PROG_CC' (since October 2002) and 'AC_CONFIG_HEADERS' (since July
+	2002).  Moreover, those obsolescent macros will be removed in the next
+	major Automake version (1.13).  Stop using them.
+
+	* configure.ac (AM_CONFIG_HEADER): Don't use this, ...
+	(AC_CONFIG_HEADERS): ... use this instead.  While we are at it,
+	properly quote the argument.
+	* snprintfv/configure.ac (AM_PROG_CC_STDC): Drop this, the invocation
+	to AC_PROG_CC is enough.
+
+2012-03-29  Paolo Bonzini  <bonzini@gnu.org>
+
+	* tests/compiler.st: Add testcase.
+	* tests/compiler.ok: Regenerate.
+
+2012-02-02  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* scripts/Package.st: Scan for new *.star files.
+
+2011-09-25  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* kernel/File.st: Add a <category: 'text'> to the class.
+	* kernel/PkgLoader.st: Ditto.
+	* kernel/VFS.st: Ditto.
+
+2012-03-01  Paolo Bonzini  <bonzini@gnu.org>
+
+	* kernel/CompildMeth.st: Return self from #makeLiteralsReadOnly.
+	Do not make globals read-only.  Reported by Gwenael Casaccio.
+
+2012-02-22  Paolo Bonzini  <bonzini@gnu.org>
+
+	* kernel/LinkedList: Add #first, #last, and improve error on #at:.
+
+2012-02-22  Paolo Bonzini  <bonzini@gnu.org>
+            Gwenael Casaccio  <mrgwen@gmail.com>
+
+	* tests/processes.st: Add testcase.
+	* tests/processes.ok: Regenerate.
+
+2012-02-08  Gwenael Casaccio  <mrgwen@gmail.com>
+
+	* kernel/MethodDict.st: Fix initialization of mutex.
+
+2012-02-04  Paolo Bonzini  <bonzini@gnu.org>
+
+	* kernel/MessageLookup.st: Change #sendTo: to #retrySendTo:.
+	Keep inherited implementation of #sendTo:.
+
+2012-02-02  Paolo Bonzini  <bonzini@gnu.org>
+            Gwenael Casaccio  <mrgwen@gmail.com>
+
+	* tests/delays.st: Add testcase.
+	* tests/delays.ok: Regenerate.
+
+2012-02-02  Paolo Bonzini  <bonzini@gnu.org>
+
+	* kernel/Process.st: Do not interrupt a terminated process.
+
+2012-01-30  Paolo Bonzini  <bonzini@gnu.org>
+
+	* kernel/Delay.st: Fix previous commit.
+	* tests/delays.st: Add testcase.
+	* tests/delays.ok: Regenerate.
+
+2012-01-30  Gwenael Casaccio  <mrgwen@gmail.com>
+            Paolo Bonzini  <bonzini@gnu.org>
+
+	* tests/exceptions.st: Add MessageLookup test.
+	* tests/exceptions.ok: Regenerate.
+
+2012-01-27  Paolo Bonzini  <bonzini@gnu.org>
+
+	* kernel/MessageLookup.st: Fix cut-and-paste error, reported by Gwen.
+
+2012-01-21  Gwenael Casaccio  <mrgwen@gmail.com>
+
+	* kernel/Delay.st: Reset delay before removing.
+
+2011-12-27  Paolo Bonzini  <bonzini@gnu.org>
+
+	* kernel/CFuncs.st: Add #system:withArguments:.
+	* kernel/VFSZip.st: Use it instead of #%.  Reported by Maarten van Beek.
+	* scripts/Package.st: Use it instead of #%.
+
+2011-12-27  Paolo Bonzini  <bonzini@gnu.org>
+
+	* kernel/FilePath.st: Add #withShellEscapes and use it for printing.
+
+2011-12-27  Paolo Bonzini  <bonzini@gnu.org>
+
+	* kernel/CharArray.st: Add #withShellEscapes (and OS-specific workers).
+
+2011-12-27  Paolo Bonzini  <bonzini@gnu.org>
+
+	* kernel/DirMessage.st: Add #method.
+	* kernel/MessageLookup.st: New.
+
+2011-11-28  Paolo Bonzini  <bonzini@gnu.org>
+
+	* scripts/Package.st: Use #symlinkFrom: to create absolute-path
+	symlinks.
+
+2011-11-23  Paolo Bonzini  <bonzini@gnu.org>
+
+	* kernel/AnsiDates.st: Improve #readFrom: to not read ahead too much
+	and parse more formats.  Reported by Maarten van Beek.
+	* kernel/Date.st: Improve #readFrom: to not read ahead too much
+	and parse negative years.
+	* kernel/Time.st: Improve #readFrom: to not read ahead too much.
+	* tests/dates.st: Add testcases.
+	* tests/dates.ok: Regenerate.
+
+2011-11-23  Paolo Bonzini  <bonzini@gnu.org>
+
+	* kernel/AnsiDates.st: Fix printing DateTimes with negative
+	fractional offsets.
+
+2011-11-14  Mehul Sanghvi  <mehul.sanghvi@gmail.com>
+
+	* kernel/CFuncs.st: Add #environ.
+
+2011-11-10  Gwenael Casaccio  <mrgwen@gmail.com>
+            Paolo Bonzini  <bonzini@gnu.org>
+
+	* kernel/Behavior.st: Add #scopeDictionary.
+	* kernel/Dictionary.st: Add #scopeDictionary.
+
+2011-11-04  Gwenael Casaccio  <mrgwen@gmail.com>
+
+	* kernel/RootNamespc.st: Fix #new:.
+
+2011-09-22  Paolo Bonzini  <bonzini@gnu.org>
+
+	* kernel/Delay.st: Restart pending delays when the image restarts.
+	* kernel/Time.st: Make the millisecondClockValue monotonic across
+	image save.
+
+2011-08-13  Paolo Bonzini <bonzini@gnu.org>
+            Mathieu Suen  <mathieusuen@yahoo.fr>
+
+	* kernel/ProcSched.st: Add #dispatchEvents and #forkEventLoop.
+
 2011-08-13  Paolo Bonzini <bonzini@gnu.org>
 
 	* scripts/Remote.st: Move server logic to RemoteServer class.

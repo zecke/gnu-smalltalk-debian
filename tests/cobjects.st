@@ -121,7 +121,7 @@ Object extend [
     ]
 
     testLongLong: aLong [
-         <cCall: 'testLongLong' returning: #void args: #(#longLong)>
+         <cCall: 'testLongLong' returning: #longLong args: #(#longLong)>
     ]
 ]
 
@@ -129,7 +129,7 @@ Eval [ true testCallin: (CCallbackDescriptor for: [ :x | x printNl. 3 ]
        returning: #int withArgs: #(#string)) ]
 Eval [ nil testCString: (CString value: 'this is a test') ]
 
-Eval [ nil testLongLong: 16r100110012002. ^nil ]
+Eval [ ^(nil testLongLong: 16r100110012002) printString ]
 
 Eval [
     cObject := CCharType new.
@@ -235,6 +235,13 @@ Eval [
     (c at: 2) printNl.
     (c at: 3) printNl.
     c free.
+    c free.
+]
+
+" Play with conversion for Boolean"
+Eval [
+    c := CBoolean value: true.
+    c value printNl.
     c free.
 ]
 

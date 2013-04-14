@@ -382,7 +382,9 @@ File extend [
 	Command
 	    execute: [
 	        Directory working: dir name.
-		Smalltalk system: '%1 -n .st:.xml -qr %2 .' % { Command zip. self }
+		Smalltalk
+		     system: '%1 -n .st:.xml -qr %2 .'
+                     withArguments: { Command zip. self }
 	    ]
 	    ensure: [ Directory working: saveDir ]
     ]
@@ -399,7 +401,7 @@ File extend [
 	Command execute: [
 	    destFile := File name: dest.
 	    destFile exists ifTrue: [ destFile remove ].
-	    self symlinkAs: dest ].
+	    destFile symlinkFrom: self name ].
     ]
 
     emitInstall: dest [
@@ -687,6 +689,9 @@ PackageCommand subclass: PkgInstall [
 	[ super run ] ensure: [
 	    tmpDir isNil ifFalse: [ tmpDir all remove ] ].
 
+	PackageLoader
+            flush;
+            refresh.
 	(Command dryRun not and: [ self isOption: 'load' ])
 	    ifTrue: [ ^self loadPackages ].
 
@@ -729,12 +734,14 @@ PackageCommand subclass: PkgInstall [
 	self packages
 	    do: [ :each | packageList := packageList, ' ', each name ].
 
-	Smalltalk system: (pat % {
-	    gstLoad.
-	    File image.
-	    Directory kernel.
-	    (self isOption: 'test') ifTrue: [ '--test' ] ifFalse: [ '' ].
-	    packageList })
+	Smalltalk
+            system: pat
+            withArguments: {
+	        gstLoad.
+	        File image.
+	        Directory kernel.
+	        (self isOption: 'test') ifTrue: [ '--test' ] ifFalse: [ '' ].
+	        packageList }
     ]
 
     tmpDir [
@@ -1192,4 +1199,4 @@ The default target directory is ', Directory image name, '
     do: [ :ex |
 	('gst-package: ', ex messageText, '
 ') displayOn: stderr.
-	ex pass. ObjectMemory quit: 1 ].
+	"ex pass." ObjectMemory quit: 1 ].

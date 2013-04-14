@@ -388,6 +388,8 @@ Namespace current: Kernel [
 PackageContainer subclass: PackageDirectory [
     | baseDirectories baseDirCache |
 
+    <category: 'Language-Packaging'>
+
     PackageContainer class >> on: aFile baseDirectories: aBlock [
 	<category: 'accessing'>
 	^(super new)
@@ -915,19 +917,11 @@ XML.'>
 
 Namespace current: Kernel [
 
-PackageInfo subclass: StarPackage [
+PackageInfo subclass: ExternalPackage [
     | file loadedPackage |
     
     <category: 'Language-Packaging'>
     <comment: nil>
-
-    StarPackage class >> file: file [
-	<category: 'accessing'>
-	^(self new)
-	    file: file;
-	    name: (File stripPathFrom: (File stripExtensionFrom: file name));
-	    yourself
-    ]
 
     fullPathOf: fileName [
 	"Try appending 'self directory' and fileName to each of the directory
@@ -1077,8 +1071,26 @@ PackageInfo subclass: StarPackage [
     ]
 
     loadedPackage [
+        ^ self subclassResponsibility
+    ]
+]
+
+ExternalPackage subclass: StarPackage [
+
+    <category: 'Language-Packaging'>
+    <comment: 'I represent an external package in the form of a .star package'>
+
+    StarPackage class >> file: file [
 	<category: 'accessing'>
-	| file package |
+	^(self new)
+	    file: file;
+	    name: (File stripPathFrom: (File stripExtensionFrom: file name));
+	    yourself
+    ]
+
+    loadedPackage [
+	<category: 'accessing'>
+	| package |
 	loadedPackage isNil ifFalse: [^loadedPackage].
 	package := self file zip / 'package.xml'
 		withReadStreamDo: [ :fileStream | Package parse: fileStream].
@@ -1107,6 +1119,8 @@ Namespace current: Kernel [
 
 Object subclass: Version [
     | major minor patch |
+
+    <category: 'Language-Packaging'>
 
     Version class >> fromString: aString [
 	<category: 'instance creation'>
@@ -1181,7 +1195,7 @@ Object subclass: Version [
 Kernel.PackageInfo subclass: Package [
     | features prerequisites builtFiles files fileIns relativeDirectory
        baseDirectories libraries modules callouts url namespace sunitScripts
-       startScript stopScript test version |
+       startScript stopScript test version path |
     
     <category: 'Language-Packaging'>
     <comment: 'I am not part of a standard Smalltalk system. I store internally the
@@ -1196,7 +1210,7 @@ XML.'>
        ^ Tags ifNil: [ Tags := Dictionary from: {      
                         'file' -> #addFile:.
                         'filein' -> #addFileIn:.
-                       'prereq' -> #addPrerequisite:.
+                        'prereq' -> #addPrerequisite:.
                         'provides' -> #addFeature:.
                         'module' -> #addModule:.
                         'directory' -> #relativeDirectory:.
@@ -1313,6 +1327,7 @@ XML.'>
     addFeature: aString [
        <category: 'accessing'>
 
+       self path isEmpty ifFalse: [self error: 'unexpected <feature> inside <dir> tag'].
        self features add: aString
     ]
 
@@ -1327,6 +1342,7 @@ XML.'>
     addPrerequisite: aString [
        <category: 'accessing'>
 
+       self path isEmpty ifFalse: [self error: 'unexpected <prereq> inside <dir> tag'].
        self prerequisites add: aString
     ]
 
@@ -1341,7 +1357,7 @@ XML.'>
     addBuiltFile: aString [
        <category: 'accessing'>
 
-       self builtFiles add: aString
+       self builtFiles add: self path, aString
     ]
 
     builtFiles [
@@ -1356,7 +1372,7 @@ XML.'>
         <category: 'accessing'>
 
 	files isNil ifTrue: [files := OrderedCollection new].
-        files add: aString
+        files add: self path, aString
     ]
 
     files [
@@ -1375,7 +1391,7 @@ XML.'>
     addFileIn: aString [
         <category: 'accessing'>
 
-        self fileIns add: aString
+        self fileIns add: self path, aString
     ]
 
     fileIns [
@@ -1391,6 +1407,7 @@ XML.'>
     addLibrary: aString [
        <category: 'accessing'>
 
+       self path isEmpty ifFalse: [self error: 'unexpected <library> inside <dir> tag'].
        self libraries add: aString
     ]
 
@@ -1405,6 +1422,7 @@ XML.'>
     addModule: aString [
        <category: 'accessing'>
 
+       self path isEmpty ifFalse: [self error: 'unexpected <module> inside <dir> tag'].
        self modules add: aString
     ]
 
@@ -1419,6 +1437,7 @@ XML.'>
     addSunitScript: aString [
        <category: 'accessing'>
 
+       self path isEmpty ifFalse: [self error: 'unexpected <sunit> inside <dir> tag'].
        self sunitScripts add: aString
     ]
 
@@ -1433,6 +1452,7 @@ XML.'>
     addCallout: aString [
        <category: 'accessing'>
 
+       self path isEmpty ifFalse: [self error: 'unexpected <callout> inside <dir> tag'].
        self callouts add: aString
     ]
 
@@ -1569,9 +1589,86 @@ XML.'>
 		    Namespace current: namespace]
     ]
 
+    path [
+
+	^ path ifNil: [ path := '' ]
+    ]
+
+    path: aString [
+
+	path := aString
+    ]
+
+    isInPath [
+
+	^ self path ~= ''
+    ]
+
+    checkTagIfInPath: aString [
+
+	self isInPath ifFalse: [ ^ self ].
+	(aString = 'file' or: [ aString = 'filein' or: [ aString = 'built-file' ] ]) ifFalse: [ self error: 'invalid tag in a dir tag ', aString ]
+    ]
+
+    dir: file tag: aDictionary [
+	| oldPath newPath |
+        newPath := aDictionary
+            at: 'name'
+            ifAbsent: [ self error: 'name attribute is not present in a dir tag' ].
+        newPath isEmpty
+            ifTrue: [ self error: 'name attribute is empty' ].
+
+	oldPath := self path.
+        newPath := oldPath, newPath.
+        (newPath notEmpty and: [newPath last isPathSeparator not])
+            ifTrue: [ newPath := newPath, Directory pathSeparatorString].
+	self path: newPath.
+	self parse: file tag: 'dir'.
+	self path: oldPath.
+    ]
+
+    parseAttributes: aString [
+
+        | attribute args key value terminator ch |
+        attribute := ReadStream on: aString.
+        args := LookupTable new.
+        [
+            attribute atEnd ifTrue: [^args].
+            attribute peek isSeparator ifFalse: [
+                self error: 'expected separator'].
+            [
+                attribute next.
+                attribute atEnd ifTrue: [^args].
+                attribute peek isSeparator ] whileTrue.
+            attribute peek isAlphaNumeric ifFalse: [
+                self error: 'expected attribute'].
+
+            key := String streamContents: [ :s |
+                [
+                    attribute atEnd ifTrue: [
+                        self error: 'expected attribute'].
+                    ch := attribute next. ch = $= ] whileFalse: [
+                        ch isAlphaNumeric ifFalse: [
+                            self error: 'invalid attribute name'].
+                        s nextPut: ch ] ].
+
+            terminator := attribute next.
+            (terminator = $' or: [terminator = $"]) ifFalse: [
+                self error: 'expected single or double quote'].
+
+            value := String streamContents: [ :s |
+                [
+                    attribute atEnd ifTrue: [
+                        self error: 'expected %1' % { terminator }].
+                    ch := attribute next. ch = terminator ] whileFalse: [
+                        s nextPut: ch ] ].
+            args at: key put: value.
+        ] repeat
+    ]
+
     parse: file tag: openingTag [
 	<category: 'private-initializing'>
-	| stack cdata ch tag testPackage |
+	| stack cdata ch tag testPackage words |
 	stack := OrderedCollection new.
 	stack addLast: openingTag.
 	
@@ -1587,18 +1684,24 @@ XML.'>
 			ifTrue: 
 			    [tag := stack removeLast.
 			    file next.
-                           (file upTo: $>) = tag 
-                               ifFalse: [^self error: 'error in packages file: unmatched end tag ' , tag].
-
+                            (file upTo: $>) = tag 
+                               ifFalse: [^self error: 'error in packages file: unmatched end tag ' , tag ].
                            tag = openingTag ifTrue: [ ^ self ].
-                           self perform: (self class tags at: tag ifAbsent: [ self error: 'invalid tag ', tag ]) with: cdata.
-                           cdata := nil].
+			   self checkTagIfInPath: tag.
+			   self perform: (self class tags at: tag ifAbsent: [ self error: 'invalid tag ', tag ]) with: cdata.
+			   cdata := nil ].
                    ch isAlphaNumeric 
                        ifTrue: 
 			    [tag := file upTo: $>.
-			    tag = 'test' 
-				ifTrue: [self test: (TestPackage new parse: file tag: tag)]
-				ifFalse: [stack addLast: tag].
+			    words := tag substrings.
+			    words first = 'dir' ifTrue: [
+                                self
+                                    dir: file
+                                    tag: (self parseAttributes: (tag copyFrom: words first size + 1)) ]
+				ifFalse: [
+			            words first = 'test' 
+				        ifTrue: [self test: (TestPackage new parse: file tag: tag)]
+				        ifFalse: [stack addLast: tag] ].
 			    cdata trimSeparators isEmpty 
 				ifFalse: [^self error: 'unexpected character data'].
 			    cdata := nil]]] 

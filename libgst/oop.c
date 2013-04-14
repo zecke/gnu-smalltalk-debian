@@ -134,11 +134,6 @@ struct statistical_data
    builtin OOPs into _gst_nil_oop et al.  */
 static void alloc_oop_table (size_t);
 
-/* Allocate a large object of SIZE bytes from fixedspace.  Put the
-   corresponding newly allocated OOP in *P_OOP.  */
-static gst_object alloc_large_obj (size_t size,
-				   OOP *p_oop);
-
 /* Free N slots from the beginning of the queue Q and return a pointer
    to their base.  */
 static OOP *queue_get (surv_space *q, int n);
@@ -170,6 +165,15 @@ static inline mst_Boolean incremental_gc_running (void);
    are assumed to be alive (currently the base of the OOP table is
    always passed, but you never know).  */
 static void reset_incremental_gc (OOP firstOOP);
+
+/* Compact the old objects.  Grow oldspace to NEWSIZE bytes.  */
+static void compact (size_t new_heap_limit);
+
+/* Allocate and return space for a fixedspace object of SIZE bytes.
+   The pointer to the object data is returned, the OOP is
+   stored in P_OOP.  */
+static gst_object alloc_fixed_obj (size_t size,
+                                   OOP *p_oop);
 
 /* Gather statistics.  */
 static void update_stats (unsigned long *last, double *between, double *duration);
@@ -727,7 +731,8 @@ _gst_make_oop_fixed (OOP oop)
       oop->object = newObj;
     }
 
-  oop->flags |= F_FIXED;
+  oop->flags &= ~(F_SPACES | F_POOLED);
+  oop->flags |= F_OLD | F_FIXED;
 }
 
 void
@@ -769,7 +774,7 @@ _gst_alloc_obj (size_t size,
   newAllocPtr = _gst_mem.eden.allocPtr + BYTES_TO_SIZE (size);
 
   if UNCOMMON (size >= _gst_mem.big_object_threshold)
-    return alloc_large_obj (size, p_oop);
+    return alloc_fixed_obj (size, p_oop);
 
   if UNCOMMON (newAllocPtr >= _gst_mem.eden.maxPtr)
     {
@@ -786,40 +791,8 @@ _gst_alloc_obj (size_t size,
 }
 
 gst_object
-alloc_large_obj (size_t size,
-                 OOP *p_oop)
-{
-  gst_object p_instance;
-
-  size = ROUNDED_BYTES (size);
-
-  /* If the object is big enough, we put it directly in fixedspace.  */
-  p_instance = (gst_object) _gst_mem_alloc (_gst_mem.fixed, size);
-  if COMMON (p_instance)
-    goto ok;
-
-  _gst_global_gc (size);
-  p_instance = (gst_object) _gst_mem_alloc (_gst_mem.fixed, size);
-  if COMMON (p_instance)
-    goto ok;
-
-  _gst_compact (0);
-  p_instance = (gst_object) _gst_mem_alloc (_gst_mem.fixed, size);
-  if UNCOMMON (!p_instance)
-    {
-      _gst_errorf ("Cannot recover, exiting...");
-      exit (1);
-    }
-
-ok:
-  *p_oop = alloc_oop (p_instance, _gst_mem.active_flag | F_FIXED);
-  p_instance->objSize = FROM_INT (BYTES_TO_SIZE (size));
-  return p_instance;
-}
-
-gst_object
-_gst_alloc_old_obj (size_t size,
-		    OOP *p_oop)
+alloc_fixed_obj (size_t size,
+	         OOP *p_oop)
 {
   gst_object p_instance;
 
@@ -835,7 +808,7 @@ _gst_alloc_old_obj (size_t size,
   if COMMON (p_instance)
     goto ok;
 
-  _gst_compact (0);
+  compact (0);
   p_instance = (gst_object) _gst_mem_alloc (_gst_mem.old, size);
   if UNCOMMON (!p_instance)
     {
@@ -929,23 +902,27 @@ oldspace_before_freeing (heap_data *h, heap_block *blk, size_t sz)
 heap_data *
 oldspace_nomemory (heap_data *h, size_t sz)
 {
+  heap_data **p_heap;
+
+  assert (h == _gst_mem.old || h == _gst_mem.fixed);
+  p_heap = (h == _gst_mem.old ? &_gst_mem.old : &_gst_mem.fixed);
+
   if (!_gst_gc_running)
     _gst_global_gc (sz);
   else
     {
       /* Already garbage collecting, emergency growth just to satisfy
 	 tenuring necessities.  */
-      int grow_amount_to_satisfy_rate = _gst_mem.old->heap_limit
+      int grow_amount_to_satisfy_rate = h->heap_limit
            * (100.0 + _gst_mem.space_grow_rate) / 100;
-      int grow_amount_to_satisfy_threshold = 
-	   (sz + _gst_mem.old->heap_total)
+      int grow_amount_to_satisfy_threshold = (sz + h->heap_total)
 	   * 100.0 /_gst_mem.grow_threshold_percent;
 
-      _gst_mem.old->heap_limit = MAX (grow_amount_to_satisfy_rate,
-				      grow_amount_to_satisfy_threshold);
+      h->heap_limit = MAX (grow_amount_to_satisfy_rate,
+                           grow_amount_to_satisfy_threshold);
     }
 
-  return _gst_mem.old;
+  return *p_heap;
 }
 
 #ifndef NO_SIGSEGV_HANDLING
@@ -1010,7 +987,7 @@ update_stats (unsigned long *last, double *between, double *duration)
 void
 _gst_grow_memory_to (size_t spaceSize)
 {
-  _gst_compact (spaceSize);
+  compact (spaceSize);
 }
 
 void
@@ -1024,10 +1001,9 @@ grow_memory_no_compact (size_t new_heap_limit)
 }
 
 void
-_gst_compact (size_t new_heap_limit)
+compact (size_t new_heap_limit)
 {
   OOP oop;
-  grey_area_node *node, **next, *last;
   heap_data *new_heap = init_old_space (
     new_heap_limit ? new_heap_limit : _gst_mem.old->heap_limit);
 
@@ -1047,26 +1023,6 @@ _gst_compact (size_t new_heap_limit)
       update_stats (&stats.timeOfLastCompaction, NULL, NULL);
     }
 
-  /* Leave only pages from the loaded image in the grey table.  */
-  for (last = NULL, next = &_gst_mem.grey_pages.head; (node = *next); )
-    if (node->base >= (OOP *)_gst_mem.loaded_base
-        && node->base < _gst_mem.loaded_end)
-      {
-#ifdef MMAN_DEBUG_OUTPUT
-        printf ("  Remembered table entry left for loaded image: %p..%p\n",
-                node->base, node->base+node->n);
-#endif
-        last = node;
-        next = &(node->next);
-      }
-    else
-      {
-        _gst_mem.rememberedTableEntries--;
-        *next = node->next;
-        xfree (node);
-      }
-
-  _gst_mem.grey_pages.tail = last;
   _gst_fixup_object_pointers ();
 
   /* Now do the copying loop which will compact oldspace.  */
@@ -1100,7 +1056,7 @@ void
 _gst_global_compact ()
 {
   _gst_global_gc (0);
-  _gst_compact (0);
+  compact (0);
 }
 
 void
@@ -1175,7 +1131,7 @@ _gst_global_gc (int next_allocation)
 	  if (target_limit < old_limit)
             {
               s = "done, heap compacted";
-              _gst_compact (0);
+              compact (0);
               grow_memory_no_compact (target_limit);
             }
         }
@@ -1490,18 +1446,20 @@ _gst_sweep_oop (OOP oop)
     _gst_make_oop_non_weak (oop);
 
   /* Free unreachable oldspace objects.  */
-  if UNCOMMON (oop->flags & F_OLD)
+  if UNCOMMON (oop->flags & F_FIXED)
     {
       _gst_mem.numOldOOPs--;
       stats.reclaimedOldSpaceBytesSinceLastGlobalGC +=
-        SIZE_TO_BYTES (TO_INT (OOP_TO_OBJ (oop)->objSize));
-    }
-
-  if ((oop->flags & F_LOADED) == 0)
-    {
-      if UNCOMMON (oop->flags & F_FIXED)
+	SIZE_TO_BYTES (TO_INT (OOP_TO_OBJ (oop)->objSize));
+      if ((oop->flags & F_LOADED) == 0)
         _gst_mem_free (_gst_mem.fixed, oop->object);
-      else if UNCOMMON (oop->flags & F_OLD)
+    }
+  else if UNCOMMON (oop->flags & F_OLD)
+    {
+      _gst_mem.numOldOOPs--;
+      stats.reclaimedOldSpaceBytesSinceLastGlobalGC +=
+	SIZE_TO_BYTES (TO_INT (OOP_TO_OBJ (oop)->objSize));
+      if ((oop->flags & F_LOADED) == 0)
         _gst_mem_free (_gst_mem.old, oop->object);
     }
 
@@ -1658,9 +1616,7 @@ tenure_one_object ()
     _gst_tenure_oop (oop);
 
   queue_get (&_gst_mem.tenuring_queue, 1);
-
-  if (!(oop->flags & F_FIXED))
-    queue_get (_gst_mem.active_half, TO_INT (oop->object->objSize));
+  queue_get (_gst_mem.active_half, TO_INT (oop->object->objSize));
 }
 
 void
@@ -1752,8 +1708,8 @@ check_weak_refs ()
       if (!IS_OOP_VALID_GC (oop))
 	continue;
 
-      for (field = (OOP *) oop->object, n = TO_INT (oop->object->objSize);
-	   n--; field++)
+      for (field = (OOP *) oop->object + OBJ_HEADER_SIZE_WORDS,
+	   n = NUM_OOPS (oop->object); n--; field++)
         {
 	  OOP oop = *field;
           if (IS_INT (oop))
@@ -1971,15 +1927,10 @@ int
 scanned_fields_in (gst_object object,
 		  int flags)
 {
-  OOP objClass = object->objClass;
-
   if COMMON (!(flags & (F_WEAK | F_CONTEXT)))
     {
       int size = NUM_OOPS (object);
-      if COMMON (size)
-	return object->data + size - &object->objClass;
-      else
-	return UNCOMMON (!IS_OOP_COPIED (objClass));
+      return object->data + size - &object->objClass;
     }
 
   if COMMON (flags & F_CONTEXT)
@@ -1990,14 +1941,9 @@ scanned_fields_in (gst_object object,
       methodSP = TO_INT (ctx->spOffset);
       return ctx->contextStack + methodSP + 1 - &ctx->objClass;
     }
-  else
-    {
-      /* In general, there will be many instances of a class,
-	 but only the first time will it need to be copied;
-         moreover, classes are often old.  So I'm
-	 marking this as uncommon.  */
-      return UNCOMMON (!IS_OOP_COPIED (objClass));
-    }
+
+  /* Weak object, only mark the class.  */
+  return 1;
 }
 
 void
@@ -2104,10 +2050,8 @@ _gst_copy_an_oop (OOP oop)
 #endif
 
       queue_put (&_gst_mem.tenuring_queue, &oop, 1);
-
-      if (!(oop->flags & F_FIXED))
-        obj = oop->object = (gst_object)
-	  queue_put (_gst_mem.active_half, pData, TO_INT (obj->objSize));
+      obj = oop->object = (gst_object)
+	queue_put (_gst_mem.active_half, pData, TO_INT (obj->objSize));
 
       oop->flags &= ~(F_SPACES | F_POOLED);
       oop->flags |= _gst_mem.active_flag;

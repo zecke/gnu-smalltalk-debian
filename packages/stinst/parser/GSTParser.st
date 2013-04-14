@@ -238,26 +238,29 @@ STInST.STFileInParser subclass: GSTFileInParser [
     ]
     
     parseClassTag [
-        | selector argument stmt |
+        | selectors arguments stmt |
         
         self skipExpectedToken: #<.
         
         (currentToken isKeyword)
-            ifTrue: [selector := currentToken value asSymbol. self step]
             ifFalse: [self parserError: 'expected keyword'].
-        
-        argument := self parsePrimitiveObject.
+
+        selectors := OrderedCollection new.
+        arguments := OrderedCollection new.
+
+        "Consume all keywords and literals of the pragma"
+        [currentToken isKeyword] whileTrue: [
+            selectors add: currentToken. self step.
+            arguments add: self parsePrimitiveObject.
+        ].
+
         self skipExpectedToken: #>.
         
-        argument isVariable
-            ifTrue: [stmt := RBMessageNode
-    	                     receiver: taggee
-    	                     selector: selector
-    	                     arguments: { argument }.
-                     self evaluateStatement: stmt]
-            ifFalse: [self evaluateMessageOn: taggee
-                           selector: selector
-                           argument: argument value]
+        stmt := RBMessageNode
+    	             receiver: taggee
+	             selectorParts: selectors
+	             arguments: arguments.
+        self evaluateStatement: stmt.
     ]
     
     parseClassVariable [ 

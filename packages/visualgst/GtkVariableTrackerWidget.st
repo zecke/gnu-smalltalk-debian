@@ -1,4 +1,4 @@
-GtkConcreteWidget subclass: GtkVariableTrackerWidget [
+GTKTools.GtkConcreteWidget subclass: GtkVariableTrackerWidget [
     | model object widget |
 
     GtkVariableTrackerWidget class >> on: anObject [
@@ -29,7 +29,7 @@ GtkConcreteWidget subclass: GtkVariableTrackerWidget [
         widget := GtkScrollTreeWidget createListWithModel: {{GtkColumnTextType title: 'Variable'}. {GtkColumnTextType title: 'Value'}}.
         widget connectToWhenPopupMenu: (WorkspaceVariableMenus on: self).
         widget treeView getSelection setMode: GTK.Gtk gtkSelectionBrowse.
-        (model := GtkListModel on: widget treeView getModel)
+        (model := GTKTools.GtkListModel on: widget treeView getModel)
                                         contentsBlock: [ :each | {each asString. (object instVarNamed: each) displayString} ].
         ^ widget mainWidget
     ]

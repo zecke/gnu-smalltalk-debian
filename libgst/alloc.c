@@ -122,7 +122,7 @@ static size_t pagesize;
 heap_data *
 _gst_mem_new_heap (size_t heap_allocation_size, size_t heap_limit)
 {
-  heap_data *h = (heap_data *) malloc (sizeof (heap_data));
+  heap_data *h = (heap_data *) xcalloc (1, sizeof (*h));
   init_heap (h, heap_allocation_size, heap_limit);
   return h;
 }
@@ -671,6 +671,8 @@ heap_system_alloc (heap_data *h, size_t sz)
 #endif
 
   mem = (heap_block *) morecore (sz);
+  if (!mem)
+	nomemory(1);
   mem->mmap_block = 0;
   mem->size = sz;
 
@@ -700,7 +702,7 @@ morecore (size_t size)
     {
       char *ptr = _gst_heap_sbrk (current_heap, size);
 
-      if (ptr != (PTR) -1)
+      if (ptr != NULL)
 	{
           if (((intptr_t) ptr & (pagesize - 1)) > 0)
             {
@@ -710,7 +712,7 @@ morecore (size_t size)
 	      ptr = _gst_heap_sbrk (current_heap, size);
             }
 
-          if (ptr != (PTR) -1)
+          if (ptr != NULL)
 	    return (ptr);
 	}
 

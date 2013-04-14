@@ -3,6 +3,7 @@
   <namespace>VisualGST</namespace>
   <prereq>Parser</prereq>
   <prereq>GTK</prereq>
+  <prereq>GTKTools</prereq>
   <prereq>Cairo</prereq>
   <prereq>SUnit</prereq>
   <prereq>DebugTools</prereq>
@@ -14,10 +15,8 @@
     <filein>Tests/CompiledMethodTest.st</filein>
     <filein>Tests/ExtractLiteralsTest.st</filein>
     <filein>Tests/CategoryTest.st</filein>
-    <filein>Tests/GtkScrollTreeWidgetTest.st</filein>
     <filein>Tests/MenuBuilderTest.st</filein>
     <filein>Tests/GtkAssistantTest.st</filein>
-    <filein>Tests/GtkSimpleListWidgetTest.st</filein>
     <filein>Tests/EmptyTest.st</filein>
     <filein>Tests/AddClassUndoCommandTest.st</filein>
     <filein>Tests/GtkCategoryWidgetTest.st</filein>
@@ -26,16 +25,13 @@
     <filein>Tests/PragmaTest.st</filein>
     <filein>Tests/GtkCategorizedNamespaceWidgetTest.st</filein>
     <filein>Tests/GtkCategorizedClassWidgetTest.st</filein>
-    <filein>Tests/GtkConcreteWidgetTest.st</filein>
     <file>Tests/AddNamespaceUndoCommandTest.st</file>
     <file>Tests/GtkMethodWidgetTest.st</file>
     <file>Tests/CompiledMethodTest.st</file>
     <file>Tests/ExtractLiteralsTest.st</file>
     <file>Tests/CategoryTest.st</file>
-    <file>Tests/GtkScrollTreeWidgetTest.st</file>
     <file>Tests/MenuBuilderTest.st</file>
     <file>Tests/GtkAssistantTest.st</file>
-    <file>Tests/GtkSimpleListWidgetTest.st</file>
     <file>Tests/EmptyTest.st</file>
     <file>Tests/AddClassUndoCommandTest.st</file>
     <file>Tests/GtkCategoryWidgetTest.st</file>
@@ -44,18 +40,15 @@
     <file>Tests/PragmaTest.st</file>
     <file>Tests/GtkCategorizedNamespaceWidgetTest.st</file>
     <file>Tests/GtkCategorizedClassWidgetTest.st</file>
-    <file>Tests/GtkConcreteWidgetTest.st</file>
     <sunit>
       VisualGST.AddNamespaceUndoCommandTest
       VisualGST.GtkMethodWidgetTest
       VisualGST.CompiledMethodTest
       VisualGST.ExtractLiteralsTest
       VisualGST.CategoryTest
-      VisualGST.GtkScrollTreeWidgetTest
       VisualGST.Test
       VisualGST.MenuBuilderTest
       VisualGST.GtkAssistantTest
-      VisualGST.GtkSimpleListWidgetTest
       VisualGST.EmptyTest
       VisualGST.AddClassUndoCommandTest
       VisualGST.GtkCategoryWidgetTest
@@ -65,7 +58,6 @@
       VisualGST.GtkCategorizedNamespaceWidgetTest
       VisualGST.GtkCategorizedClassWidgetTest
       VisualGST.#Test
-      VisualGST.GtkConcreteWidgetTest
     </sunit>
   </test>
   <filein>Extensions.st</filein>
@@ -159,23 +151,10 @@
   <filein>Category/ClassCategory.st</filein>
   <filein>Category/AbstractNamespace.st</filein>
   <filein>Category/Class.st</filein>
-  <filein>GtkAbstractConcreteWidget.st</filein>
-  <filein>GtkConcreteWidget.st</filein>
-  <filein>GtkScrollTreeWidget.st</filein>
-  <filein>GtkSimpleListWidget.st</filein>
   <filein>GtkEntryWidget.st</filein>
-  <filein>GtkSidebarWidget.st</filein>
-  <filein>GtkHSidebarWidget.st</filein>
-  <filein>GtkVSidebarWidget.st</filein>
-  <filein>Model/GtkColumnType.st</filein>
-  <filein>Model/GtkColumnTextType.st</filein>
-  <filein>Model/GtkColumnPixbufType.st</filein>
-  <filein>Model/GtkColumnOOPType.st</filein>
-  <filein>GtkListModel.st</filein>
   <filein>GtkTreeModel.st</filein>
   <filein>Text/GtkTextWidget.st</filein>
   <filein>GtkPackageBuilderWidget.st</filein>
-  <filein>GtkMainWindow.st</filein>
   <filein>GtkVisualGSTTool.st</filein>
   <filein>GtkBrowsingTool.st</filein>
   <filein>GtkLauncher.st</filein>
@@ -204,7 +183,6 @@
   <filein>GtkHistoryWidget.st</filein>
   <filein>Inspector/GtkInspector.st</filein>
   <filein>StBrowser/GtkClassBrowserWidget.st</filein>
-  <filein>GtkEntryDialog.st</filein>
   <filein>HistoryStack.st</filein>
   <filein>Undo/UndoStack.st</filein>
   <filein>Undo/UndoCommand.st</filein>
@@ -239,7 +217,6 @@
   <filein>Undo/Text/InsertTextCommand.st</filein>
   <filein>Undo/Text/DeleteTextCommand.st</filein>
   <filein>Undo/Text/ReplaceTextCommand.st</filein>
-  <filein>Clock/GtkClock.st</filein>
   <filein>Inspector/GtkInspectorSourceWidget.st</filein>
   <filein>Inspector/GtkInspectorBrowserWidget.st</filein>
   <filein>Inspector/GtkInspectorWidget.st</filein>
@@ -261,20 +238,6 @@
   <filein>Notification/Kernel/MethodDictionary.st</filein>
   <filein>Debugger/GtkStackInspectorView.st</filein>
   <filein>Debugger/GtkStackInspector.st</filein>
-  <filein>Tetris/HighScores.st</filein>
-  <filein>Tetris/Score.st</filein>
-  <filein>Tetris/TetrisPieceWidget.st</filein>
-  <filein>Tetris/BlockWidget.st</filein>
-  <filein>Tetris/TetrisField.st</filein>
-  <filein>Tetris/TetrisPiece.st</filein>
-  <filein>Tetris/TetrisPieceI.st</filein>
-  <filein>Tetris/TetrisPieceJ.st</filein>
-  <filein>Tetris/TetrisPieceL.st</filein>
-  <filein>Tetris/TetrisPieceO.st</filein>
-  <filein>Tetris/TetrisPieceS.st</filein>
-  <filein>Tetris/TetrisPieceT.st</filein>
-  <filein>Tetris/TetrisPieceZ.st</filein>
-  <filein>Tetris/Tetris.st</filein>
   <filein>SUnit/TestBacktraceLog.st</filein>
   <filein>SUnit/GtkSUnitResultWidget.st</filein>
   <filein>GtkClassSUnitWidget.st</filein>
@@ -385,23 +348,10 @@
   <file>Category/ClassCategory.st</file>
   <file>Category/AbstractNamespace.st</file>
   <file>Category/Class.st</file>
-  <file>GtkAbstractConcreteWidget.st</file>
-  <file>GtkConcreteWidget.st</file>
-  <file>GtkScrollTreeWidget.st</file>
-  <file>GtkSimpleListWidget.st</file>
   <file>GtkEntryWidget.st</file>
-  <file>GtkSidebarWidget.st</file>
-  <file>GtkHSidebarWidget.st</file>
-  <file>GtkVSidebarWidget.st</file>
-  <file>Model/GtkColumnType.st</file>
-  <file>Model/GtkColumnTextType.st</file>
-  <file>Model/GtkColumnPixbufType.st</file>
-  <file>Model/GtkColumnOOPType.st</file>
-  <file>GtkListModel.st</file>
   <file>GtkTreeModel.st</file>
   <file>Text/GtkTextWidget.st</file>
   <file>GtkPackageBuilderWidget.st</file>
-  <file>GtkMainWindow.st</file>
   <file>GtkVisualGSTTool.st</file>
   <file>GtkBrowsingTool.st</file>
   <file>GtkLauncher.st</file>
@@ -430,7 +380,6 @@
   <file>GtkHistoryWidget.st</file>
   <file>Inspector/GtkInspector.st</file>
   <file>StBrowser/GtkClassBrowserWidget.st</file>
-  <file>GtkEntryDialog.st</file>
   <file>HistoryStack.st</file>
   <file>Undo/UndoStack.st</file>
   <file>Undo/UndoCommand.st</file>
@@ -466,7 +415,6 @@
   <file>Undo/Text/InsertTextCommand.st</file>
   <file>Undo/Text/DeleteTextCommand.st</file>
   <file>Undo/Text/ReplaceTextCommand.st</file>
-  <file>Clock/GtkClock.st</file>
   <file>Inspector/GtkInspectorSourceWidget.st</file>
   <file>Inspector/GtkInspectorBrowserWidget.st</file>
   <file>Inspector/GtkInspectorWidget.st</file>
@@ -488,20 +436,6 @@
   <file>Notification/Kernel/MethodDictionary.st</file>
   <file>Debugger/GtkStackInspectorView.st</file>
   <file>Debugger/GtkStackInspector.st</file>
-  <file>Tetris/HighScores.st</file>
-  <file>Tetris/Score.st</file>
-  <file>Tetris/TetrisPieceWidget.st</file>
-  <file>Tetris/BlockWidget.st</file>
-  <file>Tetris/TetrisField.st</file>
-  <file>Tetris/TetrisPiece.st</file>
-  <file>Tetris/TetrisPieceI.st</file>
-  <file>Tetris/TetrisPieceJ.st</file>
-  <file>Tetris/TetrisPieceL.st</file>
-  <file>Tetris/TetrisPieceO.st</file>
-  <file>Tetris/TetrisPieceS.st</file>
-  <file>Tetris/TetrisPieceT.st</file>
-  <file>Tetris/TetrisPieceZ.st</file>
-  <file>Tetris/Tetris.st</file>
   <file>SUnit/TestBacktraceLog.st</file>
   <file>SUnit/GtkSUnitResultWidget.st</file>
   <file>GtkClassSUnitWidget.st</file>

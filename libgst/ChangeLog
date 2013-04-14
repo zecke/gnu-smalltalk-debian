@@ -1,3 +1,211 @@
+2013-02-24  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* libgst/dict.c: Remove ATTRIBUTE_HIDDEN from static methods.
+	* libgst/comp.c: Remove unused variables in get_attributes_array.
+	* libgst/save.c: Remove unused variable in make_oop_table_to_be_saved.
+
+2013-01-17  Gwenael Casaccio  <gwenael.casaccio@gmail.com>
+
+	* libgst/sysdep/win32/timer.c: Correct the function signature.
+
+2012-12-29  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/oop.h: MAX_OOP_TABLE_SIZE is expressed in OOPs, not bytes.
+	Reported by Holger Freyther.
+
+2012-12-29  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* libgst/alloc.c: _gst_heap_sbrk returns NULL and not MMAP_FAILED
+	on allocation failure.
+	* libgst/heap.c: Return NULL on allocation failure.
+
+2012-09-09  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/sysdep/posix/events.c: Register the fd with gst
+	before polling.
+
+2012-07-15  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/opt.c: Fix error in compute_jump_length that could lead
+	to verification errors after optimization.
+
+2012-06-15  Thomas Girard  <thomas.g.girard@free.fr>
+
+	* libgst/dict.inl: Add IS_C_LONGLONG and IS_C_ULONGLONG macros.
+	* libgst/cint.c: Add missing long long and unsigned long long types
+	to _gst_c_type_size.  Use new macros.
+	* libgst/prims.def: Use IS_C_ULONG in VMpr_CObject_atPut.
+	Use new macros.
+
+2012-06-04  Thomas Girard  <thomas.g.girard@free.fr>
+
+	* libgst/dict.inl: Add FROM_C_LONGLONG and FROM_C_ULONGLONG macros.
+	* libgst/cint.c: Add missing mappings from (unsigned) long long.
+
+2012-05-19  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/prims.def: Another fix for the new primitive.
+
+2012-05-19  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/prims.def: Fix class test for new primitive.
+
+2012-05-19  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/events.h: Adjust prototype for _gst_async_timed_wait.
+	* libgst/prims.def: Switch VMpr_Processor_signalAtMillisecondClockValue
+	to nanosecond precision, adjust call to _gst_async_timed_wait.
+	* libgst/sysdep.h: Adjust prototype for _gst_sigalrm_at.
+	* libgst/sysdep/cygwin/timer.c: Switch _gst_sigalrm_at to nanosecond
+	precision.
+	* libgst/sysdep/posix/timer.c: Switch _gst_sigalrm_at to nanosecond
+	precision.
+	* libgst/sysdep/win32/events.c: Switch _gst_async_timed_wait to nanosecond
+	precision.
+
+2012-05-19  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/events.h: Adjust prototype for _gst_async_timed_wait.
+	* libgst/interp.c: Use _gst_sigvtalrm_every.
+	* libgst/prims.def: Pass absolute time to _gst_async_timed_wait.
+	* libgst/sysdep.h: Remove _gst_signal_after, add _gst_sigvtalrm_every
+	and _gst_sigalrm_at.
+	* libgst/sysdep/cygwin/timer.c: Remove _gst_signal_after, add
+	_gst_sigvtalrm_every and _gst_sigalrm_at.
+	* libgst/sysdep/posix/events.c: Use _gst_sigalrm_at.
+	* libgst/sysdep/posix/timer.c: Remove _gst_signal_after, add
+	_gst_sigvtalrm_every and _gst_sigalrm_at.
+	* libgst/sysdep/win32/events.c: Get absolute time in
+	_gst_async_timed_wait.
+	* libgst/sysdep/win32/timer.c: Do not abort on _gst_sigvtalrm_every,
+	just do nothing.
+
+2012-05-19  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/prims.def: Support the new primitive
+	VMpr_Processor_signalAtMillisecondClockValue.
+
+2012-05-19  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/prims.def: Add VMpr_Time_nanosecondClock.
+	* libgst/sysdep.h: Add _gst_get_ns_time.
+	* libgst/sysdep/common/time.c: Add _gst_get_milli_time.
+	* libgst/sysdep/posix/time.c: Change _gst_get_milli_time to
+	_gst_get_ns_time.
+	* libgst/sysdep/win32/time.c: Likewise.
+
+2012-03-30  Gwenael Casaccio  <mrgwen@gmail.com>
+
+	* libgst/oop.c: Allocate large objects from fixedspace.
+
+2012-03-30  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/oop.h: Remove _gst_compact and _gst_alloc_old_obj.
+	* libgst/oop.c: Make them static.
+
+2012-03-30  Gwenael Casaccio  <mrgwen@gmail.com>
+
+	* libgst/alloc.c: Allocate heaps with xcalloc.
+	* libgst/oop.c: Let oldspace_before_freeing remove grey pages
+	when compacting.
+
+2012-03-29  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/gst-parse.c: Do not call _gst_free_tree in the presence
+	of lookahead, or add assertions that we can do so.  Reported by
+	Gwenael Casaccio.
+
+2012-03-29  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/lex.c: Report location of EOF token.
+
+2012-03-23  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/oop.c: Fix weak objects thinko in Gwen's patch.
+
+2012-03-14  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/oop.c: Return fixedspace from oldspace_nomemory when
+	appropriate.
+
+2012-02-22  Gwenael Casaccio  <mrgwen@gmail.com>
+
+	* libgst/oop.c: Fix weak objects with pointer and byte parts.
+
+2012-03-01  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/oop.c: Remove premature optimization.
+
+2012-02-22  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/gstpriv.h: Include crt_externs.h if present.
+
+2012-02-22  Gwenael Casaccio  <mrgwen@gmail.com>
+
+	* libgst/opt.c: Account for two line number bytecodes.
+
+2011-02-02  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/sysdep/posix/events.c: Fix signal handling race.
+	Reported by Derek Zhou.
+
+2012-02-02  Gwenael Casaccio  <mrgwen@gmail.com>
+            Paolo Bonzini  <pbonzini@redhat.com>
+
+	* libgst/interp.c: Use remove_process_from_list consistently.
+
+2011-12-27  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/dict.c: Add MessageLookup declaration.
+	* libgst/dict.h: Add gst_message_lookup.
+	* libgst/files.c: Load MessageLookup.st.
+	* libgst/interp.c: Pass a MessageLookup to #doesNotUnderstand:.
+
+2011-12-14  Paolo Bonzini  <pbonzini@redhat.com>
+
+	* libgst/gst-parse.c: Only increase lookahead by one token at
+	a time, so that we do not lookahead past EOF.
+
+2011-11-14  Mehul Sanghvi  <mehul.sanghvi@gmail.com>
+
+	* libgst/cint.c: Add get_environ and pass it to Smalltalk.
+
+2011-10-21  Paolo Bonzini  <bonzini@gnu.org>
+
+	Revert commit c51f7d2 (do not automatically tenure large objects)
+
+	2011-05-18  Gwenael Casaccio  <mrgwen@gmail.com>
+
+	* libgst/gstpriv.h: Fix documentation of F_FIXED.
+	* libgst/oop.c: Implement fixed young objects.
+
+2011-09-26  Tony Garnock-Jones  <tonygarnockjones@gmail.com>
+
+	* libgst/cint.c: Try .dylib as a last resort on Mac OS X.
+
+2011-09-22  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/save.c: Close file descriptors upon image save.
+
+2011-09-22  Paolo Bonzini  <bonzini@gnu.org>
+
+	* libgst/dict.c: Add the ClockOnImageSave class variable to time.
+
+2011-08-13  Paolo Bonzini  <bonzini@gnu.org>
+            Mathieu Suen  <mathieusuen@yahoo.fr>
+
+	* libgst/dict.c: Add eventSemaphore to the ProcessorScheduler
+	class.
+	* libgst/events.c: Add support for event polling handlers.
+	* libgst/events.h: Add declarations.
+	* libgst/files.c: Call _gst_init_event_loop.
+	* libgst/gstpub.c: Add _gst_set_event_loop_handlers to VMProxy
+	and add wrapper for libgst.so.
+	* libgst/gstpub.h: Likewise.
+	* libgst/interp.c: Add sync_wait_process.
+	* libgst/interp.h: Add eventSemaphore to ProcessorScheduler.
+	* libgst/prims.def: Add VMpr_Processor_dispatchEvents.
+
 2011-08-13  Paolo Bonzini  <bonzini@gnu.org>
 
 	* libgst/prims.def: Atomically nil the file descriptor field

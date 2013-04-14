@@ -2930,6 +2930,52 @@ primitive VMpr_Process_yield [succeed,check_interrupt]
   PRIM_SUCCEEDED;
 }
 
+/* Processor waitForEvents */
+primitive VMpr_Processor_dispatchEvents [succeed,check_interrupt]
+{
+  interp_jmp_buf jb;
+  gst_processor_scheduler processor;
+  OOP oop1 = STACKTOP ();
+  OOP semaphoreOOP;
+  OOP processOOP;
+  inc_ptr incPtr;
+
+  incPtr = INC_SAVE_POINTER ();
+  _gst_primitives_executed++;
+  processor = (gst_processor_scheduler) OOP_TO_OBJ (oop1);
+  if (TO_INT (processor->objSize)
+      > offsetof (struct gst_processor_scheduler, eventSemaphore) / sizeof(OOP))
+    {
+      processor = (gst_processor_scheduler) OOP_TO_OBJ (_gst_processor_oop);
+      semaphoreOOP = processor->eventSemaphore;
+      INC_ADD_OOP (semaphoreOOP);
+    }
+  else
+    semaphoreOOP = _gst_nil_oop;
+
+  processOOP = get_active_process ();
+  INC_ADD_OOP (processOOP);
+
+  push_jmp_buf (&jb, false, processOOP);
+  if (setjmp (jb.jmpBuf) == 0)
+    _gst_dispatch_events ();
+
+  if (pop_jmp_buf ())
+    stop_execution ();
+
+  if (!IS_NIL (semaphoreOOP))
+    {
+      /* If there was a context switch in the meanwhile, be sure to
+         suspend the process that invoked us!  */
+      sync_wait_process (semaphoreOOP, processOOP);
+      processor = (gst_processor_scheduler) OOP_TO_OBJ (_gst_processor_oop);
+      processor->eventSemaphore = semaphoreOOP;
+    }
+
+  INC_RESTORE_POINTER (incPtr);
+  PRIM_SUCCEEDED;
+}
+
 /* Processor pause: waitForSignal */
 primitive VMpr_Processor_pause [succeed,check_interrupt]
 {
@@ -2938,12 +2984,7 @@ primitive VMpr_Processor_pause [succeed,check_interrupt]
   _gst_primitives_executed++;
   oop1 = POP_OOP ();
   if (would_reschedule_process ())
-    {
-      if (oop1 == _gst_true_oop)
-	_gst_pause ();
-      else
-	_gst_usleep (20000);
-    }
+    _gst_idle (oop1 == _gst_true_oop);
 
   active_process_yield ();
   PRIM_SUCCEEDED;
@@ -3044,6 +3085,18 @@ primitive VMpr_Time_secondClock [succeed]
   PRIM_SUCCEEDED;
 }
 
+/* Time class nanosecondClock.  */
+primitive VMpr_Time_nanosecondClock [succeed]
+{
+  OOP nsOOP;
+  uint64_t ns;
+  _gst_primitives_executed++;
+  ns = _gst_get_ns_time ();
+  nsOOP = from_c_int_64 (ns);
+  SET_STACKTOP (nsOOP);
+  PRIM_SUCCEEDED;
+}
+
 /* Time class millisecondClock.  */
 primitive VMpr_Time_millisecondClock [succeed]
 {
@@ -3056,9 +3109,12 @@ primitive VMpr_Time_millisecondClock [succeed]
   PRIM_SUCCEEDED;
 }
 
-/* Processor signal: semaphore
-             atMilliseconds: deltaMilliseconds */
-primitive VMpr_Processor_signalAtMilliseconds [succeed,fail,check_interrupt]
+/* Processor signal: semaphore atMilliseconds: deltaMilliseconds
+   Processor signal: semaphore atNanosecondClockValue: absNanoseconds
+ */
+primitive VMpr_Processor_signalAt :
+  prim_id VMpr_Processor_signalAtMilliseconds [succeed,fail,check_interrupt],
+  prim_id VMpr_Processor_signalAtNanosecondClockValue [succeed,fail,check_interrupt]
 {
   OOP oop1;
   OOP oop2;
@@ -3066,11 +3122,13 @@ primitive VMpr_Processor_signalAtMilliseconds [succeed,fail,check_interrupt]
 
   oop2 = POP_OOP ();
   oop1 = POP_OOP ();
-  if (IS_INT (oop2))
+  if (is_c_int_64 (oop2))
     {
-      intptr_t arg2;
-      arg2 = TO_INT (oop2);
-      if (arg2 <= 0)
+      int64_t arg2 = to_c_int_64 (oop2);
+      uint64_t ns = _gst_get_ns_time ();
+      if (id == prim_id(VMpr_Processor_signalAtMilliseconds))
+        arg2 = (arg2 * 1000000) + ns;
+      if (arg2 <= ns)
 	_gst_sync_signal (oop1, true);
       else
 	_gst_async_timed_wait (oop1, arg2);
@@ -3736,9 +3794,9 @@ primitive VMpr_Memory_atPut [succeed,fail]
 	      PRIM_SUCCEEDED;
 	    }
 	  break;
-       case CDATA_LONGLONG:            /* long */
-       case CDATA_ULONGLONG:           /* unsigned long */
-         if (is_c_int_64 (oop4) || is_c_uint_64 (oop4))
+       case CDATA_LONGLONG:            /* long long */
+       case CDATA_ULONGLONG:           /* unsigned long long */
+         if (IS_C_LONGLONG (oop4) || IS_C_ULONGLONG (oop4))
            {
              *(long long *) arg2 = to_c_int_64 (oop4);
              PRIM_SUCCEEDED;
@@ -4793,16 +4851,16 @@ primitive VMpr_CObject_atPut [succeed,fail]
 
 	case CDATA_LONG:		/* long */
 	case CDATA_ULONG:		/* ulong */
-	  if (IS_C_LONG (oop3))
+          if (IS_C_LONG (oop3) || IS_C_ULONG (oop3))
 	    {
 	      *(long *) addr = (long) TO_C_LONG (oop3);
 	      PRIM_SUCCEEDED;
 	    }
 	  break;
 
-       case CDATA_LONGLONG:            /* long */
-       case CDATA_ULONGLONG:           /* ulong */
-         if (IS_C_LONG (oop3))
+       case CDATA_LONGLONG:            /* long long */
+       case CDATA_ULONGLONG:           /* unsigned long long */
+         if (IS_C_LONGLONG (oop3) || IS_C_ULONGLONG (oop3))
            {
              *(long long *) addr = (long long) to_c_int_64 (oop3);
              PRIM_SUCCEEDED;
@@ -5110,41 +5168,6 @@ primitive VMpr_SystemDictionary_debug [succeed]
   PRIM_SUCCEEDED;
 }
 
-
-/* Object isUntrusted */
-primitive VMpr_Object_isUntrusted [succeed]
-{
-  OOP oop1;
-  _gst_primitives_executed++;
-
-  oop1 = STACKTOP ();
-  SET_STACKTOP_BOOLEAN (IS_OOP_UNTRUSTED (oop1));
-  PRIM_SUCCEEDED;
-}
-
-/* Object makeUntrusted: */
-primitive VMpr_Object_makeUntrusted [succeed,fail]
-{
-  OOP oop1;
-  OOP oop2;
-  _gst_primitives_executed++;
-
-  oop2 = POP_OOP ();
-  oop1 = STACKTOP ();
-  if (oop2 == _gst_true_oop)
-    {
-      MAKE_OOP_UNTRUSTED (oop1, true);
-      PRIM_SUCCEEDED;
-    }
-  else if (oop2 == _gst_false_oop)
-    {
-      MAKE_OOP_UNTRUSTED (oop1, false);
-      PRIM_SUCCEEDED;
-    }
-
-  UNPOP (1);
-  PRIM_FAILED;
-}
 
 /* Object isReadOnly */
 primitive VMpr_Object_isReadOnly [succeed]

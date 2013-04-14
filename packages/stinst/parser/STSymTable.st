@@ -271,21 +271,18 @@ Object subclass: STSymbolTable [
 
     declareEnvironment: aBehavior [
 	<category: 'declaring'>
-	| i canAlwaysStore inSandbox |
+	| i |
 	environment := aBehavior.
-	inSandbox := thisContext isUntrusted.
 	i := -1.
-	canAlwaysStore := aBehavior isUntrusted.
 	aBehavior withAllSuperclasses reverseDo: 
 		[:class | 
-		canAlwaysStore := canAlwaysStore and: [class isUntrusted].
 		class instVarNames do: 
 			[:iv | 
 			instVars at: iv asSymbol
 			    put: (STVariable 
 				    id: (i := i + 1)
 				    scope: 0
-				    canStore: (canAlwaysStore or: [inSandbox not]))]].
+				    canStore: true)]].
 	self declareGlobals
     ]
 
@@ -397,7 +394,7 @@ Object subclass: STSymbolTable [
 	    to: namesArray size
 	    keysAndValuesDo: 
 		[:i :each | 
-		assoc := assoc value associationAt: each asSymbol
+		assoc := assoc value scopeDictionary associationAt: each asSymbol
 			    ifAbsent: 
 				[| symbol |
 				i < namesArray size ifTrue: [self invalidScopeResolution: stCompiler].
@@ -584,7 +581,7 @@ default.'>
 	"Search all pools in order (see super comment)."
 	<category: 'accessing'>
 	pools do: [:pool |
-	    (pool associationAt: symbol ifAbsent: [nil])
+	    (pool scopeDictionary associationAt: symbol ifAbsent: [nil])
 		ifNotNil: [:assoc | ^assoc]].
 	^nil
     ]

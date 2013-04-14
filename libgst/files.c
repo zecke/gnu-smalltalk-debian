@@ -162,6 +162,7 @@ static const char standard_files[] = {
   "SysDict.st\0"
   "Object.st\0"
   "Message.st\0"
+  "MessageLookup.st\0"
   "DirMessage.st\0"
   "Boolean.st\0"
   "False.st\0"
@@ -238,7 +239,6 @@ static const char standard_files[] = {
   "FileSegment.st\0"
   "FileDescr.st\0"
   "SymLink.st\0"
-  "Security.st\0"
   "WeakObjects.st\0"
   "ObjMemory.st\0"
 
@@ -288,6 +288,7 @@ static const char standard_files[] = {
   "StreamOps.st\0"
   "Regex.st\0"
   "PkgLoader.st\0"
+  "DirPackage.st\0"
   "Autoload.st\0"
 };
 
@@ -455,6 +456,7 @@ _gst_initialize (const char *kernel_dir,
 
   _gst_init_sysdep ();
   _gst_init_signals ();
+  _gst_init_event_loop();
   _gst_init_cfuncs ();
   _gst_init_sockets ();
   _gst_init_primitives ();

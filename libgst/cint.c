@@ -196,6 +196,7 @@ static int my_lstat (const char *name,
 		     OOP out);
 #endif
 static int my_putenv (const char *str);
+static char **get_environ (void);
 static int my_chdir (const char *str);
 static int my_chown (const char *file, const char *owner, const char *group);
 static int my_symlink (const char* oldpath, const char* newpath);
@@ -253,6 +254,8 @@ static const char *c_type_name[] = {
   "wchar_t *",			/* CDATA_WSTRING */
   "wchar_t *",			/* CDATA_WSTRING_OUT */
   "char *",			/* CDATA_SYMBOL_OUT */
+  "long long",			/* CDATA_LONGLONG */
+  "unsigned long long", 	/* CDATA_ULONGLONG */
 };
 
 /* The errno on output from a callout */
@@ -393,6 +396,12 @@ my_putenv (const char *str)
   return (putenv (clone));
 }
 
+static char **
+get_environ (void)
+{
+  return environ;
+}
+
 
 int
 my_chdir (const char *dir)
@@ -433,10 +442,11 @@ my_opendir (const char *dir)
   return (result);
 }
 
-void 
+long long
 test_longlong (long long aVerylongInt)
 {
   printf ("Getting a long long 0x%llx\n", aVerylongInt);
+  return aVerylongInt;
 }
 
 void
@@ -498,6 +508,17 @@ dld_open (const char *filename)
   handle = lt_dlopen (filename);
   if (!handle)
     handle = lt_dlopenext (filename);
+#ifdef __APPLE__
+  if (!handle)
+    {
+      /* For some reason, lt_dlopenext on OS X doesn't try ".dylib" as
+         a possible extension, so we're left with trying it here. */
+      char *full_filename;
+      asprintf(&full_filename, "%s.dylib", filename);
+      handle = lt_dlopen (full_filename);
+      free (full_filename);
+    }
+#endif
   if (handle)
     {
       initModule = lt_dlsym (handle, "gst_initModule");
@@ -600,6 +621,7 @@ _gst_init_cfuncs (void)
   /* Access to C library */
   _gst_define_cfunc ("system", system);
   _gst_define_cfunc ("getenv", getenv);
+  _gst_define_cfunc ("environ", get_environ);
   _gst_define_cfunc ("putenv", my_putenv);
   _gst_define_cfunc ("printf", printf);
 
@@ -726,6 +748,11 @@ _gst_c_type_size (int type)
       return sizeof (long);
     case CDATA_ULONG:
       return sizeof (unsigned long);
+
+    case CDATA_LONGLONG:
+      return sizeof (long long);
+    case CDATA_ULONGLONG:
+      return sizeof (unsigned long long);
 
     case CDATA_FLOAT:
       return sizeof (float);
@@ -1320,6 +1347,14 @@ c_to_smalltalk (cparam *result, OOP receiverOOP, OOP returnTypeOOP)
 
     case CDATA_ULONG:
       resultOOP = FROM_C_ULONG (result->u.longVal);
+      break;
+
+    case CDATA_LONGLONG:
+      resultOOP = FROM_C_LONGLONG (result->u.longLongVal);
+      break;
+
+    case CDATA_ULONGLONG:
+      resultOOP = FROM_C_ULONGLONG (result->u.longLongVal);
       break;
 
     case CDATA_STRING:

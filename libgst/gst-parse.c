@@ -208,7 +208,6 @@ lex_lookahead (gst_parser *p, int n)
   while (p->la_size < n)
     {
       int i = (p->la_first + p->la_size) % 4;
-      assert (p->la_size == 0 || token (p, p->la_size - 1) != EOF);
       p->la[i].token = _gst_yylex (&p->la[i].val, &p->la[i].loc);
       p->la_size++;
     }
@@ -325,16 +324,6 @@ _gst_get_current_namespace (void)
   return _gst_current_namespace;
 }
 
-mst_Boolean
-_gst_untrusted_parse (void)
-{
-  if (!_gst_current_parser)
-    return false;
-
-  return (_gst_current_parser->untrustedContext
-          || IS_OOP_UNTRUSTED (_gst_current_parser->currentClass));
-}
-
 void
 _gst_set_compilation_class (OOP class_oop)
 {
@@ -414,7 +403,6 @@ _gst_parse_method (OOP currentClass, OOP currentCategory)
   incPtr = INC_SAVE_POINTER ();
   parser_init (&p);
   p.state = PARSE_METHOD;
-  p.untrustedContext = IS_OOP_UNTRUSTED (_gst_this_context_oop);
   p.current_namespace = _gst_nil_oop;
   _gst_set_compilation_class (currentClass);
   _gst_set_compilation_category (currentCategory);
@@ -447,7 +435,6 @@ _gst_parse_chunks (OOP currentNamespace)
   _gst_current_parser = &p;
   incPtr = INC_SAVE_POINTER ();
   parser_init (&p);
-  p.untrustedContext = IS_OOP_UNTRUSTED (_gst_this_context_oop);
   if (currentNamespace)
     p.current_namespace = currentNamespace;
   p.state = PARSE_DOIT;
@@ -599,7 +586,6 @@ execute_doit (gst_parser *p, tree_node temps, tree_node stmts,
                       _gst_get_current_namespace (),
                       _gst_current_parser->currentClass,
                       _gst_nil_oop,
-                      _gst_untrusted_parse (),
                       false);
 
   resultOOP = _gst_execute_statements (receiverOOP, method, undeclared, quiet);
@@ -645,7 +631,12 @@ parse_doit (gst_parser *p, mst_Boolean fail_at_eof)
   else if (statement)
     {
       execute_doit (p, NULL, statement, NULL, true, false);
-      _gst_free_tree ();
+
+      /* Because a '.' could be inserted automagically, the next token
+         value might be already on the obstack.  Do not free in that
+         case!  */
+      if (p->la_size == 0)
+        _gst_free_tree ();
     }
 
   _gst_had_error = false;
@@ -748,6 +739,7 @@ parse_eval_definition (gst_parser *p)
     {
       tmps = parse_temporaries (p, false);
       stmts = parse_statements (p, NULL, true);
+      lex_must_be (p, ']');
     }
 
   if (stmts && !_gst_had_error)
@@ -774,6 +766,7 @@ parse_eval_definition (gst_parser *p)
       _gst_had_error = false;
     }
 
+  assert (p->la_size <= 1);
   _gst_free_tree ();
   _gst_pop_temporaries_dictionary (oldDictionary);
   memcpy (p->recover, old_recover, sizeof (p->recover));
@@ -881,11 +874,11 @@ parse_namespace_definition (gst_parser *p, tree_node first_stmt)
 static mst_Boolean
 parse_class_definition (gst_parser *p, OOP classOOP, mst_Boolean extend)
 {
-  int t1, t2, t3;
   mst_Boolean add_inst_vars = extend;
 
   for (;;)
     {
+      int t1, t2, t3;
       if (_gst_had_error)
 	break;
 
@@ -893,14 +886,11 @@ parse_class_definition (gst_parser *p, OOP classOOP, mst_Boolean extend)
       if (token (p, 0) == ']' || token (p, 0) == EOF)
 	break;
 
-      lex_lookahead (p, 3);
 #if 0
       print_tokens (p);      
 #endif
       
       t1 = token (p, 0);
-      t2 = token (p, 1);
-      t3 = token (p, 2);
 
       switch (t1) 
 	{	
@@ -918,6 +908,8 @@ parse_class_definition (gst_parser *p, OOP classOOP, mst_Boolean extend)
 	  continue;
 	  
 	case '<':
+	  lex_lookahead (p, 2);
+	  t2 = token (p, 1);
 	  if (t2 == IDENTIFIER) 
 	    {
 #if 0
@@ -937,6 +929,8 @@ parse_class_definition (gst_parser *p, OOP classOOP, mst_Boolean extend)
 	  break;
    
 	case IDENTIFIER:
+	  lex_lookahead (p, 2);
+	  t2 = token (p, 1);
 	  if (t2 == ASSIGNMENT)
 	    {
 #if 0
@@ -1009,6 +1003,8 @@ parse_class_definition (gst_parser *p, OOP classOOP, mst_Boolean extend)
 	    }
 	  else if (t2 == IDENTIFIER)
 	    {
+	      lex_lookahead (p, 3);
+	      t3 = token (p, 2);
 	      if (t3 == BINOP) 
 		{
 #if 0
@@ -1048,6 +1044,8 @@ parse_class_definition (gst_parser *p, OOP classOOP, mst_Boolean extend)
 	  break;
 	  
 	case '|':
+	  lex_lookahead (p, 2);
+	  t2 = token (p, 1);
 	  if (t2  == '|') 
 	    {
 #if 0
@@ -1058,6 +1056,8 @@ parse_class_definition (gst_parser *p, OOP classOOP, mst_Boolean extend)
 	    }
 	  else if (t2 == IDENTIFIER) 
 	    {
+	      lex_lookahead (p, 3);
+	      t3 = token (p, 2);
 	      if (t3 == IDENTIFIER || t3 == '|') 
 		{
 #if 0
@@ -1350,7 +1350,6 @@ parse_method (gst_parser *p, int at_end)
 			     pat, temps, attrs, stmts, NULL,
 			     _gst_current_parser->currentClass,
 			     _gst_current_parser->currentCategory,
-			     _gst_untrusted_parse (),
 			     at_end != ']');
 
   if (!_gst_had_error && !_gst_skip_compilation)
@@ -1360,6 +1359,7 @@ parse_method (gst_parser *p, int at_end)
       INC_ADD_OOP (_gst_current_parser->lastMethodOOP);
     }
 
+  assert (p->la_size <= 1);
   _gst_free_tree ();
   _gst_had_error = false;
   if (at_end != EOF)
@@ -1963,7 +1963,6 @@ parse_compile_time_constant (gst_parser *p)
                            NULL, temps, NULL, statements, NULL,
                            _gst_current_parser->currentClass,
                            _gst_nil_oop,
-                           _gst_untrusted_parse (),
                            false);
 }
 

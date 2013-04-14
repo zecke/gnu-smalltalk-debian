@@ -1,4 +1,4 @@
-GtkConcreteWidget subclass: GtkClassHierarchyWidget [
+GTKTools.GtkConcreteWidget subclass: GtkClassHierarchyWidget [
     | root dic classesTree model classOrMeta |
 
     GtkClassHierarchyWidget >> on: aClass [

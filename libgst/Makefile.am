@@ -20,14 +20,14 @@ CLEANFILES = genprims$(EXEEXT) genbc$(EXEEXT) genvm$(EXEEXT) \
 
 # definitions for libgst.la
 
-libgst_la_LIBADD=$(top_builddir)/lib-src/library.la $(SOCKET_LIBS) \
+libgst_la_LIBADD=$(top_builddir)/lib-src/library.la \
 	$(LIBSIGSEGV) $(LIBFFI) $(LIBSNPRINTFV) $(LIBREADLINE) $(LIBLTDL) \
 	$(LIBGMP) $(LIBTHREAD)
 
 libgst_la_DEPENDENCIES=$(top_builddir)/lib-src/library.la $(LIBSNPRINTFV)
 
 libgst_la_LDFLAGS = -version-info $(VERSION_INFO) -no-undefined \
-	-export-symbols-regex "^gst_.*"
+	-export-symbols-regex "^gst_.*" -bindir $(bindir)
 
 libgst_la_SOURCES = \
        gstpub.c    files.c       gst-parse.c    lex.c        \
@@ -35,8 +35,8 @@ libgst_la_SOURCES = \
        sym.c       dict.c        oop.c  	opt.c        \
        save.c      cint.c    	 heap.c	        input.c      \
        sysdep.c    callin.c      xlat.c         mpz.c        \
-       print.c	   alloc.c	 security.c     re.c	     \
-       interp.c    real.c	 sockets.c	events.c
+       print.c	   alloc.c	 re.c	        interp.c     \
+       real.c	   sockets.c	 events.c
 
 # definitions for genprims
 
@@ -94,7 +94,7 @@ noinst_HEADERS = \
 	print.h alloc.h genprims.h gst-parse.h \
 	genpr-parse.h genbc.h genbc-decl.h \
 	genbc-impl.h genvm-parse.h genvm.h \
-	security.h superop1.inl superop2.inl \
+	superop1.inl superop2.inl \
 	sysdep/common/files.c sysdep/common/time.c sysdep/cygwin/files.c \
 	sysdep/cygwin/findexec.c sysdep/cygwin/mem.c sysdep/cygwin/signals.c \
 	sysdep/cygwin/time.c sysdep/cygwin/timer.c sysdep/posix/files.c \
@@ -166,7 +166,7 @@ $(srcdir)/vm.stamp: vm.def
 # rules for invoking gperf
 # not fully idiot-proof but only to be run by maintainers
 
-.gperf.inl:
+%.inl: %.gperf
 	@opts="$< `$(SED) -ne /.*gperf/!d -e s///p -e q $< | \
 	    $(SED) 's,$$(srcdir),$(srcdir),g'`"; \
 	  echo $(GPERF) $$opts " > $@"; \

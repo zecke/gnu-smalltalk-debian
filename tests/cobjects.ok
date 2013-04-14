@@ -101,7 +101,7 @@ returned value is nil
 
 Execution begins...
 Getting a long long 0x100110012002
-returned value is nil
+returned value is '17596749520898'
 
 Execution begins...
 returned value is 'this is a test'
@@ -162,4 +162,8 @@ $1
 $2
 $3
 $<0>
+returned value is nil
+
+Execution begins...
+true
 returned value is nil

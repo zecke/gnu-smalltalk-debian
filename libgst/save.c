@@ -377,8 +377,6 @@ make_oop_table_to_be_saved (struct save_file_header *header)
     {
       if (IS_OOP_VALID_GC (oop))
 	{
-	  int numPointers = NUM_OOPS (oop->object);
-
           myOOPTable[i].flags = (oop->flags & ~F_RUNTIME) | F_OLD;
 	  myOOPTable[i].object = (gst_object) TO_INT (oop->object->objSize);
 	}
@@ -754,6 +752,13 @@ fixup_object (OOP oop, gst_object dest, gst_object src, int numBytes)
 	    }
 	  linkOOP = process->nextLink;
 	}
+    }
+
+  /* File descriptors are invalidated on resume.  */
+  else if (is_a_kind_of (class_oop, _gst_file_descriptor_class))
+    {
+      gst_file_stream file = (gst_file_stream) dest;
+      file->fd = _gst_nil_oop;
     }
 
   /* The other case is to reset CFunctionDescriptor objects, so that we'll

@@ -106,6 +106,7 @@ OOP _gst_date_class = NULL;
 OOP _gst_deferred_variable_binding_class = NULL;
 OOP _gst_dictionary_class = NULL;
 OOP _gst_directed_message_class = NULL;
+OOP _gst_message_lookup_class = NULL;
 OOP _gst_false_class = NULL;
 OOP _gst_file_descriptor_class = NULL;
 OOP _gst_file_segment_class = NULL;
@@ -181,15 +182,13 @@ OOP _gst_processor_oop = NULL;
    dictionary instance that DICTIONARYOOP is pointing to with a new,
    larger dictionary, and returns this new dictionary (the object
    pointer, not the OOP).  */
-static gst_object grow_dictionary (OOP dictionaryOOP) 
-  ATTRIBUTE_HIDDEN;
+static gst_object grow_dictionary (OOP dictionaryOOP);
 
 /* Called when an IdentityDictionary becomes full, this routine
    replaces the IdentityDictionary instance that IDENTITYDICTIONARYOOP
    is pointing to with a new, larger dictionary, and returns this new
    dictionary (the object pointer, not the OOP).  */
-static gst_object grow_identity_dictionary (OOP identityDictionaryOOP) 
-  ATTRIBUTE_HIDDEN;
+static gst_object grow_identity_dictionary (OOP identityDictionaryOOP);
 
 /* Answer the number of slots that are in a dictionary of
    OLDNUMFIELDS items after growing it.  */
@@ -336,6 +335,10 @@ static const class_definition class_info[] = {
    GST_ISP_FIXED, false, 1,
    "DirectedMessage", "receiver", NULL, NULL },
 
+  {&_gst_message_lookup_class, &_gst_message_class,
+   GST_ISP_FIXED, true, 1,
+   "MessageLookup", "startingClass", NULL, NULL },
+
   {&_gst_magnitude_class, &_gst_object_class,
    GST_ISP_FIXED, false, 0,
    "Magnitude", NULL, NULL, NULL },
@@ -351,7 +354,7 @@ static const class_definition class_info[] = {
   {&_gst_time_class, &_gst_magnitude_class,
    GST_ISP_FIXED, false, 1,
    "Time", "seconds",
-   "SecondClockAdjustment ClockOnStartup", NULL },
+   "SecondClockAdjustment ClockOnStartup ClockOnImageSave", NULL },
 
   {&_gst_date_class, &_gst_magnitude_class,
    GST_ISP_FIXED, false, 4,
@@ -650,9 +653,10 @@ static const class_definition class_info[] = {
    "True", "truthValue", NULL, NULL },
 
   {&_gst_processor_scheduler_class, &_gst_object_class,
-   GST_ISP_FIXED, false, 6,
+   GST_ISP_FIXED, false, 7,
    "ProcessorScheduler",
-   "processLists activeProcess idleTasks processTimeslice gcSemaphore gcArray",
+   "processLists activeProcess idleTasks processTimeslice gcSemaphore gcArray "
+   "eventSemaphore",
    NULL, NULL },
 
   /* Change this, classDescription, or gst_class, and you must change
@@ -668,10 +672,10 @@ static const class_definition class_info[] = {
    "ClassDescription", NULL, NULL, NULL },
 
   {&_gst_class_class, &_gst_class_description_class,
-   GST_ISP_FIXED, true, 8,
+   GST_ISP_FIXED, true, 7,
    "Class",
    "name comment category environment classVariables sharedPools "
-   "securityPolicy pragmaHandlers",
+   "pragmaHandlers",
    NULL, NULL },
 
   {&_gst_metaclass_class, &_gst_class_description_class,
@@ -950,7 +954,7 @@ init_metaclass (OOP metaclassOOP)
     _gst_make_instance_variable_array (_gst_nil_oop,
 				       "superClass methodDictionary instanceSpec subClasses "
 				       "instanceVariables name comment category environment "
-				       "classVariables sharedPools securityPolicy "
+				       "classVariables sharedPools "
 				       "pragmaHandlers");
 
   metaclass->instanceSpec = GST_ISP_INTMARK | GST_ISP_FIXED |
@@ -985,7 +989,6 @@ init_class (OOP class_oop, const class_definition *ci)
   class->methodDictionary = _gst_nil_oop;
   class->comment = _gst_nil_oop;
   class->category = _gst_nil_oop;
-  class->securityPolicy = _gst_nil_oop;
   class->pragmaHandlers = _gst_nil_oop;
 }
 

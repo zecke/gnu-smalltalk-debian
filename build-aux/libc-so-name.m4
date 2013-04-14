@@ -14,13 +14,12 @@ AC_DEFUN([GST_LIBC_SO_NAME],
 save_LIBS=$LIBS
 CFLAGS="$CFLAGS $INCLTDL"
 LIBS="$CFLAGS $LIBLTDL"
-AC_RUN_IFELSE(AC_LANG_PROGRAM([[
-#include <ltdl`test $with_system_libltdl = no && echo _`.h>
-`test $with_system_libltdl = no && echo '#include "ltdl.c"' `
+AC_RUN_IFELSE([AC_LANG_PROGRAM([[
+#include <ltdl.h>
 ]], [[
 lt_dlinit();
 return lt_dlopenext("libc") == NULL ? 1 : 0;
-]]), [gst_cv_libc_dlopen_works=yes],
+]])], [gst_cv_libc_dlopen_works=yes],
      [gst_cv_libc_dlopen_works=no],
      [gst_cv_libc_dlopen_works=no])
 CFLAGS=$save_CFLAGS
@@ -33,14 +32,18 @@ if test "$gst_cv_libc_dlopen_works" = no; then
 fi
 
 AC_CACHE_CHECK([how to dlopen the C library], gst_cv_libc_so_name, [
+  gst_lib_path=
   if test $GCC = yes; then
-    gst_lib_path=`$CC --print-multi-os-directory $CFLAGS $CPPFLAGS`
+    if $CC -print-multiarch >/dev/null 2>&1; then
+      gst_lib_path=`$CC -print-multiarch $CFLAGS $CPPFLAGS`
+    fi
+    if test -z "$gst_lib_path"; then
+      gst_lib_path=`$CC --print-multi-os-directory $CFLAGS $CPPFLAGS`
+    fi
     case $gst_lib_path in
       .) gst_lib_path= ;;
       *) gst_lib_path=$gst_lib_path/ ;;
     esac
-  else
-    gst_lib_path=
   fi
   case $gst_lib_path in
     /*) gst_libc_search_path="${gst_lib_path}libc.so*

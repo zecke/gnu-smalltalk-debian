@@ -379,8 +379,7 @@ static void realloc_literal_vec (void);
    dictionary for the current class.  If the current class does not
    contain a valid method dictionary, one is allocated for it.  */
 static void install_method (OOP methodOOP,
-			    OOP classOOP,
-			    mst_Boolean untrusted);
+			    OOP classOOP);
 
 /* This caches the OOP of the special UndefinedObject>>#__terminate
    method, which is executed by contexts created with
@@ -430,7 +429,7 @@ _gst_install_initial_methods (void)
   ((gst_compiled_method) OOP_TO_OBJ (termination_method))->header.headerFlag
     = MTH_ANNOTATED;
 
-  install_method (termination_method, _gst_undefined_object_class, false);
+  install_method (termination_method, _gst_undefined_object_class);
 }
 
 OOP
@@ -837,8 +836,7 @@ _gst_compile_method (tree_node method,
 
       if (install)
 	install_method (methodOOP,
-			_gst_curr_method->v_method.currentClass,
-			_gst_curr_method->v_method.untrusted);
+			_gst_curr_method->v_method.currentClass);
     }
   else
     {
@@ -2315,16 +2313,7 @@ get_attributes_array (tree_node attribute_list)
     {
       tree_node value = attribute_list->v_list.value;
       OOP messageOOP = value->v_const.val.oopVal;
-      gst_message message = (gst_message) OOP_TO_OBJ (messageOOP);
-      OOP selectorOOP = message->selector;
-
       attributes->data[i] = messageOOP;
-      if (selectorOOP == _gst_primitive_symbol
-          && _gst_untrusted_parse ())
-        {
-          _gst_errorf ("an untrusted method cannot declare primitives");
-          EXIT_COMPILATION ();
-        }
     }
 
   return attributesOOP;
@@ -2423,7 +2412,7 @@ get_literals_array (void)
 
 
 void
-install_method (OOP methodOOP, OOP classOOP, mst_Boolean untrusted)
+install_method (OOP methodOOP, OOP classOOP)
 {
   OOP oldMethod, selector, methodDictionaryOOP;
   gst_compiled_method method;
@@ -2469,16 +2458,6 @@ install_method (OOP methodOOP, OOP classOOP, mst_Boolean untrusted)
      here.  */
   methodDictionaryOOP =
     _gst_valid_class_method_dictionary (classOOP);
-  if (untrusted)
-    {
-      oldMethod = _gst_identity_dictionary_at (methodDictionaryOOP,
-					       selector);
-      if (!IS_NIL (oldMethod) && !IS_OOP_UNTRUSTED (oldMethod))
-	{
-	  _gst_errorf ("cannot redefine a trusted method as untrusted");
-	  EXIT_COMPILATION ();
-	}
-    }
 
   MAKE_OOP_READONLY (methodOOP, true);
   if (_gst_kernel_initialized)
@@ -2666,13 +2645,6 @@ method_new (method_header header,
   method = (gst_compiled_method) instantiate_with (_gst_compiled_method_class,
 						   numByteCodes, &methodOOP);
 
-  if (_gst_curr_method)
-    MAKE_OOP_UNTRUSTED (methodOOP, _gst_curr_method->v_method.untrusted);
-  else
-    MAKE_OOP_UNTRUSTED (methodOOP,
-                        IS_OOP_UNTRUSTED (_gst_this_context_oop)
-                        || IS_OOP_UNTRUSTED (class));
-
   method->header = header;
   method->descriptor = methodDesc;
   method->literals = literals;
@@ -2695,7 +2667,6 @@ method_new (method_header header,
       block = (gst_compiled_block) OOP_TO_OBJ (blockOOP);
       if (IS_NIL (block->method))
 	{
-	  MAKE_OOP_UNTRUSTED (blockOOP, IS_OOP_UNTRUSTED (methodOOP));
 	  block->method = methodOOP;
 	  block->literals = literals;
 	}

@@ -1,0 +1,33 @@
+2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* Extensions.st: Added.
+	* GtkScrollTreeWidget.st: Renamed from packages/visualgst/GtkScrollTreeWidget.st.
+	* GtkSimpleListWidget.st: Renamed from packages/visualgst/GtkSimpleListWidget.st.
+	* Model/GtkColumnOOPType.st: Renamed from packages/visualgst/Model/GtkColumnOOPType.st.
+	* Model/GtkColumnPixbufType.st: Renamed from packages/visualgst/Model/GtkColumnPixbufType.st.
+	* Model/GtkColumnTextType.st: Renamed from packages/visualgst/Model/GtkColumnTextType.st.
+	* Model/GtkColumnType.st: Renamed from packages/visualgst/Model/GtkColumnType.st.
+	* Tests/GtkScrollTreeWidgetTest.st: Renamed from packages/visualgst/Tests/GtkScrollTreeWidgetTest.st.
+	* Tests/GtkSimpleListWidgetTest.st: Renamed from packages/visualgst/Tests/GtkSimpleListWidgetTest.st.
+	* package.xml: Add new files.
+
+2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* GtkHSidebarWidget.st: Renamed from packages/visualgst/GtkHSidebarWidget.st.
+	* GtkSidebarWidget.st: Renamed from packages/visualgst/GtkSidebarWidget.st.
+	* GtkVSidebarWidget.st: Renamed from packages/visualgst/GtkVSidebarWidget.st.
+	* package.xml: Add the new files.
+
+2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* GtkListModel.st: Renamed from packages/visualgst/GtkListModel.st.
+	* package.xml: Add GtkListModel.
+
+2013-03-30  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* GtkAbstractConcreteWidget.st: Renamed from packages/visualgst/GtkAbstractConcreteWidget.st.
+	* GtkConcreteWidget.st: Renamed from packages/visualgst/GtkConcreteWidget.st.
+	* GtkEntryDialog.st: Renamed from packages/visualgst/GtkEntryDialog.st.
+	* GtkMainWindow.st: Renamed from packages/visualgst/GtkMainWindow.st.
+	* Tests/GtkConcreteWidgetTest.st: Renamed from packages/visualgst/Tests/GtkConcreteWidgetTest.st.
+	* package.xml: Added.

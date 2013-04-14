@@ -7,7 +7,7 @@
 
 "======================================================================
 |
-| Copyright (C) 2007 Free Software Foundation, Inc.
+| Copyright (C) 2007,2013 Free Software Foundation, Inc.
 | Written by Stephen Compall.
 |
 | This file is part of the GNU Smalltalk class library.
@@ -246,6 +246,183 @@ behavior stayed the same, at least as much as I care it to stay so.'>
 		    nextPutAll: '    ==> ';
 		    display: newCodeString;
 		    contents)
+    ]
+]
+
+TestCase subclass: TestFormat [
+    <comment: 'I test aspects of the RBFormatter class.'>
+
+    testNumberLiteralRewrite [
+	| inp res |
+	inp := RBParser parseExpression: '2r01'.
+	self assert: inp value = 1.
+
+	res := RBFormatter new formatAll: (Array with: inp).
+	self assert: res = '2r01'.
+    ]
+
+    testNumberLiteralHexRewrite [
+	| inp res |
+	inp := RBParser parseExpression: '16r01 '.
+	self assert: inp value = 1.
+
+	res := RBFormatter new formatAll: (Array with: inp).
+	self assert: res = '16r01'.
+    ]
+
+    testArrayRewrite [
+	| inp res |
+	inp := RBParser parseExpression: '#(16r01 2r01 16rFF )'.
+	self assert: inp value = (Array with: 1 with: 1 with: 255).
+
+	res := RBFormatter new formatAll: (Array with: inp).
+	self assert: res = '#(16r01 2r01 16rFF)'.
+    ]
+
+    testParanthesis [
+        | inp |
+        inp := RBParser parseExpression: '(2r1)'.
+        self assert: inp formattedCode = '2r1'.
+    ]
+
+    testNumberLiteralFloatRewrite [
+        | inp |
+        inp := RBParser parseExpression: '2q'.
+        self
+            assert: inp value = 2.0;
+            assert: inp formattedCode = '2q'.
+
+        inp := RBParser parseExpression: '2d'.
+        self
+            assert: inp value = 2.0;
+            assert: inp formattedCode = '2d'.
+
+        inp := RBParser parseExpression: '2e'.
+        self
+            assert: inp value = 2.0;
+            assert: inp formattedCode = '2e'.
+
+        inp := RBParser parseExpression: '2q-'.
+        self
+            assert: inp value = 2.0;
+            assert: inp formattedCode = '2q-'.
+
+        inp := RBParser parseExpression: '20q-1'.
+        self
+            assert: inp value = 2.0;
+            assert: inp formattedCode = '20q-1'.
+    ]
+
+    testNegativeNumbers [
+        | inp |
+        inp := RBParser parseExpression: '-3'.
+        self assert: inp value = -3.
+        self assert: inp token source = '-3'.
+        self assert: inp formattedCode = '-3'.
+    ]
+
+    testNumberExpressionParsing [
+        | inp |
+        inp := RBParser parseExpression: '2-2'.
+        self
+            assert: inp receiver value = 2;
+            assert: inp selector = #-;
+            assert: inp arguments first value = 2.
+    ]
+]
+
+TestCase subclass: TestScanner [
+    <comment: 'Test aspects of the RBScanner'>
+
+    testScanner [
+        | scanner num |
+        scanner := RBScanner on: '3' readStream.
+        num := scanner next.
+        self assert: num value = 3.
+    ]
+
+    testScannerConcatStream [
+        | scanner num |
+        "This is different to >>#testScanner by using a different kind of stream with
+        a different species."
+
+        scanner := RBScanner on: (Kernel.ConcatenatedStream with: '3' readStream).
+        num := scanner next.
+        self assert: num value = 3.
+    ]
+]
+
+TestCase subclass: TestRewrite [
+    <comment: 'I test that rewriting a method for the OldSyntaxExport and
+    SqueakExporter will pick up the new code.'>
+
+    testNamespaceRewrite [
+        | class tree rule rewriter res out|
+
+        tree := RBParser parseRewriteExpression: 'Osmo.LogManager -> LogManager'.
+        rule := RBStringReplaceRule
+                    searchForTree: tree receiver
+                    replaceWith: tree arguments first.
+        rewriter := ParseTreeRewriter new
+                        addRule: rule; yourself.
+
+        class := (STClassLoader new
+                    parseSmalltalkStream: 'Object subclass: TestData [
+                        logManager [
+                            ^Osmo.LogManager default
+                        ]
+                    ]' readStream with: GSTFileInParser) first.
+
+        "Rewrite the method. This will modify the code on inside the class"
+        res := rewriter executeTree: (class >> #logManager) node; tree.
+        self assert: (class >> #logManager) node == res.
+
+        "Now generate the code"
+        out := WriteStream on: (String new).
+        (SqueakSyntaxExporter on: class to: out)
+            completeFileOut: false;
+            fileOutSelectors: (Array with: #logManager) classSelectors: #().
+        self assert: (out contents indexOfSubCollection: 'Osmo.LogManager') = 0.
+    ]
+
+    testOldSyntaxNamespaceRewrite [
+        | class tree rule rewriter res out|
+
+        tree := RBParser parseRewriteExpression: 'Osmo.LogManager -> LogManager'.
+        rule := RBStringReplaceRule
+                    searchForTree: tree receiver
+                    replaceWith: tree arguments first.
+        rewriter := ParseTreeRewriter new
+                        addRule: rule; yourself.
+
+        "Load the old code"
+        class := (STClassLoader new
+                    parseSmalltalkStream:
+'SystemOrganization addCategory: #''osmo-logging-core''!
+Object subclass: #LogManager
+    instanceVariableNames: ''target filter areas''
+    classVariableNames: ''Log''
+    poolDictionaries: ''''
+    category: ''osmo-logging-core''!
+
+!LogManager methodsFor: ''as yet unclassified''!
+
+logManager
+    ^Osmo.LogManager default
+! !' readStream with: SqueakFileInParser) first.
+
+
+        "Rewrite the method. This will modify the code on inside the class"
+        res := rewriter executeTree: (class >> #logManager) node; tree.
+        self assert: (class >> #logManager) node == res.
+        self assert: (class >> #logManager) isOldSyntax.
+
+        "Now generate the code"
+        out := WriteStream on: (String new).
+        (SqueakSyntaxExporter on: class to: out)
+            completeFileOut: false;
+            fileOutSelectors: (Array with: #logManager) classSelectors: #().
+        self assert: (out contents indexOfSubCollection: 'Osmo.LogManager') = 0.
     ]
 ]
 

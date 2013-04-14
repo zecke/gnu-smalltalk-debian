@@ -12,7 +12,7 @@ NamespaceCommand subclass: AddClassCommand [
 	superclass := target state hasSelectedClass
             ifTrue: [ target state classOrMeta ]
             ifFalse: [ Object ].
-        dlg := GtkEntryDialog title: 'Add a class' text: 'Name of the new class'.
+        dlg := GTKTools.GtkEntryDialog title: 'Add a class' text: 'Name of the new class'.
         dlg hasPressedOk: [
             (AddClassUndoCommand
                 add: dlg result asSymbol

@@ -8,22 +8,23 @@ ALL_LIBS = $(GLIB_LIBS) $(GTHREAD_LIBS)
 include_HEADERS = gst-gobject.h
 lib_LTLIBRARIES = libgst-gobject.la
 libgst_gobject_la_SOURCES = gst-gobject.c
-libgst_gobject_la_LDFLAGS = -version-info 1:0:0 -no-undefined
+libgst_gobject_la_LDFLAGS = -version-info 1:0:0 -no-undefined -bindir $(bindir)
 libgst_gobject_la_LIBADD = $(ALL_LIBS) ../../libgst/libgst.la
 
 moduleexec_LTLIBRARIES = gst-glib.la
 gst_glib_la_LDFLAGS = $(gst_module_ldflags)
-gst_glib_la_LIBADD = $(ALL_LIBS) libgst-gobject.la
+gst_glib_la_LIBADD = $(ALL_LIBS) libgst-gobject.la ../../lib-src/library.la 
 gst_glib_la_DEPENDENCIES = libgst-gobject.la
 dist_gst_glib_la_SOURCES = gst-glib.c
-nodist_gst_glib_la_SOURCES = libs.def
 BUILT_SOURCES = libs.def
 
 # Work around bug in Automake (or is it Libtool?)  The gst-glib library is
 # installed before libgst-gobject has been relinked.
 .NOTPARALLEL:
 
-INCLUDES = -I$(top_srcdir)/libgst -I$(top_srcdir)/lib-src -I$(top_srcdir)/libltdl
+AM_CPPFLAGS = \
+  -I$(top_srcdir)/libgst \
+  -I$(top_srcdir)/lib-src
 
 AM_CFLAGS = $(GLIB_CFLAGS) $(GTHREAD_CFLAGS)
 

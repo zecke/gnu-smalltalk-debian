@@ -274,6 +274,10 @@ static inline uint64_t to_c_uint_64 (OOP oop);
 
 #define TO_C_INT(integer)	to_c_int_32(integer)
 #define IS_C_INT(oop)		is_c_int_32(oop)
+#define IS_C_LONGLONG(oop)	is_c_int_64(oop)
+#define IS_C_ULONGLONG(oop)	is_c_uint_64(oop)
+#define FROM_C_LONGLONG(integ)	from_c_int_64(integ)
+#define FROM_C_ULONGLONG(integ)	from_c_uint_64(integ)
 
 #if SIZEOF_OOP == 4
 #define FROM_C_INT(integer)	FROM_C_LONG((intptr_t) (signed) integer)
@@ -686,7 +690,6 @@ new_instance_with (OOP class_oop,
   INIT_UNALIGNED_OBJECT (*p_oop, alignedBytes - numBytes);
 
   p_instance->objClass = class_oop;
-  (*p_oop)->flags |= (class_oop->flags & F_UNTRUSTED);
 
   return p_instance;
 }
@@ -706,7 +709,6 @@ new_instance (OOP class_oop,
 
   p_instance = _gst_alloc_obj (numBytes, p_oop);
   p_instance->objClass = class_oop;
-  (*p_oop)->flags |= (class_oop->flags & F_UNTRUSTED);
 
   return p_instance;
 }
@@ -724,7 +726,6 @@ instantiate_numbytes (OOP class_oop,
 
   p_instance = _gst_alloc_obj (numBytes, p_oop);
   p_instance->objClass = class_oop;
-  (*p_oop)->flags |= (class_oop->flags & F_UNTRUSTED);
 
   n = instanceSpec >> ISP_NUMFIXEDFIELDS;
   if UNCOMMON (n == 0)
@@ -777,7 +778,6 @@ instantiate_with (OOP class_oop,
     {
       p_instance = _gst_alloc_obj (numBytes, p_oop);
       p_instance->objClass = class_oop;
-      (*p_oop)->flags |= (class_oop->flags & F_UNTRUSTED);
       nil_fill (p_instance->data,
 	        (instanceSpec >> ISP_NUMFIXEDFIELDS) + numIndexFields);
     }

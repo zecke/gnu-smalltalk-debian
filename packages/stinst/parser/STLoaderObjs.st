@@ -1001,6 +1001,10 @@ instanceVariableNames: ivn
 
 superclass
     ^superclass
+!
+
+article
+    ^superclass article
 ! !
 
 !LoadedMetaclass methodsFor: 'printing'!
@@ -1181,13 +1185,13 @@ sharedPools
 addClassVarName: aString
     "Return the names of the shared pools defined by the class"
 
-    sharedPools := sharedPools copyWith: aString
+    classVars := classVars copyWith: aString
 !
 
 addClassVarName: aString value: aBlock
     "Return the names of the shared pools defined by the class"
 
-    sharedPools := sharedPools copyWith: aString
+    classVars := classVars copyWith: aString
 !
 
 import: aNamespace
@@ -1503,13 +1507,16 @@ name
 
 printOn: aStream
     "Print a representation of the receiver on aStream"
-    aStream nextPutAll: self classNameString , '[', proxy name, '] (' ; nl.
+    aStream nextPutAll: self class storeString , '[', proxy name, '] (' ; nl.
     self myKeysAndValuesDo:
-    	[ :key :value | aStream tab;
-		   print: key;
-		   nextPutAll: '->';
-		   print: value;
-		   nl ].
+        [ :key :value |
+            value == self ifFalse: [
+                aStream tab;
+                    print: key;
+                    nextPutAll: '->';
+                    print: value;
+                    nl ].
+        ].
     aStream nextPut: $)
 !
 
