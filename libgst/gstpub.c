@@ -609,3 +609,8 @@ gst_set_event_loop_handlers(mst_Boolean (*poll) (int ms),
 {
   return _gst_set_event_loop_handlers(poll, dispatch);
 }
+
+void gst_omit_line_numbers(mst_Boolean omit)
+{
+  _gst_omit_line_numbers = omit;
+}

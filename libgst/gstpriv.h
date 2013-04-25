@@ -552,6 +552,9 @@ extern OOP _gst_nil_oop
 #define MIN(x, y) 		( ((x) > (y)) ? (y) : (x) )
 #endif
 
+/* helpers */
+extern mst_Boolean _gst_omit_line_numbers;
+
 #include "ansidecl.h"
 #include "mathl.h"
 #include "socketx.h"

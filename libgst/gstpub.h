@@ -342,6 +342,8 @@ extern wchar_t *gst_oop_to_wstring (OOP oop);
 extern mst_Boolean gst_set_event_loop_handlers(mst_Boolean (*poll) (int ms),
 					       void (*dispatch) (void));
 
+extern void gst_omit_line_numbers(mst_Boolean omit);
+
 /* This is exclusively for programs who link with libgst.a; plugins
    should not use this VMProxy but rather the one they receive in
    gst_initModule.  */
