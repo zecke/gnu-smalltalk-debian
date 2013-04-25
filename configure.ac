@@ -655,6 +655,15 @@ if test "$enable_preemption" != no; then
     [Define to enable preemptive multitasking of Smalltalk processes])
 fi
 
+AC_ARG_ENABLE(prefetch,
+[  --disable-prefetch      disable memory prefetch macros], ,
+enable_prefetch=yes)
+
+if test "$enable_prefetch" != no; then
+  AC_DEFINE(ENABLE_PREFETCH, 1,
+    [Define to enable usage of __builtin_prefetch])
+fi
+
 GST_ARG_ENABLE_MODULES([Blox,TCP])
 
 dnl 
