@@ -259,6 +259,11 @@ FilePath subclass: File [
 	
     ]
 
+    primLink: srcName as: destName [
+        <category: 'private-C call-outs'>
+        <cCall: 'link' returning: #int args: #(#string #string)>
+    ]
+
     primSymlink: srcName as: destName [
 	<category: 'private-C call-outs'>
 	<cCall: 'symlink' returning: #int args: #(#string #string)>
@@ -287,6 +292,16 @@ FilePath subclass: File [
 	<category: 'private-C call-outs'>
 	<cCall: 'mkdir' returning: #int args: #(#string #int)>
 	
+    ]
+
+    primFsync: aFd [
+        <category: 'private-C call-outs'>
+        <cCall: 'fsync' returning: #int args: #(#int)>
+    ]
+
+    primSync [
+        <category: 'private-C call-outs'>
+        <cCall: 'sync' returning: #int args: #()>
     ]
 
     extractDirentName: dirent [

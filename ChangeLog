@@ -1,3 +1,8 @@
+2013-04-28  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* kernel/File.st: Add File>>#primLink:as:, File>>#primFsync: and
+	File>>#primSync to use the new primitives.
+
 2013-03-04  Holger Hans Peter Freyther  <holger@freyther.de>
 
 	* kernel/PkgLoader.st: Remove unused variable.

@@ -1,3 +1,7 @@
+2013-04-28  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* libgst/cint.c: Bind link, fsync, sync for additional C level access.
+
 2013-04-25  Holger Hans Peter Freyther  <holger@freyther.de>
 
 	* libgst/md-config.h: Add cases for the ARM architecture.
