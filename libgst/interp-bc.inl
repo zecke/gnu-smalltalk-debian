@@ -463,6 +463,12 @@ _gst_interpret (OOP processOOP)
 			   LOCAL_COUNTER = 0)
 #endif
 
+#ifdef ENABLE_PROFILING
+# define INCR_LOCAL_COUNTER LOCAL_COUNTER++
+#else
+# define INCR_LOCAL_COUNTER
+#endif
+
 /* If we have a good quantity of registers, activate more caching mechanisms.  */
 #if  REG_AVAILABILITY >= 2
   OOP self_cache, *temp_cache, *lit_cache;

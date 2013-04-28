@@ -664,6 +664,15 @@ if test "$enable_prefetch" != no; then
     [Define to enable usage of __builtin_prefetch])
 fi
 
+AC_ARG_ENABLE(profiling,
+[  --disable-profiling     disable profiling support], ,
+enable_profiling=yes)
+
+if test "$enable_profiling" != no; then
+  AC_DEFINE(ENABLE_PROFILING, 1,
+    [Define to enable counting bytecodes for profiling support])
+fi
+
 GST_ARG_ENABLE_MODULES([Blox,TCP])
 
 dnl 

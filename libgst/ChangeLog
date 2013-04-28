@@ -1,5 +1,11 @@
 2013-04-28  Holger Hans Peter Freyther  <holger@freyther.de>
 
+	* libgst/vm.def: Use INCR_LOCAL_COUNTER instead LOCAL_COUNTER++.
+	* libgst/interp-bc.inl: Add INCR_LOCAL_COUNTER and allow to disable
+	it when ENABLE_PROFILING is not defined.
+
+2013-04-28  Holger Hans Peter Freyther  <holger@freyther.de>
+
 	* libgst/gstpriv.h: Allow to disable the DO_PREFETCH.
 
 2013-04-28  Holger Hans Peter Freyther  <holger@freyther.de>
