@@ -1,3 +1,9 @@
+2013-04-28  Holger Hans Peter Freyther  <holger@moiji-mobile.com>
+
+	* libgst/vm.def: Use INCR_LOCAL_COUNTER instead LOCAL_COUNTER++.
+	* libgst/interp-bc.inl: Add INCR_LOCAL_COUNTER and allow to disable
+	it when ENABLE_PROFILING is not defined.
+
 2013-08-09  Holger Hans Peter Freyther  <holger@moiji-mobile.com>
 
 	* libgst/cint.c: Bind link, fsync, fdatasync and sync for
