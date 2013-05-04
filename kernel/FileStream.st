@@ -394,7 +394,7 @@ file object, such as /dev/rmt0 on UNIX or MTA0: on VMS).'>
 	 the stream's contents if no such character is found."
 
 	<category: 'overriding inherited methods'>
-	| n resultStream result ch |
+	| start resultStream result ch |
 	writePtr notNil ifTrue: [self flush].
 	ptr > endPtr 
 	    ifTrue: 
@@ -408,16 +408,22 @@ file object, such as /dev/rmt0 on UNIX or MTA0: on VMS).'>
 		[:i | 
 		(ch := collection at: i) == aCharacter
 		    ifTrue: 
-			[result := collection copyFrom: ptr to: i - 1.
+			[start := ptr.
 			ptr := i + 1.
 
-			"If we went through the loop only once, we're done."
-			resultStream isNil ifTrue: [^result].
+			"If we went through the loop only once, copy from
+			 the buffer."
+			resultStream isNil ifTrue: [
+			    result := collection copyFrom: start to: i - 1.
+			    ^result].
 
 			"Else finish the stream and return its contents."
-			^resultStream
-			    nextPutAll: result;
-			    contents]].
+			resultStream
+			    next: i - start
+			    putAll: collection
+			    startingAt: start.
+
+			^resultStream contents]].
 	resultStream isNil 
 	    ifTrue: 
 		[resultStream := WriteStream on: (self species new: endPtr - ptr + 20)].
@@ -438,7 +444,7 @@ file object, such as /dev/rmt0 on UNIX or MTA0: on VMS).'>
 	 stream's contents if no new-line character is found."
 
 	<category: 'overriding inherited methods'>
-	| n resultStream result ch |
+	| start resultStream result ch |
 	writePtr notNil ifTrue: [self flush].
 	ptr > endPtr 
 	    ifTrue: 
@@ -452,17 +458,26 @@ file object, such as /dev/rmt0 on UNIX or MTA0: on VMS).'>
 		[:i | 
 		((ch := collection at: i) == ##(Character cr) or: [ch == ##(Character nl)]) 
 		    ifTrue: 
-			[result := collection copyFrom: ptr to: i - 1.
+			[start := ptr.
 			ptr := i + 1.
-			ch == ##(Character cr) ifTrue: [self peekFor: ##(Character nl)].
 
-			"If we went through the loop only once, we're done."
-			resultStream isNil ifTrue: [^result].
+			"If we went through the loop only once, copy from
+			 the buffer.  We cannot check for CR/LF yet, #peekFor:
+			 could refill collection."
+			resultStream isNil ifTrue: [
+			    result := collection copyFrom: start to: i - 1.
+			    ch == ##(Character cr) ifTrue: [self peekFor: ##(Character nl)].
+			    ^result].
 
 			"Else finish the stream and return its contents."
-			^resultStream
-			    nextPutAll: result;
-			    contents]].
+			resultStream
+			    next: i - start
+			    putAll: collection
+			    startingAt: start.
+
+			ch == ##(Character cr) ifTrue: [self peekFor: ##(Character nl)].
+			^resultStream contents]].
+
 	resultStream isNil 
 	    ifTrue: 
 		[resultStream := WriteStream on: (self species new: endPtr - ptr + 20)].
