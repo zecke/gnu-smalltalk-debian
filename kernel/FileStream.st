@@ -499,7 +499,10 @@ file object, such as /dev/rmt0 on UNIX or MTA0: on VMS).'>
 	<category: 'buffering'>
 	| last n |
 	writePtr notNil ifTrue: [self flush].
-	ptr > endPtr ifTrue: [self fill].
+	ptr > endPtr ifTrue: [
+            anInteger > collection size
+                ifTrue: [^super nextAvailable: anInteger putAllOn: aStream].
+            self fill].
 
 	"Fetch data from the buffer, without doing more than one I/O operation."
 	last := endPtr min: ptr + anInteger - 1.
@@ -516,7 +519,10 @@ file object, such as /dev/rmt0 on UNIX or MTA0: on VMS).'>
 	<category: 'buffering'>
 	| last n |
 	writePtr notNil ifTrue: [self flush].
-	ptr > endPtr ifTrue: [self fill].
+	ptr > endPtr ifTrue: [
+            anInteger > collection size
+                ifTrue: [^super nextAvailable: anInteger into: aCollection startingAt: pos].
+            self fill].
 
 	"Fetch data from the buffer, without doing more than one I/O operation."
 	last := endPtr min: ptr + anInteger - 1.
