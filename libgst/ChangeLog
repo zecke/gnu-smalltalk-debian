@@ -1,5 +1,9 @@
 2013-06-03  Holger Hans Peter Freyther  <holger@freyther.de>
 
+	* files.c: Make BlockClosure available before the CharacterArray.
+
+2013-06-03  Holger Hans Peter Freyther  <holger@freyther.de>
+
 	* xlat.c: Use jit_flush_code for the runtime code.
 
 2013-05-18  Holger Hans Peter Freyther  <holger@freyther.de>
