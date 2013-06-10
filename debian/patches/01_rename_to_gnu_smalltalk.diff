@@ -1,33 +1,39 @@
 Rename `smalltalk' package to `gnu-smalltalk'.
---- smalltalk-3.2.orig/Makefile.am
-+++ smalltalk-3.2/Makefile.am
-@@ -19,7 +19,7 @@
- AUTOMAKE_OPTIONS = gnu 1.8
+Index: smalltalk/Makefile.am
+===================================================================
+--- smalltalk.orig/Makefile.am	2013-06-10 10:08:57.508816084 +0200
++++ smalltalk/Makefile.am	2013-06-10 10:08:57.500816084 +0200
+@@ -20,7 +20,7 @@
  ACLOCAL_AMFLAGS = -I build-aux
+ DISTCHECK_CONFIGURE_FLAGS=--without-system-libltdl --without-system-libsigsegv --without-system-libffi
  
 -PACKAGE=smalltalk
 +PACKAGE=gnu-smalltalk
  gstdatadir=$(pkgdatadir)
  
  DIST_SUBDIRS = lib-src snprintfv lightning sigsegv libffi opcode libgst \
---- smalltalk-3.2.orig/configure.ac
-+++ smalltalk-3.2/configure.ac
+Index: smalltalk/configure.ac
+===================================================================
+--- smalltalk.orig/configure.ac	2013-06-10 10:08:57.508816084 +0200
++++ smalltalk/configure.ac	2013-06-10 10:09:23.612816783 +0200
 @@ -7,7 +7,7 @@
  
  dnl 2.63 needed by testsuite, actually
  AC_PREREQ(2.63)
--AC_INIT([GNU Smalltalk], 3.2.4, help-smalltalk@gnu.org, smalltalk,
-+AC_INIT([GNU Smalltalk], 3.2.4, help-smalltalk@gnu.org, gnu-smalltalk,
+-AC_INIT([GNU Smalltalk], 3.2.5, help-smalltalk@gnu.org, smalltalk,
++AC_INIT([GNU Smalltalk], 3.2.5, help-smalltalk@gnu.org, gnu-smalltalk,
          [http://smalltalk.gnu.org/])
  MAINTAINER="bonzini@gnu.org"
  
---- smalltalk-3.2.orig/tests/package.m4
-+++ smalltalk-3.2/tests/package.m4
+Index: smalltalk/tests/package.m4
+===================================================================
+--- smalltalk.orig/tests/package.m4	2013-06-10 10:08:57.508816084 +0200
++++ smalltalk/tests/package.m4	2013-06-10 10:09:43.100817305 +0200
 @@ -1,6 +1,6 @@
  # Signature of the current package.
  m4_define([AT_PACKAGE_NAME],      [GNU Smalltalk])
 -m4_define([AT_PACKAGE_TARNAME],   [smalltalk])
 +m4_define([AT_PACKAGE_TARNAME],   [gnu-smalltalk])
- m4_define([AT_PACKAGE_VERSION],   [3.2.4])
- m4_define([AT_PACKAGE_STRING],    [GNU Smalltalk 3.2.4])
+ m4_define([AT_PACKAGE_VERSION],   [3.2.5])
+ m4_define([AT_PACKAGE_STRING],    [GNU Smalltalk 3.2.5])
  m4_define([AT_PACKAGE_BUGREPORT], [help-smalltalk@gnu.org])

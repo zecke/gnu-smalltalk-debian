@@ -1,4 +1,10 @@
-gnu-smalltalk (3.2.4-2zecke2) UNRELEASED; urgency=low
+gnu-smalltalk (3.2.5) UNRELEASED; urgency=low
+
+  * New upstream release of GNU Smalltalk. 
+
+ -- Holger Hans Peter Freyther <holger@freyther.de>  Mon, 10 Jun 2013 10:07:14 +0200
+
+gnu-smalltalk (3.2.4-2zecke2) unstable; urgency=low
 
   * Build recent 3.2 stable git.
   * Add .m4 files to the dev package

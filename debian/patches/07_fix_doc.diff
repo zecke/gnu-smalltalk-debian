@@ -1,0 +1,31 @@
+From 789f6d26dfa01ec21e0a83cf62f9b26fb0be4f6c Mon Sep 17 00:00:00 2001
+From: Stefano Lattarini <stefano.lattarini@gmail.com>
+Date: Wed, 15 May 2013 21:31:11 +0200
+Subject: [PATCH] docs: Port the tutorial to work with Texinfo 5
+
+* doc/tutorial.texi: Simply by substituting an instance of '@itemx'
+with an instance of '@item' in this file.
+
+Copyright-paperwork-exempt: yes
+Signed-off-by: Stefano Lattarini <stefano.lattarini@gmail.com>
+---
+ ChangeLog         |    5 +++++
+ doc/tutorial.texi |    2 +-
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/doc/tutorial.texi b/doc/tutorial.texi
+index 4624ae9..784d2b4 100644
+--- a/doc/tutorial.texi
++++ b/doc/tutorial.texi
+@@ -3920,7 +3920,7 @@ and keyword selectors:
+    #at:put:
+ @end example
+ 
+-@itemx @t{eval: ``##('' [temps] exprs ``)''}
++@item @t{eval: ``##('' [temps] exprs ``)''}
+ This syntax also has not been used in the tutorial, and results
+ in evaluating an arbitrarily complex expression at compile-time,
+ and substituting the result: for example @code{##(Object allInstances
+-- 
+1.7.10.4
+

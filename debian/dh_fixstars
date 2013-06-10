@@ -9,8 +9,8 @@ dh_fixstars - fixes GNU Smalltalk archives (.star)
 use strict;
 use File::Find;
 use Debian::Debhelper::Dh_Lib;
-#use Dpkg::Arch qw(get_raw_host_arch debarch_to_multiarch);
-use Dpkg::Arch qw(get_raw_host_arch);
+use Dpkg::Arch qw(get_raw_host_arch debarch_to_multiarch);
+#use Dpkg::Arch qw(get_raw_host_arch);
 
 =head1 SYNOPSIS
 
@@ -57,12 +57,12 @@ foreach my $package (@{$dh{DOPACKAGES}}) {
 
 sub path_to_shlib {
     my $lib = shift;
-    #my $multiarch_dir = debarch_to_multiarch(get_raw_host_arch());
+    my $multiarch_dir = debarch_to_multiarch(get_raw_host_arch());
     my %dirs = (
         "/lib/$lib"                    => "/lib/$lib",
         "/usr/lib/$lib"                => "../$lib",
-#        "/usr/lib/$multiarch_dir/$lib" => "../$multiarch_dir/$lib",
-#        "/lib/$multiarch_dir/$lib"     => "/lib/$multiarch_dir/$lib"
+        "/usr/lib/$multiarch_dir/$lib" => "../$multiarch_dir/$lib",
+        "/lib/$multiarch_dir/$lib"     => "/lib/$multiarch_dir/$lib"
     );
 
     # Found path; can be empty.
