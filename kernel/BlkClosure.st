@@ -173,7 +173,7 @@ creation of Processes from blocks.'>
 	        top := parent isNil
 		    ifTrue: [nil]
 		    ifFalse: [
-			parent sp == 0 
+			parent sp <= 0 
 			    ifTrue: [parent receiver]
 			    ifFalse: [parent at: parent sp]].
 	        self value. top]
