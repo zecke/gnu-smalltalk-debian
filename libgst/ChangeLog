@@ -1,3 +1,7 @@
+2013-06-10  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* interp-jit.inl: Set the F_XLAT_REACHABLE flag in refresh_native_ips.
+
 2013-06-03  Holger Hans Peter Freyther  <holger@freyther.de>
 
 	* files.c: Make BlockClosure available before the CharacterArray.
