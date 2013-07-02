@@ -1,5 +1,10 @@
 2013-07-01  Gwenael Casaccio <gwenael.casaccio@gmail.com>
 
+        * .gitignore: Do not track Makefile.frag files
+        * *.frag: Remove Makefile.frag files
+
+2013-07-01  Gwenael Casaccio <gwenael.casaccio@gmail.com>
+
         * kernel/DirPackage.st: Return the loaded package.
         * scripts/Test.st: Load a package from the package.xml file.
 
