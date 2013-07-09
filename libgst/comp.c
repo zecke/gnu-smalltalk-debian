@@ -171,6 +171,9 @@ static mst_Boolean compile_and_or_statement (OOP selector,
 static mst_Boolean compile_if_true_false_statement (OOP selector,
 						    tree_node expr);
 
+static mst_Boolean compile_if_nil_statement (OOP selector,
+                                                    tree_node expr);
+
 /* Special case compilation of an infinite loop, given by the parse
    node in RECEIVER.  Returns true if byte codes were emitted, false
    if not.  If the last argument to the message is not a block
@@ -251,6 +254,12 @@ static bc_vector compile_sub_expression (tree_node expr);
    BRANCHLEN bytecodes.  */
 static bc_vector compile_sub_expression_and_jump (tree_node expr,
 						  int branchLen);
+
+/* Like compile_sub_expression, except that after compiling EXPR this
+   subexpression always ends with an unconditional branch past
+   BRANCHLEN bytecodes and POP the value on the stack.  */
+static bc_vector compile_pop_sub_expression_and_jump (tree_node expr,
+                                                  int branchLen);
 
 /* Compile a send with the given RECEIVER (used to check for sends to
    super), SELECTOR and number of arguments NUMARGS.  */
@@ -1285,6 +1294,11 @@ compile_keyword_expr (tree_node expr,
 
       compile_expression (expr->v_expr.receiver);
 
+      if (selector == _gst_if_nil_symbol)
+        {
+          if (compile_if_nil_statement (selector, expr->v_expr.expression))
+            return;
+        }
       if (selector == _gst_if_true_symbol
           || selector == _gst_if_false_symbol)
         {
@@ -1720,6 +1734,52 @@ compile_if_statement (OOP selector,
   return (true);
 }
 
+bc_vector
+compile_pop_sub_expression_and_jump (tree_node expr,
+                                 int branchLen)
+{
+  bc_vector current_bytecodes, subExprByteCodes;
+  mst_Boolean returns;
+
+  current_bytecodes = _gst_save_bytecode_array ();
+
+  _gst_compile_byte (POP_STACK_TOP, 0);
+
+  returns = compile_statements (expr->v_block.statements, false);
+  if (returns)
+    INCR_STACK_DEPTH ();
+
+  if (!returns)
+    _gst_compile_byte (JUMP, branchLen);
+
+  subExprByteCodes = _gst_get_bytecodes ();
+  _gst_restore_bytecode_array (current_bytecodes);
+
+  return (subExprByteCodes);
+}
+
+mst_Boolean
+compile_if_nil_statement (OOP selector,
+                      tree_node expr)
+{
+  bc_vector nilByteCodes;
+  struct builtin_selector *bs = _gst_lookup_builtin_selector ("isNil", 5);
+
+  if (expr->v_list.value->nodeType != TREE_BLOCK_NODE
+      || HAS_PARAMS_OR_TEMPS (expr->v_list.value))
+    return (false);
+
+  _gst_compile_byte (DUP_STACK_TOP, 0);
+  INCR_STACK_DEPTH ();
+
+  _gst_compile_byte (bs->bytecode, 0);
+
+  nilByteCodes = compile_pop_sub_expression_and_jump (expr->v_list.value, 0);
+  compile_jump (_gst_bytecode_length (nilByteCodes), false);
+  _gst_compile_and_free_bytecodes (nilByteCodes);
+
+  return (true);
+}
 
 mst_Boolean
 compile_and_or_statement (OOP selector,

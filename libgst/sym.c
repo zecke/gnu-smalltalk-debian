@@ -126,6 +126,7 @@ OOP _gst_if_false_if_true_symbol = NULL;
 OOP _gst_if_false_symbol = NULL;
 OOP _gst_if_true_if_false_symbol = NULL;
 OOP _gst_if_true_symbol = NULL;
+OOP _gst_if_nil_symbol = NULL;
 OOP _gst_int_symbol = NULL;
 OOP _gst_long_double_symbol = NULL;
 OOP _gst_long_symbol = NULL;
@@ -278,6 +279,7 @@ static const symbol_info sym_info[] = {
   {&_gst_if_false_symbol, "ifFalse:"},
   {&_gst_if_true_if_false_symbol, "ifTrue:ifFalse:"},
   {&_gst_if_true_symbol, "ifTrue:"},
+  {&_gst_if_nil_symbol, "ifNil:"},
   {&_gst_int_symbol, "int"},
   {&_gst_uint_symbol, "uInt"},
   {&_gst_long_double_symbol, "longDouble"},
