@@ -1,3 +1,9 @@
+2013-07-09  Gwenael Casaccio <gwenael.casaccio@gmail.com>
+
+        * sym.h: Add new global variable for #ifNil:.
+        * sym.c: Create and initialize symbol #ifNil:.
+        * comp.c: Inline ifNil: messages.
+
 2013-07-01  Gwenael Casaccio <gwenael.casaccio@gmail.com>
 
         * .gitignore: Do not track Makefile.frag files
