@@ -1,3 +1,7 @@
+2013-07-09  Gwenael Casaccio <gwenael.casaccio@gmail.com>
+
+	* oop.c: Protect oop1 and oop2 in _gst_swap_objects.
+
 2013-06-10  Holger Hans Peter Freyther  <holger@moiji-mobile.com>
 
 	* interp-jit.inl: Set the F_XLAT_REACHABLE flag in refresh_native_ips.
