@@ -1,5 +1,14 @@
 2013-07-09  Gwenael Casaccio <gwenael.casaccio@gmail.com>
 
+        _gst_swap_objects can tenure oop1 or oop2 thus an garbage
+        collection can be potentialy run, if the function is called
+        with two objects that are not reachable from a Smalltalk context
+        they could be GC'ed.
+
+        * oop.c: Protect oop1 and oop2 in _gst_swap_objects
+
+2013-07-09  Gwenael Casaccio <gwenael.casaccio@gmail.com>
+
         * sym.h: Add new global variable for #ifNil:.
         * sym.c: Create and initialize symbol #ifNil:.
         * comp.c: Inline ifNil: messages.
