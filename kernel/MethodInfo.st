@@ -33,7 +33,7 @@
 
 
 Object subclass: MethodInfo [
-    | sourceCode category class selector |
+    | sourceCode category class selector debugInfo |
     
     <shape: #pointer>
     <category: 'Language-Implementation'>
@@ -139,6 +139,18 @@ code of the method.'>
     setSourceCode: source [
 	<category: 'private'>
 	sourceCode := source
+    ]
+
+    argumentsFor: anObject [
+        <category: 'accessing'>
+
+        ^ (debugInfo at: anObject) arguments: anObject numArgs
+    ]
+
+    temporariesFor: anObject [
+        <category: 'accessing'>
+
+        ^ (debugInfo at: anObject) temporaries: anObject numArgs
     ]
 ]
 

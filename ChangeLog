@@ -1,3 +1,18 @@
+2013-07-10  Gwenael Casaccio <gwenael.casaccio@gmail.com>
+
+        * kernel/DebugInformation.st: Add DebugInformation.
+        * kernel/CompildMeth.st: Add DebugInformation support.
+        * kernel/CompiledBlk.st: Add DebugInformation support.
+        * kernel/MethodInfo.st: Add DebugInformation support.
+        * libgst/comp.c: Add arguments and temporaries name in DebugInformation.
+        * libgst/comp.h: Add a debugInfo state in the compiler.
+        * libgst/dict.c: Add _gst_identity_dictionary_new.
+        * libgst/dict.h: Add _gst_identity_dictionary_new.
+        * libgst/files.c: Bootstrap information for DebugInformation.
+        * packages.xml: Bootstrap information for DebugInformation.
+        * tests/stcompiler.ok: Tests for DebugInformations.
+        * tests/stcompiler.st: Tests for DebugInformations.
+
 2013-07-01  Gwenael Casaccio <gwenael.casaccio@gmail.com>
 
         * .gitignore: Do not track Makefile.frag files
