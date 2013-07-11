@@ -2739,6 +2739,7 @@ method_info_new (OOP class,
   methodInfo->category = categoryOOP;
   methodInfo->class = class;
   methodInfo->selector = selector;
+  methodInfo->debugInfo = _gst_nil_oop;
 
   while (attrs)
     {
