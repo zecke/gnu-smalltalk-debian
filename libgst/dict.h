@@ -655,4 +655,10 @@ extern int _gst_resolve_primitive_name (char *name)
 extern void _gst_record_profile (OOP oldMethod, OOP newMethod, int ipOffset)
   ATTRIBUTE_HIDDEN;
 
+/* Create a new instance of CLASSOOP (an IdentityDictionary subclass)
+   and answer it.  */
+extern OOP _gst_identity_dictionary_new (OOP classOOP,
+                                    int size)
+  ATTRIBUTE_HIDDEN;
+
 #endif /* GST_DICT_H */

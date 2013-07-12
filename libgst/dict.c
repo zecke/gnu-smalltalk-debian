@@ -1815,6 +1815,12 @@ namespace_new (int size, const char *name, OOP superspaceOOP)
 }
 
 OOP
+_gst_identity_dictionary_new (OOP classOOP, int size)
+{
+  return identity_dictionary_new (classOOP, size);
+}
+
+OOP
 _gst_dictionary_new (int size)
 {
   gst_dictionary dictionary;
@@ -2270,3 +2276,5 @@ _gst_identity_dictionary_at_inc (OOP identityDictionaryOOP,
 
   return (oldValue);
 }
+
+
