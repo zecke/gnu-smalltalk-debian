@@ -439,6 +439,7 @@ extern OOP _gst_weak_key_identity_dictionary_class ATTRIBUTE_HIDDEN;
 extern OOP _gst_weak_value_identity_dictionary_class ATTRIBUTE_HIDDEN;
 extern OOP _gst_write_stream_class ATTRIBUTE_HIDDEN;
 extern OOP _gst_processor_oop ATTRIBUTE_HIDDEN;
+extern OOP _gst_debug_information_class ATTRIBUTE_HIDDEN;
 
 /* The size of the indexed instance variables corresponding to the
    various instanceSpec values declared in gstpriv.h.  */
@@ -571,6 +572,13 @@ extern OOP _gst_byte_array_new (const gst_uchar * bytes,
 extern OOP _gst_counted_string_new (const char *s,
 				    size_t len) 
   ATTRIBUTE_HIDDEN;
+
+/* Create a new instance of CLASSOOP (an IdentityDictionary subclass)
+   and answer it.  */
+extern OOP _gst_identity_dictionary_new (OOP classOOP,
+                                    int size)
+  ATTRIBUTE_HIDDEN;
+
 
 /* Adds the key KEYOOP, associated with VALUEOOP, to the
    IdentityDictionary (or a subclass sharing the same representation)
