@@ -690,6 +690,7 @@ _gst_compile_method (tree_node method,
   tree_node outer_method;
   compiler_state s, *outer_state;
   tree_node statement;
+  OOP temp;
   OOP selector;
   OOP literalsOOP, attributesOOP;
   OOP methodOOP;
@@ -722,6 +723,9 @@ _gst_compile_method (tree_node method,
   _gst_push_new_scope ();
   selector = compute_selector (method->v_method.selectorExpr);
   INC_ADD_OOP (selector);
+
+  temp = _gst_identity_dictionary_new (_gst_identity_dictionary_class, 6);
+  INC_ADD_OOP (temp);
 
   // _gst_compiler_state->debugInfoDict = _gst_identity_dictionary_new (_gst_identity_dictionary_class, 6);
   // INC_ADD_OOP (_gst_compiler_state->debugInfoDict);
