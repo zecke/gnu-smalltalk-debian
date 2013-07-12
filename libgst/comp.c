@@ -534,6 +534,9 @@ _gst_execute_statements (OOP receiverOOP,
       memset (&s, 0, sizeof (s));
       _gst_compiler_state->undeclared_temporaries = undeclared;
 
+      _gst_compiler_state->debugInfoDict = _gst_identity_dictionary_new (_gst_identity_dictionary_class, 6);
+      INC_ADD_OOP (_gst_compiler_state->debugInfoDict);
+
       if (setjmp (_gst_compiler_state->bad_method) == 0)
         {
           resultOOP = _gst_make_constant_oop (statements->v_list.value);
@@ -718,6 +721,9 @@ _gst_compile_method (tree_node method,
   _gst_alloc_bytecodes ();
   _gst_push_new_scope ();
   selector = compute_selector (method->v_method.selectorExpr);
+
+  _gst_compiler_state->debugInfoDict = _gst_identity_dictionary_new (_gst_identity_dictionary_class, 6);
+  INC_ADD_OOP (_gst_compiler_state->debugInfoDict);
 
   /* When we are reading from stdin, it's better to write line numbers where
      1 is the first line *in the current doit*, because for now the prompt
