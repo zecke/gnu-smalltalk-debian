@@ -177,6 +177,7 @@ OOP _gst_weak_key_identity_dictionary_class = NULL;
 OOP _gst_weak_value_identity_dictionary_class = NULL;
 OOP _gst_write_stream_class = NULL;
 OOP _gst_processor_oop = NULL;
+OOP _gst_debug_information_class = NULL;
 
 /* Called when a dictionary becomes full, this routine replaces the
    dictionary instance that DICTIONARYOOP is pointing to with a new,
@@ -747,7 +748,11 @@ static const class_definition class_info[] = {
 
   {&_gst_file_segment_class, &_gst_object_class,
    GST_ISP_FIXED, true, 3,
-   "FileSegment", "file startPos size", NULL, NULL }
+   "FileSegment", "file startPos size", NULL, NULL },
+
+  {&_gst_debug_information_class, &_gst_object_class,
+    GST_ISP_FIXED, true, 1,
+    "DebugInformation", "variables", NULL, NULL }
 
 /* Classes not defined here (like Point/Rectangle/RunArray) are
    defined after the kernel has been fully initialized.  */
