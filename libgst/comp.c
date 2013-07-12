@@ -725,7 +725,7 @@ _gst_compile_method (tree_node method,
   INC_ADD_OOP (selector);
 
   temp = _gst_identity_dictionary_new (_gst_identity_dictionary_class, 6);
-  INC_ADD_OOP (temp);
+  // INC_ADD_OOP (temp);
 
   // _gst_compiler_state->debugInfoDict = _gst_identity_dictionary_new (_gst_identity_dictionary_class, 6);
   // INC_ADD_OOP (_gst_compiler_state->debugInfoDict);
