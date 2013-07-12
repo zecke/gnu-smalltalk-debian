@@ -723,8 +723,8 @@ _gst_compile_method (tree_node method,
   selector = compute_selector (method->v_method.selectorExpr);
   INC_ADD_OOP (selector);
 
-  _gst_compiler_state->debugInfoDict = _gst_identity_dictionary_new (_gst_identity_dictionary_class, 6);
-  INC_ADD_OOP (_gst_compiler_state->debugInfoDict);
+  // _gst_compiler_state->debugInfoDict = _gst_identity_dictionary_new (_gst_identity_dictionary_class, 6);
+  // INC_ADD_OOP (_gst_compiler_state->debugInfoDict);
 
   /* When we are reading from stdin, it's better to write line numbers where
      1 is the first line *in the current doit*, because for now the prompt
