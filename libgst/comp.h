@@ -235,7 +235,6 @@ typedef struct compiler_state
   OOP *literal_vec;
   OOP *literal_vec_curr;
   OOP *literal_vec_max;
-  OOP debugInfoDict;
   jmp_buf bad_method;
 } compiler_state;
 
