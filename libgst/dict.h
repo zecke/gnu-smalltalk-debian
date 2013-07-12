@@ -573,6 +573,13 @@ extern OOP _gst_counted_string_new (const char *s,
 				    size_t len) 
   ATTRIBUTE_HIDDEN;
 
+/* Create a new instance of CLASSOOP (an IdentityDictionary subclass)
+   and answer it.  */
+extern OOP _gst_identity_dictionary_new (OOP classOOP,
+                                    int size)
+  ATTRIBUTE_HIDDEN;
+
+
 /* Adds the key KEYOOP, associated with VALUEOOP, to the
    IdentityDictionary (or a subclass sharing the same representation)
    IDENTITYDICTIONARYOOP.  */

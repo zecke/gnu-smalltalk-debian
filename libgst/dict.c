@@ -217,11 +217,6 @@ static int _gst_identity_dictionary_at_inc (OOP identityDictionaryOOP,
                                             OOP keyOOP,
                                             int inc);
 
-/* Create a new instance of CLASSOOP (an IdentityDictionary subclass)
-   and answer it.  */
-static OOP identity_dictionary_new (OOP classOOP,
-				    int size);
-
 /* Create a new instance of Namespace with the given SIZE, NAME and
    superspace (SUPERSPACEOOP).  */
 static OOP namespace_new (int size,
@@ -1410,7 +1405,7 @@ _gst_valid_class_method_dictionary (OOP class_oop)
     {
       OOP methodDictionaryOOP;
       methodDictionaryOOP =
-        identity_dictionary_new (_gst_method_dictionary_class, 32);
+        _gst_identity_dictionary_new (_gst_method_dictionary_class, 32);
       class = (gst_class) OOP_TO_OBJ (class_oop);
       class->methodDictionary = methodDictionaryOOP;
     }
@@ -1726,7 +1721,7 @@ identity_dictionary_find_key_or_nil (OOP identityDictionaryOOP,
 }
 
 OOP
-identity_dictionary_new (OOP classOOP, int size)
+_gst_identity_dictionary_new (OOP classOOP, int size)
 {
   gst_identity_dictionary identityDictionary;
   OOP identityDictionaryOOP;
@@ -2211,7 +2206,7 @@ _gst_record_profile (OOP oldMethod, OOP newMethod, int ipOffset)
   profile = _gst_identity_dictionary_at (_gst_raw_profile, oldMethod);
   if UNCOMMON (IS_NIL (profile))
     {
-      profile = identity_dictionary_new (_gst_identity_dictionary_class, 6);
+      profile = _gst_identity_dictionary_new (_gst_identity_dictionary_class, 6);
       _gst_identity_dictionary_at_put (_gst_raw_profile, oldMethod, 
                                        profile);
     }
