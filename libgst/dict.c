@@ -743,8 +743,8 @@ static const class_definition class_info[] = {
    "Memory", NULL, NULL, NULL },
 
   {&_gst_method_info_class, &_gst_object_class,
-   GST_ISP_POINTER, true, 4,
-   "MethodInfo", "sourceCode category class selector", NULL, NULL },
+   GST_ISP_POINTER, true, 5,
+   "MethodInfo", "sourceCode category class selector debugInfo", NULL, NULL },
 
   {&_gst_file_segment_class, &_gst_object_class,
    GST_ISP_FIXED, true, 3,
