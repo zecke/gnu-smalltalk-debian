@@ -2376,7 +2376,7 @@ add_literal (OOP oop)
 
   i =_gst_compiler_state->literal_vec_curr - _gst_compiler_state->literal_vec;
   *_gst_compiler_state->literal_vec_curr++ = oop;
-  _gst_register_oop (oop);
+  INC_ADD_OOP (oop);
   return i;
 }
 
