@@ -1107,7 +1107,7 @@ compile_block (tree_node blockExpr)
   incPtr = INC_SAVE_POINTER ();
   blockOOP = make_block (_gst_get_arg_count (), _gst_get_temp_count (),
 			 blockByteCodes, stack_depth);
-  _gst_register_oop (blockOOP);
+  INC_ADD_OOP (blockOOP);
   _gst_pop_old_scope ();
 
   /* emit standard byte sequence to invoke a block: 
@@ -2104,7 +2104,7 @@ _gst_make_constant_oop (tree_node constExpr)
          speed; but not now -- with the array temporarily part of the
          root set it must be completely initialized (sigh).  */
       instantiate_with (_gst_array_class, len, &resultOOP);
-      _gst_register_oop (resultOOP);
+      INC_ADD_OOP (resultOOP);
 
       for (i = 0, subexpr = constExpr; i < len;
 	   i++, subexpr = subexpr->v_list.next)
@@ -2155,7 +2155,7 @@ _gst_make_constant_oop (tree_node constExpr)
         incPtr = INC_SAVE_POINTER ();
         dvb = (gst_deferred_variable_binding)
 	  instantiate (_gst_deferred_variable_binding_class, &resultOOP);
-        _gst_register_oop (resultOOP);
+        INC_ADD_OOP (resultOOP);
 
 	dvb->key = _gst_intern_string (varNode->v_list.name);
 	dvb->class = _gst_current_parser->currentClass;
