@@ -2200,7 +2200,7 @@ _gst_make_constant_oop (tree_node constExpr)
 
       incPtr = INC_SAVE_POINTER ();
       result = instantiate_with (_gst_array_class, len, &resultOOP);
-      _gst_register_oop (resultOOP);
+      INC_ADD_OOP (resultOOP);
 
       for (i = 0, subexpr = constExpr->v_const.val.aVal; i < len;
 	   i++, subexpr = subexpr->v_list.next)
