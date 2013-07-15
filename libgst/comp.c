@@ -2544,7 +2544,7 @@ _gst_make_new_method (int numArgs,
       else if (selectorOOP == _gst_category_symbol)
         {
           categoryOOP = arguments->data[0];
-          _gst_register_oop (categoryOOP);
+          INC_ADD_OOP (categoryOOP);
         }
       else
         record_attribute (messageOOP);
@@ -2576,10 +2576,10 @@ _gst_make_new_method (int numArgs,
       if (newFlags == MTH_RETURN_LITERAL && literalOOP != NULL)
         {
           gst_object literals;
-          _gst_register_oop (literalOOP);
+          INC_ADD_OOP (literalOOP);
           literals = new_instance_with (_gst_array_class, 1, &literalsOOP);
           literals->data[0] = literalOOP;
-          _gst_register_oop (literalsOOP);
+          INC_ADD_OOP (literalsOOP);
         }
     }
 
