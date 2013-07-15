@@ -2616,12 +2616,12 @@ _gst_make_new_method (int numArgs,
   else
     {
       sourceCode = _gst_get_source_string (startPos, endPos);
-      _gst_register_oop (sourceCode);
+      INC_ADD_OOP (sourceCode);
     }
 
   methodDesc = method_info_new (class, selector, method_attrs,
 				sourceCode, categoryOOP);
-  _gst_register_oop (methodDesc);
+  INC_ADD_OOP (methodDesc);
 
   method_attrs = NULL;
 
