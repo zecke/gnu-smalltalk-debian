@@ -2200,7 +2200,7 @@ _gst_make_constant_oop (tree_node constExpr)
 
       incPtr = INC_SAVE_POINTER ();
       result = instantiate_with (_gst_array_class, len, &resultOOP);
-      INC_ADD_OOP (resultOOP);
+      _gst_register_oop (resultOOP);
 
       for (i = 0, subexpr = constExpr->v_const.val.aVal; i < len;
 	   i++, subexpr = subexpr->v_list.next)
@@ -2336,7 +2336,7 @@ record_attribute (OOP messageOOP)
   new_attr->next = method_attrs;
   method_attrs = new_attr;
 
-  INC_ADD_OOP (messageOOP);
+  _gst_register_oop (messageOOP);
 }
 
 void
@@ -2376,7 +2376,7 @@ add_literal (OOP oop)
 
   i =_gst_compiler_state->literal_vec_curr - _gst_compiler_state->literal_vec;
   *_gst_compiler_state->literal_vec_curr++ = oop;
-  INC_ADD_OOP (oop);
+  _gst_register_oop (oop);
   return i;
 }
 
