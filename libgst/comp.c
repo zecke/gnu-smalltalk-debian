@@ -540,7 +540,7 @@ _gst_execute_statements (OOP receiverOOP,
       if (setjmp (_gst_compiler_state->bad_method) == 0)
         {
           resultOOP = _gst_make_constant_oop (statements->v_list.value);
-          INC_ADD_OOP (resultOOP);
+          _gst_register_oop (resultOOP);
         }
       else
         _gst_had_error = true;
@@ -722,10 +722,10 @@ _gst_compile_method (tree_node method,
   _gst_alloc_bytecodes ();
   _gst_push_new_scope ();
   selector = compute_selector (method->v_method.selectorExpr);
-  INC_ADD_OOP (selector);
+  _gst_register_oop (selector);
 
   _gst_compiler_state->debugInfoDict = _gst_identity_dictionary_new (_gst_identity_dictionary_class, 60);
-  INC_ADD_OOP (_gst_compiler_state->debugInfoDict);
+  _gst_register_oop (_gst_compiler_state->debugInfoDict);
 
   /* When we are reading from stdin, it's better to write line numbers where
      1 is the first line *in the current doit*, because for now the prompt
@@ -836,7 +836,7 @@ _gst_compile_method (tree_node method,
 
   if (methodOOP != _gst_nil_oop)
     {
-      INC_ADD_OOP (methodOOP);
+      _gst_register_oop (methodOOP);
       compiledMethod = (gst_compiled_method) OOP_TO_OBJ (methodOOP);
       compiledMethod->header.isOldSyntax = method->v_method.isOldSyntax;
 
@@ -1107,7 +1107,7 @@ compile_block (tree_node blockExpr)
   incPtr = INC_SAVE_POINTER ();
   blockOOP = make_block (_gst_get_arg_count (), _gst_get_temp_count (),
 			 blockByteCodes, stack_depth);
-  INC_ADD_OOP (blockOOP);
+  _gst_register_oop (blockOOP);
   _gst_pop_old_scope ();
 
   /* emit standard byte sequence to invoke a block: 
@@ -2104,7 +2104,7 @@ _gst_make_constant_oop (tree_node constExpr)
          speed; but not now -- with the array temporarily part of the
          root set it must be completely initialized (sigh).  */
       instantiate_with (_gst_array_class, len, &resultOOP);
-      INC_ADD_OOP (resultOOP);
+      _gst_register_oop (resultOOP);
 
       for (i = 0, subexpr = constExpr; i < len;
 	   i++, subexpr = subexpr->v_list.next)
@@ -2155,7 +2155,7 @@ _gst_make_constant_oop (tree_node constExpr)
         incPtr = INC_SAVE_POINTER ();
         dvb = (gst_deferred_variable_binding)
 	  instantiate (_gst_deferred_variable_binding_class, &resultOOP);
-        INC_ADD_OOP (resultOOP);
+        _gst_register_oop (resultOOP);
 
 	dvb->key = _gst_intern_string (varNode->v_list.name);
 	dvb->class = _gst_current_parser->currentClass;
@@ -2169,7 +2169,6 @@ _gst_make_constant_oop (tree_node constExpr)
 	    OOP arrayOOP;
 	    gst_object array =
 	      instantiate_with (_gst_array_class, size, &arrayOOP);
-            INC_ADD_OOP (arrayOOP);
 
 	    dvb->path = arrayOOP;
 	    for (i = 0; i < size; i++, varNode = varNode->v_list.next)
@@ -2201,7 +2200,7 @@ _gst_make_constant_oop (tree_node constExpr)
 
       incPtr = INC_SAVE_POINTER ();
       result = instantiate_with (_gst_array_class, len, &resultOOP);
-      INC_ADD_OOP (resultOOP);
+      _gst_register_oop (resultOOP);
 
       for (i = 0, subexpr = constExpr->v_const.val.aVal; i < len;
 	   i++, subexpr = subexpr->v_list.next)
@@ -2337,7 +2336,7 @@ record_attribute (OOP messageOOP)
   new_attr->next = method_attrs;
   method_attrs = new_attr;
 
-  INC_ADD_OOP (messageOOP);
+  _gst_register_oop (messageOOP);
 }
 
 void
@@ -2377,7 +2376,8 @@ add_literal (OOP oop)
 
   i =_gst_compiler_state->literal_vec_curr - _gst_compiler_state->literal_vec;
   *_gst_compiler_state->literal_vec_curr++ = oop;
-  _gst_register_oop (oop); // ??? ICI ???
+  _gst_register_oop (oop);
+  _gst_register_oop (oop);
   return i;
 }
 
@@ -2545,7 +2545,7 @@ _gst_make_new_method (int numArgs,
       else if (selectorOOP == _gst_category_symbol)
         {
           categoryOOP = arguments->data[0];
-          INC_ADD_OOP (categoryOOP);
+          _gst_register_oop (categoryOOP);
         }
       else
         record_attribute (messageOOP);
@@ -2577,10 +2577,10 @@ _gst_make_new_method (int numArgs,
       if (newFlags == MTH_RETURN_LITERAL && literalOOP != NULL)
         {
           gst_object literals;
-          INC_ADD_OOP (literalOOP);
+          _gst_register_oop (literalOOP);
           literals = new_instance_with (_gst_array_class, 1, &literalsOOP);
           literals->data[0] = literalOOP;
-          INC_ADD_OOP (literalsOOP);
+          _gst_register_oop (literalsOOP);
         }
     }
 
@@ -2617,12 +2617,12 @@ _gst_make_new_method (int numArgs,
   else
     {
       sourceCode = _gst_get_source_string (startPos, endPos);
-      INC_ADD_OOP (sourceCode);
+      _gst_register_oop (sourceCode);
     }
 
   methodDesc = method_info_new (class, selector, method_attrs,
 				sourceCode, categoryOOP);
-  INC_ADD_OOP (methodDesc);
+  _gst_register_oop (methodDesc);
 
   method_attrs = NULL;
 
