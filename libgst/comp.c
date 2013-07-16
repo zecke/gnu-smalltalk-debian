@@ -534,6 +534,9 @@ _gst_execute_statements (OOP receiverOOP,
       memset (&s, 0, sizeof (s));
       _gst_compiler_state->undeclared_temporaries = undeclared;
 
+      _gst_compiler_state->debugInfoDict = _gst_identity_dictionary_new (_gst_identity_dictionary_class, 6);
+      INC_ADD_OOP (_gst_compiler_state->debugInfoDict);
+
       if (setjmp (_gst_compiler_state->bad_method) == 0)
         {
           resultOOP = _gst_make_constant_oop (statements->v_list.value);
@@ -692,6 +695,10 @@ _gst_compile_method (tree_node method,
   OOP methodOOP;
   bc_vector bytecodes;
   int stack_depth;
+  int i, argCount, tempCount;
+  OOP variablesOOP, debugInfo;
+  gst_object object;
+  tree_node args;
   inc_ptr incPtr;
   gst_compiled_method compiledMethod;
 
@@ -719,6 +726,9 @@ _gst_compile_method (tree_node method,
   _gst_push_new_scope ();
   selector = compute_selector (method->v_method.selectorExpr);
 
+  _gst_compiler_state->debugInfoDict = _gst_identity_dictionary_new (_gst_identity_dictionary_class, 6);
+  INC_ADD_OOP (_gst_compiler_state->debugInfoDict);
+
   /* When we are reading from stdin, it's better to write line numbers where
      1 is the first line *in the current doit*, because for now the prompt
      does not include the line number.  This might change in the future.
@@ -738,14 +748,18 @@ _gst_compile_method (tree_node method,
   methodOOP = _gst_nil_oop;
   if (setjmp (_gst_compiler_state->bad_method) == 0)
     {
-      if (_gst_declare_arguments (method->v_method.selectorExpr) == -1)
+      argCount = _gst_declare_arguments (method->v_method.selectorExpr);
+
+      if (argCount == -1)
 	{
 	  _gst_errorf_at (method->location.first_line,
 			  "duplicate argument name");
           EXIT_COMPILATION ();
 	}
 
-      if (_gst_declare_temporaries (method->v_method.temporaries) == -1)
+      tempCount = _gst_declare_temporaries (method->v_method.temporaries);
+
+      if (tempCount == -1)
         {
 	  _gst_errorf_at (method->location.first_line,
 			  "duplicate temporary variable name");
@@ -826,11 +840,48 @@ _gst_compile_method (tree_node method,
 					selector, method->v_method.currentCategory,
 					method->location.file_offset,
 					method->v_method.endPos);
+
+      if (methodOOP != _gst_nil_oop) {
+        INC_ADD_OOP (methodOOP);
+
+        object = new_instance_with (_gst_array_class, argCount + tempCount, &variablesOOP);
+        INC_ADD_OOP (variablesOOP);
+
+        args = method->v_method.selectorExpr;
+        i = 0;
+
+        if (args->nodeType == TREE_BINARY_EXPR) 
+          {
+            object->data[i] = _gst_intern_string (args->v_expr.expression->v_list.name);
+            i += 1;
+          }
+        else
+          {
+            for (args = args->v_expr.expression; args != NULL; args = args->v_list.next)
+              {
+                object->data[i] = _gst_intern_string (args->v_list.value->v_list.name);
+                i += 1;
+              }
+          }
+
+        for (args = method->v_method.temporaries; args != NULL; args = args->v_list.next)
+          {
+            object->data[i] = _gst_intern_string (args->v_list.name);
+            i += 1;
+          }
+
+        new_instance (_gst_debug_information_class, &debugInfo);
+        INC_ADD_OOP (debugInfo);
+
+        inst_var_at_put (debugInfo, 1, variablesOOP);
+        _gst_identity_dictionary_at_put (_gst_compiler_state->debugInfoDict, methodOOP, debugInfo);
+        inst_var_at_put (inst_var_at (methodOOP, 3), 5, _gst_compiler_state->debugInfoDict);
+      }
+
     }
 
   if (methodOOP != _gst_nil_oop)
     {
-      INC_ADD_OOP (methodOOP);
       compiledMethod = (gst_compiled_method) OOP_TO_OBJ (methodOOP);
       compiledMethod->header.isOldSyntax = method->v_method.isOldSyntax;
 
@@ -1064,9 +1115,12 @@ compile_block (tree_node blockExpr)
   bc_vector current_bytecodes, blockByteCodes;
   int argCount, tempCount;
   int stack_depth;
-  OOP blockClosureOOP, blockOOP;
+  int i;
+  OOP blockClosureOOP, blockOOP, variablesOOP;
+  OOP debugInfo;
   gst_compiled_block block;
-  inc_ptr incPtr;
+  gst_object object;
+  tree_node args;
 
   current_bytecodes = _gst_save_bytecode_array ();
 
@@ -1095,13 +1149,30 @@ compile_block (tree_node blockExpr)
 
   _gst_restore_bytecode_array (current_bytecodes);
 
-  /* Always allocate objects starting from the deepest one! (that is,
-     subtle bugs arise if make_block triggers a GC, because
-     the pointer in the closure might be no longer valid!) */
-  incPtr = INC_SAVE_POINTER ();
   blockOOP = make_block (_gst_get_arg_count (), _gst_get_temp_count (),
 			 blockByteCodes, stack_depth);
   INC_ADD_OOP (blockOOP);
+
+  object = new_instance_with (_gst_array_class, argCount + tempCount, &variablesOOP);
+  INC_ADD_OOP (variablesOOP);
+
+  for (i = 0, args = blockExpr->v_block.arguments; args != NULL; args = args->v_list.next) {
+    object->data[i] = _gst_intern_string (args->v_list.name);
+    i += 1;
+  }
+
+  for (args = blockExpr->v_block.temporaries; args != NULL; args = args->v_list.next) {
+    object->data[i] = _gst_intern_string (args->v_list.name);
+    i += 1;
+  }
+
+  new_instance (_gst_debug_information_class, &debugInfo);
+  INC_ADD_OOP (debugInfo);
+
+  inst_var_at_put (debugInfo, 1, variablesOOP);
+
+  _gst_identity_dictionary_at_put (_gst_compiler_state->debugInfoDict, blockOOP, debugInfo);
+
   _gst_pop_old_scope ();
 
   /* emit standard byte sequence to invoke a block: 
@@ -1123,8 +1194,6 @@ compile_block (tree_node blockExpr)
       _gst_compile_byte (PUSH_LIT_CONSTANT, add_literal (blockOOP));
       _gst_compile_byte (MAKE_DIRTY_BLOCK, 0);
     }
-
-  INC_RESTORE_POINTER (incPtr);
 }
 
 
@@ -2076,7 +2145,6 @@ _gst_make_constant_oop (tree_node constExpr)
   tree_node subexpr;
   int len, i;
   OOP resultOOP, elementOOP;
-  inc_ptr incPtr;
   byte_object bo;
   gst_object result;
 
@@ -2092,8 +2160,6 @@ _gst_make_constant_oop (tree_node constExpr)
       for (len = 0, subexpr = constExpr; subexpr;
 	   len++, subexpr = subexpr->v_list.next);
 
-      incPtr = INC_SAVE_POINTER ();
-
       /* this might be an uninitialized form of array creation for
          speed; but not now -- with the array temporarily part of the
          root set it must be completely initialized (sigh).  */
@@ -2108,7 +2174,6 @@ _gst_make_constant_oop (tree_node constExpr)
 	  result->data[i] = elementOOP;
 	}
       MAKE_OOP_READONLY (resultOOP, true);
-      INC_RESTORE_POINTER (incPtr);
       return (resultOOP);
     }
 
@@ -2146,7 +2211,6 @@ _gst_make_constant_oop (tree_node constExpr)
 	gst_deferred_variable_binding dvb;
 	tree_node varNode = constExpr->v_const.val.aVal;
 
-        incPtr = INC_SAVE_POINTER ();
         dvb = (gst_deferred_variable_binding)
 	  instantiate (_gst_deferred_variable_binding_class, &resultOOP);
         INC_ADD_OOP (resultOOP);
@@ -2169,7 +2233,6 @@ _gst_make_constant_oop (tree_node constExpr)
 	      array->data[i] = _gst_intern_string (varNode->v_list.name);
 	  }
 
-        INC_RESTORE_POINTER (incPtr);
         return (resultOOP);
       }
 
@@ -2192,7 +2255,6 @@ _gst_make_constant_oop (tree_node constExpr)
       for (len = 0, subexpr = constExpr->v_const.val.aVal; subexpr;
 	   len++, subexpr = subexpr->v_list.next);
 
-      incPtr = INC_SAVE_POINTER ();
       result = instantiate_with (_gst_array_class, len, &resultOOP);
       INC_ADD_OOP (resultOOP);
 
@@ -2205,7 +2267,6 @@ _gst_make_constant_oop (tree_node constExpr)
 	}
 
       MAKE_OOP_READONLY (resultOOP, true);
-      INC_RESTORE_POINTER (incPtr);
       return (resultOOP);
     }
 
@@ -2739,6 +2800,7 @@ method_info_new (OOP class,
   methodInfo->category = categoryOOP;
   methodInfo->class = class;
   methodInfo->selector = selector;
+  methodInfo->debugInfo = _gst_nil_oop;
 
   while (attrs)
     {

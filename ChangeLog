@@ -1,3 +1,19 @@
+2013-07-16  Gwenael Casaccio <gwenael.casaccio@gmail.com>
+
+        * libgst/comp.c: Fix an issue with extra INC_SAVE_POINTER in 
+        _gst_make_constant and compile_block.
+
+2013-07-10  Gwenael Casaccio <gwenael.casaccio@gmail.com>
+
+        * Makefile.am: Change dependencies of kernel/Makefile.frag
+        it can be build once gst and gst-tools are build. First
+        create an image before the Makefile.frag creation
+
+2013-07-01  Gwenael Casaccio <gwenael.casaccio@gmail.com>
+
+        * .gitignore: Do not track Makefile.frag files
+        * *.frag: Remove Makefile.frag files
+
 2013-07-01  Gwenael Casaccio <gwenael.casaccio@gmail.com>
 
         * kernel/DirPackage.st: Return the loaded package.
