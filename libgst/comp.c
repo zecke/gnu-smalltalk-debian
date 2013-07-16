@@ -1066,7 +1066,6 @@ compile_block (tree_node blockExpr)
   int stack_depth;
   OOP blockClosureOOP, blockOOP;
   gst_compiled_block block;
-  inc_ptr incPtr;
 
   current_bytecodes = _gst_save_bytecode_array ();
 
@@ -1095,10 +1094,6 @@ compile_block (tree_node blockExpr)
 
   _gst_restore_bytecode_array (current_bytecodes);
 
-  /* Always allocate objects starting from the deepest one! (that is,
-     subtle bugs arise if make_block triggers a GC, because
-     the pointer in the closure might be no longer valid!) */
-  incPtr = INC_SAVE_POINTER ();
   blockOOP = make_block (_gst_get_arg_count (), _gst_get_temp_count (),
 			 blockByteCodes, stack_depth);
   INC_ADD_OOP (blockOOP);
@@ -1123,8 +1118,6 @@ compile_block (tree_node blockExpr)
       _gst_compile_byte (PUSH_LIT_CONSTANT, add_literal (blockOOP));
       _gst_compile_byte (MAKE_DIRTY_BLOCK, 0);
     }
-
-  INC_RESTORE_POINTER (incPtr);
 }
 
 
@@ -2076,7 +2069,6 @@ _gst_make_constant_oop (tree_node constExpr)
   tree_node subexpr;
   int len, i;
   OOP resultOOP, elementOOP;
-  inc_ptr incPtr;
   byte_object bo;
   gst_object result;
 
@@ -2092,8 +2084,6 @@ _gst_make_constant_oop (tree_node constExpr)
       for (len = 0, subexpr = constExpr; subexpr;
 	   len++, subexpr = subexpr->v_list.next);
 
-      incPtr = INC_SAVE_POINTER ();
-
       /* this might be an uninitialized form of array creation for
          speed; but not now -- with the array temporarily part of the
          root set it must be completely initialized (sigh).  */
@@ -2108,7 +2098,6 @@ _gst_make_constant_oop (tree_node constExpr)
 	  result->data[i] = elementOOP;
 	}
       MAKE_OOP_READONLY (resultOOP, true);
-      INC_RESTORE_POINTER (incPtr);
       return (resultOOP);
     }
 
@@ -2146,7 +2135,6 @@ _gst_make_constant_oop (tree_node constExpr)
 	gst_deferred_variable_binding dvb;
 	tree_node varNode = constExpr->v_const.val.aVal;
 
-        incPtr = INC_SAVE_POINTER ();
         dvb = (gst_deferred_variable_binding)
 	  instantiate (_gst_deferred_variable_binding_class, &resultOOP);
         INC_ADD_OOP (resultOOP);
@@ -2169,7 +2157,6 @@ _gst_make_constant_oop (tree_node constExpr)
 	      array->data[i] = _gst_intern_string (varNode->v_list.name);
 	  }
 
-        INC_RESTORE_POINTER (incPtr);
         return (resultOOP);
       }
 
@@ -2192,7 +2179,6 @@ _gst_make_constant_oop (tree_node constExpr)
       for (len = 0, subexpr = constExpr->v_const.val.aVal; subexpr;
 	   len++, subexpr = subexpr->v_list.next);
 
-      incPtr = INC_SAVE_POINTER ();
       result = instantiate_with (_gst_array_class, len, &resultOOP);
       INC_ADD_OOP (resultOOP);
 
@@ -2205,7 +2191,6 @@ _gst_make_constant_oop (tree_node constExpr)
 	}
 
       MAKE_OOP_READONLY (resultOOP, true);
-      INC_RESTORE_POINTER (incPtr);
       return (resultOOP);
     }
 

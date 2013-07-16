@@ -1,3 +1,8 @@
+2013-07-16  Gwenael Casaccio <gwenael.casaccio@gmail.com>
+
+        * libgst/comp.c: Fix an issue with extra INC_SAVE_POINTER in 
+        _gst_make_constant and compile_block.
+
 2013-07-10  Gwenael Casaccio <gwenael.casaccio@gmail.com>
 
         * Makefile.am: Change dependencies of kernel/Makefile.frag
