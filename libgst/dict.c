@@ -177,6 +177,7 @@ OOP _gst_weak_key_identity_dictionary_class = NULL;
 OOP _gst_weak_value_identity_dictionary_class = NULL;
 OOP _gst_write_stream_class = NULL;
 OOP _gst_processor_oop = NULL;
+OOP _gst_debug_information_class = NULL;
 
 /* Called when a dictionary becomes full, this routine replaces the
    dictionary instance that DICTIONARYOOP is pointing to with a new,
@@ -742,12 +743,16 @@ static const class_definition class_info[] = {
    "Memory", NULL, NULL, NULL },
 
   {&_gst_method_info_class, &_gst_object_class,
-   GST_ISP_POINTER, true, 4,
-   "MethodInfo", "sourceCode category class selector", NULL, NULL },
+   GST_ISP_POINTER, true, 5,
+   "MethodInfo", "sourceCode category class selector debugInfo", NULL, NULL },
 
   {&_gst_file_segment_class, &_gst_object_class,
    GST_ISP_FIXED, true, 3,
-   "FileSegment", "file startPos size", NULL, NULL }
+   "FileSegment", "file startPos size", NULL, NULL },
+
+  {&_gst_debug_information_class, &_gst_object_class,
+    GST_ISP_FIXED, true, 1,
+    "DebugInformation", "variables", NULL, NULL }
 
 /* Classes not defined here (like Point/Rectangle/RunArray) are
    defined after the kernel has been fully initialized.  */
@@ -1810,6 +1815,12 @@ namespace_new (int size, const char *name, OOP superspaceOOP)
 }
 
 OOP
+_gst_identity_dictionary_new (OOP classOOP, int size)
+{
+  return identity_dictionary_new (classOOP, size);
+}
+
+OOP
 _gst_dictionary_new (int size)
 {
   gst_dictionary dictionary;
@@ -2265,3 +2276,5 @@ _gst_identity_dictionary_at_inc (OOP identityDictionaryOOP,
 
   return (oldValue);
 }
+
+
