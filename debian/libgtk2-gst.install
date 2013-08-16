@@ -1,3 +1,6 @@
+usr/lib/libgst-gobject.so.*
 usr/lib/gnu-smalltalk/gst-gtk*.so
+usr/lib/gnu-smalltalk/gst-glib*.so
 usr/share/gnu-smalltalk/GTK.star usr/lib/gnu-smalltalk
+usr/share/gnu-smalltalk/GLib.star
 usr/share/gnu-smalltalk/Cairo.star

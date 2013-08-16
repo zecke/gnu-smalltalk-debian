@@ -1,8 +1,8 @@
-gnu-smalltalk (3.2.5) UNRELEASED; urgency=low
+gnu-smalltalk (3.2.91) UNRELEASED; urgency=low
 
-  * New upstream release of GNU Smalltalk. 
+  * New upstream alpha release of GNU Smalltalk. 
 
- -- Holger Hans Peter Freyther <holger@freyther.de>  Mon, 10 Jun 2013 10:07:14 +0200
+ -- Holger Hans Peter Freyther <holger@freyther.de>  Fri, 16 Aug 2013 19:29:48 +0200
 
 gnu-smalltalk (3.2.4-2zecke2) unstable; urgency=low
 
