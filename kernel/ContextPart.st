@@ -77,6 +77,48 @@ methods that can be used in inspection or debugging.'>
 	
     ]
 
+
+    printContextState [
+        <category: 'printing'>
+
+        self printContextStateOn: Transcript
+    ]
+
+    printContextStateOn: aStream [
+        <category: 'printing'>
+
+        | i |
+        i := 0.
+
+        aStream
+            nextPutAll: 'args:';
+            nl.
+
+        self method arguments do: [ :each |
+            i := i + 1.
+
+            aStream
+                space: 4;
+                nextPutAll: each;
+                nextPutAll: ' -> ';
+                print: (self at: i);
+                nl ].
+
+        aStream
+            nextPutAll: 'temps:';
+            nl.
+
+        self method temporaries do: [ :each |
+            i := i + 1.
+
+            aStream
+                space: 4;
+                nextPutAll: each;
+                nextPutAll: ' -> ';
+                print: (self at: i);
+                nl ].
+    ]
+
     backtrace [
 	"Print a backtrace from the receiver to the bottom of the stack on the
 	 Transcript."
