@@ -381,5 +381,12 @@ BlockClosure extend [
 		forkAt: Processor unpreemptedPriority
     ]
 
+    debug [
+        <category: 'instance creation'>
+        <exceptionHandlingInternal: false>
+
+        self class debuggerClass debug: 'Debugger'.
+        self value
+    ]
 ]
 

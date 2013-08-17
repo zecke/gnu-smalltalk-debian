@@ -1,3 +1,7 @@
+2013-08-15  Gwenael Casaccio <gwenael.casaccio@gmail.com>
+
+	* DebugTools.st: Add support for block debugging
+
 2011-07-27  Paolo Bonzini <bonzini@gnu.org>
 
 	* DebugTools.st: Improve 2011-07-15 change to fix testsuite failures.
