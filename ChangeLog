@@ -1,3 +1,7 @@
+2013-08-13  Gwenael Casaccio <gwenael.casaccio@gmail.com>
+
+	* examples/MiniDebugger.st: Removed.
+
 2013-08-15  Gwenael Casaccio <gwenael.casaccio@gmail.com>
 
 	* kernel/ContextPart.st: Print context args and temps names and their value.
