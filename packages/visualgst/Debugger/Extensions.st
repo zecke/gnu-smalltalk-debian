@@ -41,3 +41,13 @@ Behavior extend [
         ^ VisualGST.GtkDebugger
     ]
 ]
+
+Debugger extend [
+
+    receiver [
+        <category: '*VisualGST-debugger'>
+
+        ^ self suspendedContext receiver
+    ]
+]
+
