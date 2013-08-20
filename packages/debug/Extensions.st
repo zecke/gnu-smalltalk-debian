@@ -35,7 +35,7 @@ ContextPart extend [
 	"Answer the 1-based number of the line that is pointed to by the receiver's
 	 instruction pointer."
 
-	<category: 'source code'>
+	<category: '*DebugTools'>
 	^Debugger currentLineIn: self
     ]
 
@@ -43,7 +43,7 @@ ContextPart extend [
 	"Answer the debugger that is attached to the given context.  It
 	 is always nil unless the DebugTools package is loaded."
 
-	<category: 'debugging'>
+	<category: '*DebugTools'>
 	| ctx home |
 	ctx := self.
 	[ctx isNil] whileFalse: 
@@ -66,7 +66,7 @@ BlockClosure extend [
 	 process, passing a Debugger object that controls the currently running
 	 process."
 
-	<category: 'instance creation'>
+	<category: '*DebugTools'>
 	| process |
 	process := Processor activeProcess.
 	
@@ -77,11 +77,13 @@ BlockClosure extend [
     ]
 
     debug [
-        <category: 'instance creation'>
-        <exceptionHandlingInternal: false>
+        <category: '*DebugTools'>
 
-        self class debuggerClass debug: 'Debugger'.
-        self value
+        <debuggerHandlingInternal>
+
+        [ self class debuggerClass debug: 'Debugger'.
+          self value ] fork.
+        ^ nil
     ]
 ]
 
