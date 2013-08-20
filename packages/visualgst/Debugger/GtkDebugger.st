@@ -308,25 +308,21 @@ GtkBrowsingTool subclass: GtkDebugger [
     step [
 	<category: 'execute events'>
 
-	contextWidget isLastContextSelected
-	    ifTrue: [ debugger myStep ]
-	    ifFalse: [ debugger finish: contextWidget selectedContext ].
+        debugger step.
 	self updateContextWidget
     ]
 
     stepInto [
 	<category: 'execute events'>
 
-	contextWidget isLastContextSelected
-	    ifTrue: [ debugger myStepInto ]
-	    ifFalse: [ debugger finish: contextWidget selectedContext ].
+        debugger step.
 	self updateContextWidget
     ]
 
     stepOver [
 	<category: 'execute events'>
 
-	debugger step.
+	debugger finish.
 	self updateContextWidget
     ]
 

@@ -1,5 +1,10 @@
 2013-06-18  Gwenael Casaccio  <gwenael.casaccio@gmail.com>
 
+	* Debugger/GtkDebugger.st: Don't use previous debugger extensions.
+	* Extensions.st: Remove the debugger extension.
+
+2013-06-18  Gwenael Casaccio  <gwenael.casaccio@gmail.com>
+
 	* Debugger/GtkDebugger.st: Add support for BlockClosure>>#debug.
 
 2013-06-18  Gwenael Casaccio  <mrgwen@gmail.com>
