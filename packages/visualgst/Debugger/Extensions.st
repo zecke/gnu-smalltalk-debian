@@ -51,3 +51,24 @@ Debugger extend [
     ]
 ]
 
+ContextPart extend [
+
+    variables [
+        <category: '*VisualGST-debugger'>
+
+        ^ self method arguments, self method temporaries
+    ]
+
+    variablesDo: aBlock [
+        <category: '*VisualGST-debugger'>
+
+        ^ self variables do: aBlock
+    ]
+
+    stackInspectorView [
+        <category: '*VisualGST-debugger'>
+
+        ^ VisualGST.GtkStackInspectorView
+    ]
+]
+

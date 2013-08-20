@@ -257,8 +257,7 @@ GtkBrowsingTool subclass: GtkDebugger [
 	<category: 'context'>
 
 	self initializeProcess: aProcess.
-	3 timesRepeat: [ debugger step ].
-	debugger myStepInto.
+	4 timesRepeat: [ debugger step ].
 	self updateContextWidget
     ]
 

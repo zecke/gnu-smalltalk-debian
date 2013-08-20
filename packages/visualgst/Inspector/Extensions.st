@@ -127,11 +127,5 @@ ContextPart extend [
 
         ^ VisualGST.GtkContextInspectorView
     ]
-
-    stackInspectorView [
-        <category: '*VisualGST'>
-
-        ^ GtkStackInspectorView
-    ]
 ]
 
