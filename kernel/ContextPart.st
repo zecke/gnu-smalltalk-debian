@@ -81,42 +81,111 @@ methods that can be used in inspection or debugging.'>
     printContextState [
         <category: 'printing'>
 
-        self printContextStateOn: Transcript
+        self printContextStateOn: Transcript spaces: 4
     ]
 
-    printContextStateOn: aStream [
+
+    printVariableKind: aString on: aStream spaces: anInteger [
         <category: 'printing'>
 
-        | i |
-        i := 0.
-
         aStream
-            nextPutAll: 'args:';
+            space: anInteger;
+            nextPutAll: aString;
+            nextPutAll: ':';
             nl.
+    ]
 
-        self method arguments do: [ :each |
-            i := i + 1.
+    printVariable: anArray at: anIndex do: aBlock on: aStream spaces: anInteger [
+        <category: 'printing'>
 
+            aStream space: anInteger * 2.
+            anArray ifNil: [ aStream print: anIndex ] ifNotNil: [ aStream nextPutAll: (anArray at: anIndex) ].
             aStream
-                space: 4;
-                nextPutAll: each;
                 nextPutAll: ' -> ';
-                print: (self at: i);
-                nl ].
+                print: aBlock value;
+                nl
+    ]
 
+    printArgumentsOn: aStream spaces: anInteger [
+        <category: 'printing'>
+
+        | variables |
+
+        self printVariableKind: 'args' on: aStream spaces: 2.
+
+        variables := self method arguments.
+        1 to: self numArgs do: [ :i |
+            self printVariable: variables at: i do: [ self at: i ] on: aStream spaces: anInteger ].
+    ]
+
+    printTemporariesOn: aStream spaces: anInteger [
+        <category: 'printing'>
+
+        | variables |
+
+        self printVariableKind: 'temps' on: aStream spaces: 2.
+
+        variables := self method temporaries.
+        1 to: self numTemps do: [ :i |
+            self printVariable: variables at: i do: [ self at: self numArgs + i ] on: aStream spaces: anInteger ].
+    ]
+
+    printContextStateOn: aStream spaces: anInteger [
+        <category: 'printing'>
+
+        self
+            printArgumentsOn: aStream spaces: 2;
+            printTemporariesOn: aStream spaces: 2.
+    ]
+
+    examineOn: aStream [
+	<category: 'printing'>
+
+	| instVars output object |
+	aStream
+	    nextPutAll: 'An instance of ';
+	    print: self class;
+	    nl.
+        instVars := self class allInstVarNames.
+        1 to: instVars size
+            do:
+                [:i |
+                object := self instVarAt: i.
+                output := [object printString] on: Error
+                            do:
+                                [:ex |
+                                ex
+                                    return: '%1 %2' %
+                                                {object class article.
+                                                object class name asString}].
+                aStream
+                    nextPutAll: '  ';
+                    nextPutAll: (instVars at: i);
+                    nextPutAll: ': ';
+                    nextPutAll: output;
+                    nl].
+        self printContextStateOn: aStream spaces: 2.
         aStream
-            nextPutAll: 'temps:';
+            space: 2;
+            nextPutAll: 'stack: ';
             nl.
-
-        self method temporaries do: [ :each |
-            i := i + 1.
-
-            aStream
-                space: 4;
-                nextPutAll: each;
-                nextPutAll: ' -> ';
-                print: (self at: i);
-                nl ].
+        self numArgs + self numTemps + 1 to: self validSize do: [ :i |
+                object := self at: i.
+                output := [object printString] on: Error
+                            do:
+                                [:ex |
+                                ex
+                                    return: '%1 %2' %
+                                                {object class article.
+                                                object class name asString}].
+                aStream
+                    space: 4;
+                    nextPutAll: '[';
+                    print: i;
+                    nextPutAll: ']: ';
+                    nextPutAll: output;
+                    nl].
+            
     ]
 
     backtrace [
