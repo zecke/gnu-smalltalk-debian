@@ -51,7 +51,25 @@ GtkBrowsingTool subclass: GtkDebugger [
 		title: ('VisualGST Debugger ', aString);
 		debugger: debugger ] forkDebugger
     ]
-    
+
+    GtkDebugger class >> debug: aString [
+        <category: 'user interface'>
+
+        "The current process might be processing an event.  Gtk will
+         block inside g_main_loop_dispatch and won't deliver any
+         other events until this one is processed.  So, fork into a
+         new process and return nil without executing #ensure: blocks."
+        Processor activeProcess detach.
+
+        [ :debugger |
+            Processor activeProcess name: 'Notifier/Debugger'.
+            (self openSized: 1024@600)
+                title: ('VisualGST Debugger ', aString);
+                debugger: debugger;
+                skipFirstContext;
+                updateContextWidget ] forkDebugger
+    ]
+ 
     GtkDebugger class >> debuggerClass [
         <category: 'debugging interface'>
 
@@ -164,6 +182,20 @@ GtkBrowsingTool subclass: GtkDebugger [
 
 	super createToolbar.
 	DebuggerToolbar buildToolbarOn: self
+    ]
+
+    skipFirstContext [
+        <category: 'private'>
+
+        | code value |
+
+        [ code := debugger suspendedContext method.
+          code class == CompiledBlock ifTrue: [ code := code method ].
+          value := code attributeAt: #debuggerHandlingInternal ifAbsent: [ nil ].
+          value isNil ] whileTrue: [ debugger slowFinish ].
+        debugger
+            step;
+            step.
     ]
 
     debugger: aDebugger [
