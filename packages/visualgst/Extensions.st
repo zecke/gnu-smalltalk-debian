@@ -45,19 +45,6 @@ Eval [
 
 Object extend [
 
-    gtkInspect [
-	"Open a GtkInspector on self"
-	<category: '*VisualGST'>
-
-	VisualGST.GtkInspector openOn: self
-    ]
-
-    inspectorView [
-	<category: '*VisualGST'>
-
-	^ VisualGST.GtkObjectInspectorView
-    ]
-
     hasLiterals [
 	<category: '*VisualGST'>
 
@@ -134,73 +121,14 @@ CompiledMethod extend [
         self override ifTrue: [ ^ self class overrideIcon ].
         ^ nil
     ]
-
-    inspectorView [
-        <category: '*VisualGST'>
-
-        ^ VisualGST.GtkCompiledMethodInspectorView
-    ]
 ]
 
 CompiledBlock extend [
-    inspectorView [
-        <category: '*VisualGST'>
-
-        ^ VisualGST.GtkCompiledBlockInspectorView
-    ]
 
     methodRecompilationSourceString [
 	<category: '*VisualGST'>
 
 	^ self method methodRecompilationSourceString
-    ]
-]
-
-SequenceableCollection extend [
-    inspectorView [
-        <category: '*VisualGST'>
-
-        ^ VisualGST.GtkSequenceableCollectionInspectorView
-    ]
-]
-
-Set extend [
-    inspectorView [
-        <category: '*VisualGST'>
-
-        ^ VisualGST.GtkSetInspectorView
-    ]
-]
-
-Dictionary extend [
-    inspectorView [
-        <category: '*VisualGST'>
-
-        ^ VisualGST.GtkDictionaryInspectorView
-    ]
-]
-
-Character extend [
-    inspectorView [
-        <category: '*VisualGST'>
-
-        ^ VisualGST.GtkCharacterInspectorView
-    ]
-]
-
-Integer extend [
-    inspectorView [
-        <category: '*VisualGST'>
-
-        ^ VisualGST.GtkIntegerInspectorView
-    ]
-]
-
-Float extend [
-    inspectorView [
-        <category: '*VisualGST'>
-
-        ^ VisualGST.GtkFloatInspectorView
     ]
 ]
 
@@ -357,64 +285,6 @@ ContextPart extend [
 	^ i = anInteger 
 	    ifTrue: [ ctxt ]
 	    ifFalse: [ self error: 'Error indice too high' ]
-    ]
-
-    variables [
-	<category: '*VisualGST'>
-
-	^ 1 to: self numArgs + self numTemps collect: [ :each |
-	    each displayString ]
-    ]
-
-    variablesDo: aBlock [
-	<category: '*VisualGST'>
-
-	^ self variables do: aBlock
-    ]
-
-    stackInspectorView [
-        <category: '*VisualGST'>
-
-        ^ GtkStackInspectorView
-    ]
-]
-
-Debugger extend [
-
-    receiver [
-	<category: '*VisualGST'>
-
-	^ self suspendedContext receiver
-    ]
-
-    myStepInto [
-        "Run to the end of the current line in the inferior process or to the
-         next message send."
-
-	"TODO: Stop when affectation (get the current bytecode)"
-        <category: '*VisualGST'>
-        | context |
-        context := self suspendedContext.
-
-        [ self stepBytecode.
-          self suspendedContext == context ]
-                whileTrue
-    ]
-
-    myStep [
-        "Run to the end of the current line in the inferior process, skipping
-         over message sends."
-
-	"TODO: Stop when affectation (get the current bytecode)"
-        <category: '*VisualGST'>
-        | context |
-        context := self suspendedContext.
-
-        [ self stepBytecode.
-         (self suspendedContext notNil and: [ self suspendedContext parentContext == context ])
-                ifTrue: [ self finish: self suspendedContext. ^ self ].
-         self suspendedContext == context ]
-                whileTrue
     ]
 ]
 

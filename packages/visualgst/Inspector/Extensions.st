@@ -1,6 +1,6 @@
 "======================================================================
 |
-| GtkStackInspectorView class definition
+| Extensions
 |
 ======================================================================"
 
@@ -33,53 +33,99 @@
 |
 ======================================================================"
 
-GtkConcreteWidget subclass: GtkStackInspectorView [
-    | object args temps |
+Object extend [
 
-    GtkStackInspectorView class >> openOn: aContext [
-	<category: 'instance creation'>
+    gtkInspect [
+	<category: '*VisualGST'>
 
-	^ (super new)
-	    object: aContext;
-	    yourself
+	VisualGST.GtkInspector openOn: self
     ]
 
-    object [
-	<category: 'accessing'>
-	
-	^ object
+    inspectorView [
+	<category: '*VisualGST'>
+
+	^ VisualGST.GtkObjectInspectorView
     ]
+]
 
-    object: anObject [
-	<category: 'accessing'>
+CompiledMethod extend [
 
-	object := anObject.
+    inspectorView [
+        <category: '*VisualGST'>
+
+        ^ VisualGST.GtkCompiledMethodInspectorView
     ]
+]
 
-    do: aBlock [
-	<category: 'iterating'>
+CompiledBlock extend [
 
-	aBlock value: 'thisContext'.
-        args := IdentitySet new.
-        self object method arguments do: [ :each |
-		aBlock value: (args add: each asString) ].
-        temps := IdentitySet new.
-        self object method temporaries do: [ :each |
-		aBlock value: (temps add: each asString) ].
+    inspectorView [
+        <category: '*VisualGST'>
+
+        ^ VisualGST.GtkCompiledBlockInspectorView
     ]
+]
 
-    selectedValue: aString [
-	<category: 'item selection'>
+SequenceableCollection extend [
 
-        aString = 'thisContext' ifTrue: [ ^ self object ].
-        (args includes: aString) ifTrue: [ ^ (self object at: (self object method arguments indexOf: aString asSymbol)) displayString ].
-        ^ (self object at: self object numArgs + (self object method temporaries indexOf: aString asSymbol)) displayString
+    inspectorView [
+        <category: '*VisualGST'>
+
+        ^ VisualGST.GtkSequenceableCollectionInspectorView
     ]
+]
 
-    canDive [
-	<category: 'testing'>
+Set extend [
 
-	^ false
+    inspectorView [
+        <category: '*VisualGST'>
+
+        ^ VisualGST.GtkSetInspectorView
+    ]
+]
+
+Dictionary extend [
+
+    inspectorView [
+        <category: '*VisualGST'>
+
+        ^ VisualGST.GtkDictionaryInspectorView
+    ]
+]
+
+Character extend [
+
+    inspectorView [
+        <category: '*VisualGST'>
+
+        ^ VisualGST.GtkCharacterInspectorView
+    ]
+]
+
+Integer extend [
+
+    inspectorView [
+        <category: '*VisualGST'>
+
+        ^ VisualGST.GtkIntegerInspectorView
+    ]
+]
+
+Float extend [
+
+    inspectorView [
+        <category: '*VisualGST'>
+
+        ^ VisualGST.GtkFloatInspectorView
+    ]
+]
+
+ContextPart extend [
+
+    inspectorView [
+        <category: '*VisualGST'>
+
+        ^ VisualGST.GtkContextInspectorView
     ]
 ]
 

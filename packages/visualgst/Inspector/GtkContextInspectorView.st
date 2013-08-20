@@ -1,6 +1,6 @@
 "======================================================================
 |
-| GtkStackInspectorView class definition
+| GtkFloatInspectorView class definition
 |
 ======================================================================"
 
@@ -33,53 +33,26 @@
 |
 ======================================================================"
 
-GtkConcreteWidget subclass: GtkStackInspectorView [
-    | object args temps |
+GtkObjectInspectorView subclass: GtkContextInspectorView [
 
-    GtkStackInspectorView class >> openOn: aContext [
-	<category: 'instance creation'>
-
-	^ (super new)
-	    object: aContext;
-	    yourself
-    ]
-
-    object [
-	<category: 'accessing'>
-	
-	^ object
-    ]
-
-    object: anObject [
-	<category: 'accessing'>
-
-	object := anObject.
-    ]
+    | args temps |
 
     do: aBlock [
-	<category: 'iterating'>
+        <category: 'iterating'>
 
-	aBlock value: 'thisContext'.
         args := IdentitySet new.
-        self object method arguments do: [ :each |
-		aBlock value: (args add: each asString) ].
         temps := IdentitySet new.
-        self object method temporaries do: [ :each |
-		aBlock value: (temps add: each asString) ].
+	super do: aBlock.
+        self object method arguments do: [ :each | aBlock value: (args add: each asString) ].
+        self object method temporaries do: [ :each | aBlock value: (temps add: each asString) ].
     ]
 
     selectedValue: aString [
-	<category: 'item selection'>
+	<category: 'events'>
 
-        aString = 'thisContext' ifTrue: [ ^ self object ].
+        ((args includes: aString) not and: [ (temps includes: aString) not ]) ifTrue: [ ^ super selectedValue: aString ].
         (args includes: aString) ifTrue: [ ^ (self object at: (self object method arguments indexOf: aString asSymbol)) displayString ].
-        ^ (self object at: self object numArgs + (self object method temporaries indexOf: aString asSymbol)) displayString
-    ]
-
-    canDive [
-	<category: 'testing'>
-
-	^ false
+        ^ (self object at: self object numArgs + (self object method temporaries indexOf: aString asSymbol)) displayString.
     ]
 ]
 

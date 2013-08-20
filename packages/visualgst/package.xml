@@ -205,6 +205,7 @@
   <filein>Text/GtkSourceCodeWidget.st</filein>
   <filein>StBrowser/GtkClassHierarchyWidget.st</filein>
   <filein>GtkHistoryWidget.st</filein>
+  <filein>Inspector/Extensions.st</filein>
   <filein>Inspector/GtkInspector.st</filein>
   <filein>StBrowser/GtkClassBrowserWidget.st</filein>
   <filein>GtkEntryDialog.st</filein>
@@ -255,6 +256,7 @@
   <filein>Inspector/GtkCharacterInspectorView.st</filein>
   <filein>Inspector/GtkIntegerInspectorView.st</filein>
   <filein>Inspector/GtkFloatInspectorView.st</filein>
+  <filein>Inspector/GtkContextInspectorView.st</filein>
   <filein>Implementors/GtkImageResultsWidget.st</filein>
   <filein>Implementors/GtkImplementorResultsWidget.st</filein>
   <filein>Implementors/GtkSenderResultsWidget.st</filein>

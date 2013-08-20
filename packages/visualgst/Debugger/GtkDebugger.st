@@ -51,7 +51,25 @@ GtkBrowsingTool subclass: GtkDebugger [
 		title: ('VisualGST Debugger ', aString);
 		debugger: debugger ] forkDebugger
     ]
-    
+
+    GtkDebugger class >> debug: aString [
+        <category: 'user interface'>
+
+        "The current process might be processing an event.  Gtk will
+         block inside g_main_loop_dispatch and won't deliver any
+         other events until this one is processed.  So, fork into a
+         new process and return nil without executing #ensure: blocks."
+        Processor activeProcess detach.
+
+        [ :debugger |
+            Processor activeProcess name: 'Notifier/Debugger'.
+            (self openSized: 1024@600)
+                title: ('VisualGST Debugger ', aString);
+                debugger: debugger;
+                skipFirstContext;
+                updateContextWidget ] forkDebugger
+    ]
+ 
     GtkDebugger class >> debuggerClass [
         <category: 'debugging interface'>
 
@@ -166,6 +184,20 @@ GtkBrowsingTool subclass: GtkDebugger [
 	DebuggerToolbar buildToolbarOn: self
     ]
 
+    skipFirstContext [
+        <category: 'private'>
+
+        | code value |
+
+        [ code := debugger suspendedContext method.
+          code class == CompiledBlock ifTrue: [ code := code method ].
+          value := code attributeAt: #debuggerHandlingInternal ifAbsent: [ nil ].
+          value isNil ] whileTrue: [ debugger slowFinish ].
+        debugger
+            step;
+            step.
+    ]
+
     debugger: aDebugger [
         <category: 'context'>
 
@@ -225,8 +257,7 @@ GtkBrowsingTool subclass: GtkDebugger [
 	<category: 'context'>
 
 	self initializeProcess: aProcess.
-	3 timesRepeat: [ debugger step ].
-	debugger myStepInto.
+	4 timesRepeat: [ debugger step ].
 	self updateContextWidget
     ]
 
@@ -265,36 +296,37 @@ GtkBrowsingTool subclass: GtkDebugger [
     contextChanged [
 	<category: 'context events'>
 
-	| iter |
 	self checkCodeWidgetAndUpdate: [
+            | line |
 	    contextWidget hasSelectedContext ifFalse: [ ^ self ].
 	    codeWidget source: (BrowserMethodSource on: contextWidget selectedContext method).
-	    codeWidget applyTag: #debug forLine: contextWidget selectedContext currentLine.
+            contextWidget selectedContext currentLine ~= 0 
+                ifTrue: [ line := contextWidget selectedContext currentLine ]
+                ifFalse: [ line := 1 ].
+            codeWidget 
+                applyTag: #debug forLine: line;
+                centerViewAtLine: line.
 	    self updateInspectorWidget: contextWidget selectedContext ]
     ]
 
     step [
 	<category: 'execute events'>
 
-	contextWidget isLastContextSelected
-	    ifTrue: [ debugger myStep ]
-	    ifFalse: [ debugger finish: contextWidget selectedContext ].
+        debugger step.
 	self updateContextWidget
     ]
 
     stepInto [
 	<category: 'execute events'>
 
-	contextWidget isLastContextSelected
-	    ifTrue: [ debugger myStepInto ]
-	    ifFalse: [ debugger finish: contextWidget selectedContext ].
+        debugger step.
 	self updateContextWidget
     ]
 
     stepOver [
 	<category: 'execute events'>
 
-	debugger step.
+	debugger finish.
 	self updateContextWidget
     ]
 
