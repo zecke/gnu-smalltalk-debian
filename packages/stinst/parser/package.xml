@@ -38,12 +38,14 @@
    <sunit>STInST.Tests.TestSTLoaderObjects</sunit>
    <sunit>STInST.Tests.TestGSTParser</sunit>
    <sunit>STInST.Tests.TestCompiler</sunit>
+   <sunit>STInST.Tests.TestRBScanner</sunit>
    <filein>RewriteTests.st</filein>
    <filein>PoolResolutionTests.st</filein>
    <filein>DebugInformationTests.st</filein>
    <filein>STLoaderObjsTests.st</filein>
    <filein>GSTParserTests.st</filein>
    <filein>STCompilerTests.st</filein>
+   <filein>RBScannerTests.st</filein>
   </test>
 
   <file>ChangeLog</file>

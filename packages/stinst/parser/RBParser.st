@@ -1215,16 +1215,20 @@ Stream subclass: RBScanner [
 
     scanLiteralArray [
 	<category: 'private-scanning'>
-	| arrayStream start |
+	| arrayStream start optimizedNodes |
 	arrayStream := WriteStream on: (Array new: 10).
 	self step.
 	start := tokenStart.
+	optimizedNodes := 0.
 	
 	[self stripSeparators.
 	tokenStart := stream position.
-	currentCharacter == $)] 
+	currentCharacter == $) and: [optimizedNodes = 0]]
 		whileFalse: 
-		    [arrayStream nextPut: self scanLiteralArrayParts.
+		    [ |res|
+		    res := arrayStream nextPut: self scanLiteralArrayParts.
+		    res isOptimized ifTrue: [optimizedNodes := optimizedNodes + 1].
+		    res isSpecial ifTrue: [optimizedNodes := optimizedNodes - 1].
 		    buffer reset].
 	self step.
 	^RBLiteralToken 
@@ -1254,6 +1258,8 @@ Stream subclass: RBScanner [
 	currentCharacter == $$ ifTrue: [^self scanLiteralCharacter].
 	currentCharacter == $( ifTrue: [^self scanLiteralArray].
 	currentCharacter == $[ ifTrue: [^self scanByteArray].
+	"In the case of RBOptimizedToken we scan for $) as well"
+	currentCharacter == $) ifTrue: [^self scanSpecialCharacter].
 	^self scannerError: 'Unknown character in literal array'
     ]
 

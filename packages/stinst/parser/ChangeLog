@@ -1,3 +1,8 @@
+2013-12-21  Holger Hans Peter Freyther  <holger@moiji-mobile.com>
+
+	* RBScannerTests.st: Add new tests.
+	* RBParser.st: Change parsing of optimized tokens.
+
 2013-12-19  Holger Hans Peter Freyther  <holger@moiji-mobile.com>
 
 	* STCompiler.st: Rename STCompiler>>#addPool: to
