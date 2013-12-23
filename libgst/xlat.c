@@ -2500,10 +2500,9 @@ emit_deferred_sends (deferred_send *ds)
 void
 emit_interrupt_check (int restartReg, int ipOffset)
 {
-  jit_insn *jmp, *begin;
+  jit_insn *jmp, *restart = NULL;
 
   jit_align (2);
-  begin = jit_get_label ();
 
   jit_ldi_i (JIT_R2, &_gst_except_flag);
   jmp = jit_beqi_i (jit_forward (), JIT_R2, 0);
@@ -2517,11 +2516,13 @@ emit_interrupt_check (int restartReg, int ipOffset)
 
   /* Where to restart?*/
   if (restartReg == JIT_NOREG)
-    jit_movi_p (JIT_RET, begin);
+    restart = jit_movi_p (JIT_RET, jit_forward());
   else
     jit_movr_p (JIT_RET, restartReg);
 
   jit_ret ();
+  if (restart)
+    jit_patch_movi (restart, jit_get_label());
   jit_patch (jmp);
 }
 
