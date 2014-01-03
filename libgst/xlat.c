@@ -2502,8 +2502,6 @@ emit_interrupt_check (int restartReg, int ipOffset)
 {
   jit_insn *jmp, *restart = NULL;
 
-  jit_align (2);
-
   jit_ldi_i (JIT_R2, &_gst_except_flag);
   jmp = jit_beqi_i (jit_forward (), JIT_R2, 0);
 
@@ -2513,6 +2511,8 @@ emit_interrupt_check (int restartReg, int ipOffset)
       jit_movi_ul (JIT_R2, ipOffset);
       jit_sti_ul (&ip, JIT_R2);
     }
+
+  jit_align (2);
 
   /* Where to restart?*/
   if (restartReg == JIT_NOREG)
