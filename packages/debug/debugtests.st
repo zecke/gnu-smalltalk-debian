@@ -66,6 +66,16 @@ TestCase subclass: DebuggerTest [
     <comment: nil>
     <category: 'System-Debugging-Test'>
 
+    runsJit [
+        ^(thisContext instVarNamed: #nativeIP) ~= 0
+    ]
+
+    expectedFailures [
+        self runsJit ifFalse: [^OrderedCollection new].
+
+        ^#(#testCurrentLine #testCurtailFinish #testEvaluation #testFinish #testNext #testRegressionCurrentLine #testStep)
+    ]
+
     debuggerOn: aBlock [
 	"Attach aBlock to a debugger and step until aBlock's execution begins."
 
