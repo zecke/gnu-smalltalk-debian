@@ -1,13 +1,13 @@
 /******************************** -*- C -*- ****************************
  *
- *	Platform-independent layer inline functions (Sparc)
+ *	Floating-point support (i386)
  *
  ***********************************************************************/
 
 
 /***********************************************************************
  *
- * Copyright 2000, 2001, 2002 Free Software Foundation, Inc.
+ * Copyright 2008 Free Software Foundation, Inc.
  * Written by Paolo Bonzini.
  *
  * This file is part of GNU lightning.
@@ -31,35 +31,15 @@
 
 
 
-#ifndef __lightning_funcs_h
-#define __lightning_funcs_h
+#ifndef __lightning_fp_i386_h
+#define __lightning_fp_i386_h
 
-#if !defined(__GNUC__) && !defined(__GNUG__)
-#error Go get GNU C, I do not know how to flush the cache
-#error with this compiler.
+#if LIGHTNING_CROSS \
+	? LIGHTNING_TARGET == LIGHTNING_X86_64 \
+	: defined (__x86_64__)
+#include "fp-64.h"
 #else
-/* Why doesn't this compile?!?
- * static void
- * jit_flush_code(start, end)
- *      void 	*start;
- *      void	*end;
- */
-
-static void
-jit_flush_code(void* start, void* end)
-{
-#ifndef LIGHTNING_CROSS
-  register char *dest;
-
-  __asm__ __volatile__ ("stbar");
-  for (dest = (char *)start; dest <= (char *)end; dest += 4) {
-    __asm__ __volatile__ ("flush %0"::"r"(dest));
-  }
-
-  /* [SPARC Architecture Manual v8, page 139, implementation note #5] */
-  __asm__ __volatile__ ("nop; nop; nop; nop; nop");
-#endif
-}
+#include "fp-32.h"
 #endif
 
-#endif /* __lightning_core_h */
+#endif /* __lightning_fp_i386_h */

@@ -12,8 +12,8 @@ AC_REQUIRE([LIGHTNING_CONFIGURE_LINKS_PREREQ])
 
 suffix=
 case "$host_cpu" in
-  i?86)	   cpu=i386; suffix=-32 ;;
-  x86_64)  cpu=i386; suffix=-64 ;;
+  i?86)	   cpu=i386 ;;
+  x86_64)  cpu=i386 ;;
   sparc*)  cpu=sparc	        ;;
   powerpc) cpu=ppc	        ;;
   *)			        ;;
@@ -50,6 +50,7 @@ AC_REQUIRE([AC_CANONICAL_HOST])dnl
 AC_CHECK_HEADER(lightning.h)
 AM_CONDITIONAL(LIGHTNING_MAIN, (exit 1))
 AM_CONDITIONAL(HAVE_INSTALLED_LIGHTNING, test "$ac_cv_header_lightning_h" = yes)
+AC_SUBST([cpu])
 
 lightning=
 AS_IF([test "$ac_cv_header_lightning_h" = yes],

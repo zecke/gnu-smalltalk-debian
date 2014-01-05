@@ -13,7 +13,7 @@
  *
  * GNU lightning is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published
- * by the Free Software Foundation; either version 2.1, or (at your option)
+ * by the Free Software Foundation; either version 3, or (at your option)
  * any later version.
  * 
  * GNU lightning is distributed in the hope that it will be useful, but 
@@ -50,8 +50,8 @@
 typedef unsigned int jit_insn;
 
 #ifndef LIGHTNING_DEBUG
-#define _d30(BD)	((_jit_UL(BD) - _jit_UL(_jit.x.pc))>>2)
-#define _d22(BD)	_ck_d(22, _d30(BD))
+#define _d30(BD)	(_ck_d (30, ((_jit_SL (_jit_UL (BD) - _jit_UL (_jit.x.pc))) >> 2)))
+#define _d22(BD)	(_ck_d (22, ((_jit_SL (_jit_UL (BD) - _jit_UL (_jit.x.pc)) >> 2))))
 
 #define _HI(I)		(_jit_UL(I) >>     (10))
 #define _LO(I)		(_jit_UL(I) & _MASK(10))

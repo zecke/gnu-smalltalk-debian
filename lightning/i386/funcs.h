@@ -7,14 +7,14 @@
 
 /***********************************************************************
  *
- * Copyright 2000, 2001, 2002 Free Software Foundation, Inc.
+ * Copyright 2000, 2001, 2002, 2006 Free Software Foundation, Inc.
  * Written by Paolo Bonzini.
  *
  * This file is part of GNU lightning.
  *
  * GNU lightning is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published
- * by the Free Software Foundation; either version 2.1, or (at your option)
+ * by the Free Software Foundation; either version 3, or (at your option)
  * any later version.
  * 
  * GNU lightning is distributed in the hope that it will be useful, but 
@@ -53,7 +53,7 @@ jit_flush_code(void *dest, void *end)
      jit_flush_code as an mprotect.  */
 #ifdef __linux__
   static unsigned long prev_page = 0, prev_length = 0;
-  int page, length;
+  long page, length;
 #ifdef PAGESIZE
   const int page_size = PAGESIZE;
 #else

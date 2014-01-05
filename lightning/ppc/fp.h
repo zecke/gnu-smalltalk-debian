@@ -14,7 +14,7 @@
  *
  * GNU lightning is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published
- * by the Free Software Foundation; either version 2.1, or (at your option)
+ * by the Free Software Foundation; either version 3, or (at your option)
  * any later version.
  * 
  * GNU lightning is distributed in the hope that it will be useful, but 
@@ -37,9 +37,9 @@
 
 
 #define JIT_FPR_NUM	       6
+#define JIT_FPRET	       1
 #define JIT_FPR(i)	       (8+(i))
 
-#define JIT_FPFR	       0
 
 /* Make space for 1 or 2 words, store address in REG */
 #define jit_data(REG, D1)	        (_FBA	(18, 8, 0, 1),  _jit_L(D1), MFLRr(REG))
@@ -143,24 +143,29 @@
 
 #define jit_fpbr(d, s1, s2, rcbit) (		\
 	FCMPOrrr(_cr0,(s1),(s2)),		\
-	BTii ((rcbit), (d)))
+	BTii ((rcbit), (d)),			\
+	_jit.x.pc)
 
 #define jit_fpbr_neg(d, s1, s2,rcbit) (	\
 	FCMPOrrr(_cr0,(s1),(s2)),		\
-	BFii ((rcbit), (d)))
+	BFii ((rcbit), (d)),			\
+	_jit.x.pc)
 
 #define jit_fpbur(d, s1, s2, rcbit) (		\
 	FCMPUrrr(_cr0,(s1),(s2)),		\
-	BTii ((rcbit), (d)))
+	BTii ((rcbit), (d)),			\
+	_jit.x.pc)
 
 #define jit_fpbur_neg(d, s1, s2,rcbit) (	\
 	FCMPUrrr(_cr0,(s1),(s2)),		\
-	BFii ((rcbit), (d)))
+	BFii ((rcbit), (d)),			\
+	_jit.x.pc)
 
 #define jit_fpbur_or(d, s1, s2, bit1, bit2) (	\
 	FCMPUrrr(_cr0,(s1),(s2)),		\
 	CRORiii((bit1), (bit1), (bit2)),	\
-	BTii ((bit1), (d)))
+	BTii ((bit1), (d)),			\
+	_jit.x.pc)
 
 #define jit_bgtr_d(d, s1, s2)      jit_fpbr ((d),(s1),(s2),_gt)   
 #define jit_bger_d(d, s1, s2)      jit_fpbr_neg((d),(s1),(s2),_lt)   
@@ -177,12 +182,8 @@
 #define jit_bltgtr_d(d, s1, s2)    jit_fpbur_or ((d), (s1), (s2), _gt, _lt)
 #define jit_buneqr_d(d, s1, s2)    jit_fpbur_or ((d), (s1), (s2), _un, _eq)
 
-#define jit_getarg_f(rd, ofs)        jit_movr_f((rd),(ofs))
-#define jit_getarg_d(rd, ofs)        jit_movr_d((rd),(ofs))
 #define jit_pusharg_d(rs)	     (_jitl.nextarg_putd--,jit_movr_d((_jitl.nextarg_putf+_jitl.nextarg_putd+1), (rs)))
 #define jit_pusharg_f(rs)	     (_jitl.nextarg_putf--,jit_movr_f((_jitl.nextarg_putf+_jitl.nextarg_putd+1), (rs)))
-#define jit_retval_d(op1)            jit_movr_d(1, (op1))
-#define jit_retval_f(op1)            jit_movr_f(1, (op1))
 
 
 #define jit_floorr_d_i(rd,rs)  (MTFSFIri(7,3), \

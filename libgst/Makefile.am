@@ -8,7 +8,7 @@ AM_CPPFLAGS = $(RELOC_CPPFLAGS) \
   $(INCFFI) $(INCLIGHTNING) $(INCSNPRINTFV) $(INCSIGSEGV) $(INCLTDL)
 
 if !HAVE_INSTALLED_LIGHTNING
-AM_CPPFLAGS += -I$(top_srcdir)/lightning -I$(top_builddir)/lightning \
+AM_CPPFLAGS += -I$(top_srcdir)/lightning -I$(top_builddir)/lightning -I$(top_builddir)/lightning/$(cpu) \
   -I$(top_srcdir) -I$(top_builddir)
 endif
 
