@@ -1,5 +1,9 @@
 2016-12-30  Lee Duhem  <lee.duhem@gmail.com>
 
+	* byte.c (_gst_compile_bytecodes): Remove unnecessary copy.
+
+2016-12-30  Lee Duhem  <lee.duhem@gmail.com>
+
 	* comp.c (_gst_compile_method): Protect new created `selector' from GC
 	properly.
 	* gst-parse.c (expected): Call va_end.
