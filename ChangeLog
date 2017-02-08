@@ -1,3 +1,7 @@
+2017-02-08  Holger Hans Peter Freyther  <holger@freyther.de>
+
+	* gst-tool.c: Use strncmp instead of memcmp.
+
 2017-02-27  Lee Duhem  <lee.duhem@gmail.com>
 
 	* build-aux/tcltk.m4: Simplify tclConfig.sh searching
